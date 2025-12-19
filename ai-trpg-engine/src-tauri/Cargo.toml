@@ -1,0 +1,31 @@
+[package]
+name = "ai-trpg-engine"
+version = "0.1.0"
+description = "AI人生引擎 - 基于大语言模型的动态叙事TRPG桌面应用"
+authors = ["Cinder"]
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["dialog-all", "fs-all", "path-all"] }
+tauri-plugin-shell = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+dirs = "5"
+
+[lib]
+name = "ai_trpg_engine_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[features]
+default = ["custom-protocol"]
+custom-protocol = ["tauri/custom-protocol"]
+
+[profile.release]
+panic = "abort"
+codegen-units = 1
+lto = true
+opt-level = "z"
+strip = true

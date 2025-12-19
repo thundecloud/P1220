@@ -1,0 +1,202 @@
+[
+  {
+    "id": "talent_tradition",
+    "poolId": "medieval_common",
+    "name": "保守传统者",
+    "description": "倾向于延续社群传统,避免外部争端",
+    "aiPromptFragment": "角色天生具有保守的性格,重视传统价值观和社群稳定,在面对外来文化冲突时倾向于维护本地传统。这会影响角色在遭遇文化冲突、宗教争端、社会变革时的反应和选择。",
+    "rarity": "common",
+    "category": "社会适应",
+    "icon": "🛡️"
+  },
+  {
+    "id": "talent_curious",
+    "poolId": "medieval_common",
+    "name": "好奇心旺盛",
+    "description": "对未知事物充满兴趣,乐于探索和学习",
+    "aiPromptFragment": "角色拥有强烈的好奇心,对新事物、新知识保持开放态度。容易被陌生人的故事吸引,愿意尝试新的技艺或理念,但也可能因此陷入危险或被视为异类。",
+    "rarity": "common",
+    "category": "性格特质",
+    "icon": "🔍"
+  },
+  {
+    "id": "talent_resilient",
+    "poolId": "medieval_common",
+    "name": "坚韧不拔",
+    "description": "在逆境中展现出超乎常人的毅力",
+    "aiPromptFragment": "角色具有强大的心理韧性,面对困难、疾病、失去时能够更快恢复。不轻易被挫折击垮,在艰难处境中往往能找到继续前进的动力。",
+    "rarity": "common",
+    "category": "心理素质",
+    "icon": "💪"
+  },
+  {
+    "id": "talent_empathetic",
+    "poolId": "medieval_common",
+    "name": "同理心",
+    "description": "能够深刻理解他人的情感和处境",
+    "aiPromptFragment": "角色对他人的情感有敏锐的感知能力,容易与人建立情感联系。这使得角色在人际交往中更受欢迎,但也可能因过度共情而承受额外的情感负担。",
+    "rarity": "common",
+    "category": "社交能力",
+    "icon": "❤️"
+  },
+  {
+    "id": "talent_practical",
+    "poolId": "medieval_common",
+    "name": "实用主义",
+    "description": "注重实际效果,善于权衡利弊",
+    "aiPromptFragment": "角色在做决策时以实际利益为导向,不受过多情感和理想主义影响。善于在资源有限的情况下找到最优解,但可能被视为过于功利或缺乏理想。",
+    "rarity": "common",
+    "category": "思维方式",
+    "icon": "⚖️"
+  },
+  {
+    "id": "talent_mountain_endurance",
+    "poolId": "mountain_life",
+    "name": "山民的耐力",
+    "description": "在山地环境中展现出超常的体力和适应能力",
+    "aiPromptFragment": "角色继承了世代山民的身体素质,对高海拔、严酷气候有天然的适应力。在山地行走、负重、耐寒方面远超常人,但可能不适应平原或城市生活。",
+    "rarity": "uncommon",
+    "category": "身体素质",
+    "icon": "⛰️"
+  },
+  {
+    "id": "talent_herbal_knowledge",
+    "poolId": "mountain_life",
+    "name": "草药识别",
+    "description": "对山野植物有天生的辨识能力",
+    "aiPromptFragment": "角色从小在山野中长大,对各种植物的药用价值有直觉般的认知。能够找到治疗常见疾病的草药,这在缺医少药的时代是宝贵的生存技能。",
+    "rarity": "uncommon",
+    "category": "生存技能",
+    "icon": "🌿"
+  },
+  {
+    "id": "talent_trade_sense",
+    "poolId": "trade_skills",
+    "name": "商业嗅觉",
+    "description": "对商机和市场价值有敏锐的直觉",
+    "aiPromptFragment": "角色天生对物品价值、市场供需有准确的判断。能够发现潜在的商机,在交易中获得更好的条件,但也可能因过度追求利润而损害人际关系。",
+    "rarity": "uncommon",
+    "category": "商业才能",
+    "icon": "💰"
+  },
+  {
+    "id": "talent_negotiation",
+    "poolId": "trade_skills",
+    "name": "天生谈判家",
+    "description": "在讨价还价和说服他人方面有特殊天赋",
+    "aiPromptFragment": "角色拥有出色的口才和察言观色能力,在谈判、说服、调解中往往能达成有利的结果。这不仅适用于商业,也能在社交和政治场合发挥作用。",
+    "rarity": "rare",
+    "category": "社交能力",
+    "icon": "🤝"
+  },
+  {
+    "id": "talent_cultural_bridge",
+    "poolId": "cultural_identity",
+    "name": "文化桥梁",
+    "description": "能够理解并融合不同文化的智慧",
+    "aiPromptFragment": "角色对不同文化保持开放和尊重的态度,能够在冲突的文化间找到共同点。这使角色成为天然的调停者和翻译者,但可能在两边都不被完全接纳。",
+    "rarity": "rare",
+    "category": "文化理解",
+    "icon": "🌉"
+  },
+  {
+    "id": "talent_artistic_genius",
+    "poolId": "artistic_talents",
+    "name": "艺术天才",
+    "description": "在某项艺术领域拥有超凡的天赋",
+    "aiPromptFragment": "角色在绘画、书法、音乐或诗歌等艺术形式上有远超常人的才能。这可能为角色带来名声和机遇,但在实用主义盛行的时代,艺术才华的价值往往被低估。",
+    "rarity": "rare",
+    "category": "艺术才华",
+    "icon": "🎨"
+  },
+  {
+    "id": "talent_scholar_mind",
+    "poolId": "scholarly_pursuits",
+    "name": "学者之心",
+    "description": "对知识和真理有执着的追求",
+    "aiPromptFragment": "角色热爱学习,对经典、历史、哲学有深厚兴趣。记忆力和理解力超群,容易在学术领域取得成就,但可能过于理想化,不善应对现实的复杂性。",
+    "rarity": "uncommon",
+    "category": "智力才能",
+    "icon": "📚"
+  },
+  {
+    "id": "talent_prophetic_dreams",
+    "poolId": "medieval_common",
+    "name": "预言之梦",
+    "description": "偶尔在梦中看到未来的片段",
+    "aiPromptFragment": "角色偶尔会做一些似乎预示未来的梦。这些梦境模糊而隐晦,但有时确实能够避免危险或抓住机遇。在那个时代,这可能被视为神启,也可能被当作异端。",
+    "rarity": "legendary",
+    "category": "神秘天赋",
+    "icon": "✨"
+  },
+  {
+    "id": "talent_natural_leader",
+    "poolId": "medieval_common",
+    "name": "天生领袖",
+    "description": "拥有吸引和激励他人的魅力",
+    "aiPromptFragment": "角色具有天然的领导气质,容易获得他人的信任和追随。在群体中往往成为核心,能够在关键时刻凝聚人心,但也承担了更多的责任和压力。",
+    "rarity": "epic",
+    "category": "领导才能",
+    "icon": "👑"
+  },
+  {
+    "id": "talent_photographic_memory",
+    "poolId": "scholarly_pursuits",
+    "name": "过目不忘",
+    "description": "拥有超强的记忆力,几乎能记住所有见过的事物",
+    "aiPromptFragment": "角色拥有惊人的记忆力,对见过的文字、图像、声音都能精确回忆。这在学习、交易、情报收集中是巨大优势,但也可能因记住太多痛苦而受折磨。",
+    "rarity": "epic",
+    "category": "认知能力",
+    "icon": "🧠"
+  },
+  {
+    "id": "talent_urban_survivor",
+    "poolId": "urban_life",
+    "name": "城市生存者",
+    "description": "在复杂的城市环境中如鱼得水",
+    "aiPromptFragment": "角色对城市的运作规则、社会网络有天然的理解。善于在市井中寻找机会,规避风险,建立人脉,但可能过于世故而失去纯真。",
+    "rarity": "common",
+    "category": "生存技能",
+    "icon": "🏙️"
+  },
+  {
+    "id": "talent_artisan_hands",
+    "poolId": "artisan_skills",
+    "name": "巧匠之手",
+    "description": "手工技艺超群,制作的物品精美耐用",
+    "aiPromptFragment": "角色的手特别灵巧,无论是木工、铸造、织造还是陶艺,都能快速掌握并达到高水平。制作的物品往往成为精品,为角色赢得声誉和生计。",
+    "rarity": "uncommon",
+    "category": "手工技艺",
+    "icon": "🔨"
+  },
+  {
+    "id": "talent_warrior_spirit",
+    "poolId": "warrior_spirit",
+    "name": "武者之魂",
+    "description": "面对战斗和危险时展现出超乎寻常的勇气",
+    "aiPromptFragment": "角色在面对危险时不仅不退缩,反而能够激发出更强的战斗意志。这种精神不仅适用于战场,也体现在人生的各种挑战中,但可能导致冒险主义倾向。",
+    "rarity": "uncommon",
+    "category": "战斗素质",
+    "icon": "⚔️"
+  },
+  {
+    "id": "talent_japanese_aesthetics",
+    "poolId": "japanese_traditions",
+    "name": "侘寂之心",
+    "description": "对日本传统美学有深刻的理解和感悟",
+    "aiPromptFragment": "角色天生能够体会侘寂(wabi-sabi)的美学精神,在简朴、不完美、无常中找到深刻的美感。这种审美观影响着角色对生活的态度和选择。",
+    "rarity": "rare",
+    "category": "美学素养",
+    "icon": "🍵"
+  },
+  {
+    "id": "talent_destiny_defier",
+    "poolId": "medieval_common",
+    "name": "命运反抗者",
+    "description": "拒绝接受既定的命运,总是寻求改变的可能",
+    "aiPromptFragment": "角色不相信宿命论,即使在最严格的等级制度下也相信个人可以改变命运。这种信念使角色敢于挑战不公,追求不可能,但也可能因此遭受更多挫折。",
+    "rarity": "epic",
+    "category": "信念特质",
+    "icon": "🔥"
+  }
+]

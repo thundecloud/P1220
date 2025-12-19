@@ -1,0 +1,107 @@
+[
+  {
+    "id": "bg_mountain_villager",
+    "worldlines": ["byzantine_1075"],
+    "name": "山民后代",
+    "description": "祖辈世代居住在山区,以放牧和采集为生",
+    "effects": "更适应艰苦环境,对自然有更深理解"
+  },
+  {
+    "id": "bg_trader_family",
+    "worldlines": ["byzantine_1075", "song_dynasty_1120", "edo_japan_1650"],
+    "name": "商贾之家",
+    "description": "家族从事商业贸易,见多识广",
+    "effects": "对商业和人际交往更敏感"
+  },
+  {
+    "id": "bg_artisan_child",
+    "worldlines": ["byzantine_1075", "song_dynasty_1120", "edo_japan_1650"],
+    "name": "工匠子弟",
+    "description": "父母是手工匠人,从小接触各种技艺",
+    "effects": "对手工技艺有天然的理解"
+  },
+  {
+    "id": "bg_scholar_family",
+    "worldlines": ["song_dynasty_1120"],
+    "name": "书香门第",
+    "description": "家族世代读书,重视教育",
+    "effects": "更容易接受新知识,文化素养较高"
+  },
+  {
+    "id": "bg_farming_family",
+    "worldlines": ["byzantine_1075", "song_dynasty_1120", "edo_japan_1650"],
+    "name": "农家子弟",
+    "description": "世代务农,勤劳朴实",
+    "effects": "身体素质好,吃苦耐劳"
+  },
+  {
+    "id": "bg_temple_servant",
+    "worldlines": ["byzantine_1075", "song_dynasty_1120", "edo_japan_1650"],
+    "name": "寺院侍从",
+    "description": "曾在寺院中生活,接受宗教熏陶",
+    "effects": "对宗教和哲学有更多了解"
+  },
+  {
+    "id": "bg_urban_poor",
+    "worldlines": ["song_dynasty_1120", "edo_japan_1650"],
+    "name": "城市贫民",
+    "description": "生于城市底层,靠打零工为生",
+    "effects": "对城市生活和生存技巧了如指掌"
+  },
+  {
+    "id": "bg_servant",
+    "worldlines": ["byzantine_1075", "song_dynasty_1120", "edo_japan_1650"],
+    "name": "仆役出身",
+    "description": "曾在富裕人家做仆人,见识过上层生活",
+    "effects": "懂得察言观色,了解社会等级"
+  },
+  {
+    "id": "bg_orphan",
+    "worldlines": ["byzantine_1075", "song_dynasty_1120", "edo_japan_1650"],
+    "name": "孤儿",
+    "description": "自幼失去父母,独自成长",
+    "effects": "更加独立和坚强,但缺少家庭支持"
+  },
+  {
+    "id": "bg_militia",
+    "worldlines": ["byzantine_1075", "song_dynasty_1120"],
+    "name": "民兵家庭",
+    "description": "家族成员常被征召为民兵",
+    "effects": "对战斗和军事有基本了解"
+  },
+  {
+    "id": "bg_performer_family",
+    "worldlines": ["song_dynasty_1120", "edo_japan_1650"],
+    "name": "伎艺之家",
+    "description": "家族从事歌舞、戏曲等表演艺术",
+    "effects": "艺术天赋和表演能力较强"
+  },
+  {
+    "id": "bg_samurai_servant",
+    "worldlines": ["edo_japan_1650"],
+    "name": "武家奉公",
+    "description": "在武士家族中服侍",
+    "effects": "了解武士道精神和礼仪规范"
+  },
+  {
+    "id": "bg_fisherman",
+    "worldlines": ["edo_japan_1650"],
+    "name": "渔民之家",
+    "description": "世代以捕鱼为生",
+    "effects": "对海洋和天气有独特理解"
+  },
+  {
+    "id": "bg_traveling_merchant",
+    "worldlines": ["byzantine_1075", "song_dynasty_1120"],
+    "name": "行商之后",
+    "description": "父辈常年奔波在商路上",
+    "effects": "见识广博,适应力强"
+  },
+  {
+    "id": "bg_minority",
+    "worldlines": ["byzantine_1075", "song_dynasty_1120"],
+    "name": "异族后裔",
+    "description": "有少数民族或异域血统",
+    "effects": "对多元文化更包容,但可能受歧视"
+  }
+]

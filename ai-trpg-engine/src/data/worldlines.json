@@ -1,0 +1,65 @@
+[
+  {
+    "id": "byzantine_1075",
+    "name": "十字军阴影下的波斯山区 (AD 1075)",
+    "description": "这里是11世纪的波斯北部山区，塞尔柱突厥人的统治下,当地山民在伊斯兰文化与古老传统之间寻求平衡。远方,十字军的战旗正在东进,预示着剧变的来临。",
+    "era": "中世纪早期",
+    "region": "波斯北部山区",
+    "culture": ["伊斯兰文化", "山地部落", "商队贸易", "手工艺传统"],
+    "historicalBackground": "公元1075年,塞尔柱突厥帝国正值鼎盛时期,但内部已现分裂迹象。山区居民多为古老的波斯部落后裔,在表面接受伊斯兰教的同时保留着祖先的传统。商队贸易将东西方连接起来,也带来了文化冲突与机遇。",
+    "special": {
+      "challenges": ["十字军东征的冲击", "部落间冲突", "自然灾害", "商路危机"],
+      "opportunities": ["商贸繁荣", "文化交流", "技艺传承", "社群凝聚"]
+    },
+    "attributeParams": {
+      "constitution": { "mu": 50, "sigma": 15 },
+      "perception": { "mu": 52, "sigma": 14 },
+      "adaptability": { "mu": 48, "sigma": 16 },
+      "familyBond": { "mu": 55, "sigma": 13 },
+      "latentTalent": { "mu": 45, "sigma": 17 }
+    },
+    "talentPoolIds": ["medieval_common", "mountain_life", "trade_skills", "cultural_identity"]
+  },
+  {
+    "id": "song_dynasty_1120",
+    "name": "宋徽宗时代的汴京 (公元1120年)",
+    "description": "北宋末年的汴京城,繁华与危机并存。艺术与文化达到巅峰,但北方金国虎视眈眈,朝廷腐败,民不聊生。你将在这个时代的洪流中寻找自己的命运。",
+    "era": "北宋末期",
+    "region": "汴京(开封)",
+    "culture": ["儒家文化", "市井文化", "商业发达", "艺术繁荣"],
+    "historicalBackground": "宋徽宗赵佶在位,虽然是艺术大师,但政治昏庸。蔡京等奸臣把持朝政,花石纲等弊政横行。金国在北方日益强大,靖康之难即将到来。但汴京仍是世界上最繁华的城市之一,商业、艺术、科技都达到了前所未有的高度。",
+    "special": {
+      "challenges": ["政治腐败", "外族入侵威胁", "社会阶层固化", "天灾人祸"],
+      "opportunities": ["文化繁荣", "商业发达", "科技进步", "社会流动机会"]
+    },
+    "attributeParams": {
+      "constitution": { "mu": 48, "sigma": 14 },
+      "perception": { "mu": 55, "sigma": 13 },
+      "adaptability": { "mu": 50, "sigma": 15 },
+      "familyBond": { "mu": 52, "sigma": 14 },
+      "latentTalent": { "mu": 48, "sigma": 16 }
+    },
+    "talentPoolIds": ["medieval_common", "urban_life", "artistic_talents", "scholarly_pursuits"]
+  },
+  {
+    "id": "edo_japan_1650",
+    "name": "德川幕府的江户时代 (公元1650年)",
+    "description": "日本进入了长达两个半世纪的和平时期。严格的身份制度,锁国政策下独特的文化发展,武士精神与町人文化的碰撞,构成了这个时代的独特风貌。",
+    "era": "江户时代中期",
+    "region": "江户(东京)及周边",
+    "culture": ["武士道", "町人文化", "艺能发达", "匠人精神"],
+    "historicalBackground": "德川家光确立的幕藩体制已经稳固,日本进入锁国状态。严格的士农工商身份制度,但町人(商人)阶层逐渐富裕并发展出独特的文化。歌舞伎、浮世绘等艺术形式蓬勃发展,同时武士阶层在和平时代寻找新的存在意义。",
+    "special": {
+      "challenges": ["严格的身份制度", "锁国导致的信息闭塞", "自然灾害频发", "武士阶层的没落"],
+      "opportunities": ["长期和平", "文化艺术繁荣", "工商业发展", "独特的美学追求"]
+    },
+    "attributeParams": {
+      "constitution": { "mu": 52, "sigma": 13 },
+      "perception": { "mu": 50, "sigma": 15 },
+      "adaptability": { "mu": 45, "sigma": 16 },
+      "familyBond": { "mu": 58, "sigma": 12 },
+      "latentTalent": { "mu": 47, "sigma": 15 }
+    },
+    "talentPoolIds": ["medieval_common", "japanese_traditions", "artisan_skills", "warrior_spirit"]
+  }
+]
