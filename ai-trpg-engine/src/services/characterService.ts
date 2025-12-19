@@ -1,5 +1,14 @@
-import { clampedNormalRandom, weightedRandom, randomSample } from '../utils/random';
-import type { Worldline, Talent, Attributes, Character, TalentRarity } from '../utils/types';
+import { clampedNormalRandom, weightedRandom } from '../utils/random';
+import type {
+  Worldline,
+  Talent,
+  TalentRarity,
+  BasicAttributes,
+  DerivedAttributes,
+  CharacterAttributes,
+  Skill,
+  Character,
+} from '../utils/types';
 
 // 稀有度权重映射
 const RARITY_WEIGHTS: Record<TalentRarity, number> = {
@@ -10,45 +19,106 @@ const RARITY_WEIGHTS: Record<TalentRarity, number> = {
   legendary: 2,
 };
 
+// ============ COC风格属性生成 ============
+
 /**
- * 根据世界线参数生成角色属性
+ * 根据世界线参数生成COC风格的8项基础属性
  */
-export function generateAttributes(worldline: Worldline): Attributes {
+export function generateBasicAttributes(worldline: Worldline): BasicAttributes {
   const params = worldline.attributeParams;
 
   return {
-    constitution: clampedNormalRandom(
-      params.constitution.mu,
-      params.constitution.sigma,
-      0,
-      100
+    strength: Math.round(
+      clampedNormalRandom(params.strength.mu, params.strength.sigma, 0, 100)
     ),
-    perception: clampedNormalRandom(
-      params.perception.mu,
-      params.perception.sigma,
-      0,
-      100
+    constitution: Math.round(
+      clampedNormalRandom(params.constitution.mu, params.constitution.sigma, 0, 100)
     ),
-    adaptability: clampedNormalRandom(
-      params.adaptability.mu,
-      params.adaptability.sigma,
-      0,
-      100
+    dexterity: Math.round(
+      clampedNormalRandom(params.dexterity.mu, params.dexterity.sigma, 0, 100)
     ),
-    familyBond: clampedNormalRandom(
-      params.familyBond.mu,
-      params.familyBond.sigma,
-      0,
-      100
+    intelligence: Math.round(
+      clampedNormalRandom(params.intelligence.mu, params.intelligence.sigma, 0, 100)
     ),
-    latentTalent: clampedNormalRandom(
-      params.latentTalent.mu,
-      params.latentTalent.sigma,
-      0,
-      100
+    education: Math.round(
+      clampedNormalRandom(params.education.mu, params.education.sigma, 0, 100)
+    ),
+    power: Math.round(
+      clampedNormalRandom(params.power.mu, params.power.sigma, 0, 100)
+    ),
+    charisma: Math.round(
+      clampedNormalRandom(params.charisma.mu, params.charisma.sigma, 0, 100)
+    ),
+    luck: Math.round(
+      clampedNormalRandom(params.luck.mu, params.luck.sigma, 0, 100)
     ),
   };
 }
+
+/**
+ * 计算派生属性
+ */
+export function calculateDerivedAttributes(
+  basic: BasicAttributes,
+  age: number = 20
+): DerivedAttributes {
+  // HP = (CON + STR) / 10，向下取整
+  const hitPoints = Math.floor((basic.constitution + basic.strength) / 10);
+
+  // SAN = POW
+  const sanity = basic.power;
+
+  // MP = POW / 5，向下取整
+  const magicPoints = Math.floor(basic.power / 5);
+
+  // MOV (移动力) 基于年龄和DEX/STR
+  let movement = 8; // 基础移动力
+  if (age >= 40 && (basic.dexterity < 50 || basic.strength < 50)) {
+    movement = 7;
+  }
+  if (age >= 80) {
+    movement = 5;
+  }
+  if (basic.dexterity < 30 && basic.strength < 30) {
+    movement = 6;
+  }
+
+  return {
+    hitPoints,
+    sanity,
+    magicPoints,
+    movement,
+  };
+}
+
+/**
+ * 生成完整的角色属性（新版COC风格）
+ */
+export function generateCharacterAttributes(
+  worldline: Worldline,
+  age: number = 20
+): CharacterAttributes {
+  const basic = generateBasicAttributes(worldline);
+  const derived = calculateDerivedAttributes(basic, age);
+
+  // 初始技能列表为空，将在角色创建流程中填充
+  const skills: Skill[] = [];
+
+  return {
+    basic,
+    derived,
+    skills,
+  };
+}
+
+/**
+ * 重新投骰基础属性
+ */
+export function rerollBasicAttributes(worldline: Worldline): BasicAttributes {
+  return generateBasicAttributes(worldline);
+}
+
+// ============ 天赋系统（保留原有逻辑）============
 
 /**
  * 从天赋池中抽取天赋
@@ -68,7 +138,7 @@ export function drawTalents(
   );
 
   if (availableTalents.length < count) {
-    throw new Error('天赋池中的天赋数量不足');
+    throw new Error(`天赋池中的天赋数量不足。需要${count}个，但只有${availableTalents.length}个可用。`);
   }
 
   // 按稀有度加权随机抽取
@@ -99,15 +169,46 @@ export function groupTalents(talents: Talent[]): Talent[][] {
     throw new Error('需要正好9个天赋才能分组');
   }
 
-  return [
-    talents.slice(0, 3),
-    talents.slice(3, 6),
-    talents.slice(6, 9),
-  ];
+  return [talents.slice(0, 3), talents.slice(3, 6), talents.slice(6, 9)];
 }
 
 /**
- * 创建新角色
+ * 重新抽取某一组天赋
+ */
+export function rerollTalentGroup(
+  allTalents: Talent[],
+  poolIds: string[],
+  excludedTalents: Talent[]
+): Talent[] {
+  const availableTalents = allTalents.filter(
+    (talent) =>
+      poolIds.includes(talent.poolId) &&
+      !excludedTalents.some((excluded) => excluded.id === talent.id)
+  );
+
+  if (availableTalents.length < 3) {
+    throw new Error('可用天赋不足，无法重新抽取');
+  }
+
+  const drawn: Talent[] = [];
+  const talentPool = [...availableTalents];
+
+  while (drawn.length < 3 && talentPool.length > 0) {
+    const weights = talentPool.map((t) => RARITY_WEIGHTS[t.rarity]);
+    const selected = weightedRandom(talentPool, weights);
+    drawn.push(selected);
+
+    const index = talentPool.indexOf(selected);
+    talentPool.splice(index, 1);
+  }
+
+  return drawn;
+}
+
+// ============ 角色创建 ============
+
+/**
+ * 创建新角色（新版COC风格）
  */
 export function createCharacter(
   name: string,
@@ -115,21 +216,33 @@ export function createCharacter(
   worldlineId: string,
   worldline: Worldline,
   backgrounds: string[],
-  selectedTalents: Talent[]
+  selectedTalents: Talent[],
+  characterAttributes: CharacterAttributes,
+  age: number = 20,
+  story?: string
 ): Character {
-  const attributes = generateAttributes(worldline);
+  // 为了向后兼容，创建一个简化的旧版attributes对象
+  const legacyAttributes = {
+    constitution: characterAttributes.basic.constitution,
+    perception: characterAttributes.basic.intelligence,
+    adaptability: characterAttributes.basic.dexterity,
+    familyBond: characterAttributes.basic.charisma,
+    latentTalent: characterAttributes.basic.power,
+  };
 
   return {
     id: `char_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
     name,
-    birthYear: 0, // 将由世界线确定
+    birthYear: new Date().getFullYear() - age,
     gender,
     worldlineId,
     backgrounds,
-    attributes,
+    characterAttributes, // 新版COC风格属性
+    attributes: legacyAttributes, // 旧版属性（向后兼容）
     talents: selectedTalents,
-    currentAge: 0,
+    currentAge: age,
     createdAt: new Date().toISOString(),
+    story: story || '',
   };
 }
 
@@ -154,4 +267,32 @@ export function validateCharacter(character: Partial<Character>): boolean {
   }
 
   return true;
+}
+
+/**
+ * 计算属性总和（用于显示）
+ */
+export function calculateAttributeSum(basic: BasicAttributes): number {
+  return (
+    basic.strength +
+    basic.constitution +
+    basic.dexterity +
+    basic.intelligence +
+    basic.education +
+    basic.power +
+    basic.charisma +
+    basic.luck
+  );
+}
+
+/**
+ * 获取属性等级描述
+ */
+export function getAttributeLevel(value: number): string {
+  if (value >= 90) return '超凡';
+  if (value >= 75) return '优秀';
+  if (value >= 60) return '良好';
+  if (value >= 45) return '一般';
+  if (value >= 30) return '较差';
+  return '低下';
 }

@@ -23,16 +23,20 @@ fn get_default_config() -> String {
     "apiBaseUrl": "https://api.deepseek.com/v1",
     "modelName": "deepseek-chat",
     "temperature": 0.7,
-    "maxTokens": 2000
+    "maxTokens": 2000,
+    "topP": 1.0,
+    "presencePenalty": 0,
+    "frequencyPenalty": 0
   },
   "game": {
     "dmStyle": "humanistic",
+    "dmPrompt": "你是一位经验丰富的桌面角色扮演游戏(TRPG)的游戏主持人(Dungeon Master)。\n\n你的职责是：\n1. 根据角色的世界线背景、属性、天赋，创造沉浸式的叙事体验\n2. 描述场景时要生动、具体，调动玩家的感官体验\n3. 尊重历史背景的真实性，同时保持故事的戏剧性\n4. 根据判定结果(大成功/成功/失败/大失败)给出合理的叙事发展\n5. 让玩家的选择真正影响故事走向\n\n叙事风格：\n- 使用第二人称(\"你\")与玩家互动\n- 段落简洁有力，避免冗长描写\n- 在关键时刻给玩家选择的机会\n- 平衡叙事节奏，有张有弛\n\n请记住：你不是在写小说，而是在与玩家共同创造故事。",
     "autoSave": true,
-    "autoSaveInterval": 30,
+    "autoSaveInterval": 60,
     "language": "zh-CN"
   },
   "ui": {
-    "theme": "dark",
+    "theme": "cassette-futurism",
     "fontSize": 14,
     "animationEnabled": true
   }
@@ -113,4 +117,77 @@ pub fn load_config() -> Result<String, String> {
     }
 
     fs::read_to_string(config_path).map_err(|e| e.to_string())
+}
+
+// ============ 世界线管理 ============
+
+// 获取世界线目录路径
+fn get_worldlines_directory() -> Result<PathBuf, String> {
+    let home_dir = dirs::document_dir().ok_or("无法获取文档目录")?;
+    Ok(home_dir.join("AI-TRPG").join("worldlines"))
+}
+
+// 保存自定义世界线
+#[tauri::command]
+pub fn save_worldline(filename: String, data: String) -> Result<String, String> {
+    let worldlines_dir = get_worldlines_directory()?;
+    fs::create_dir_all(&worldlines_dir).map_err(|e| e.to_string())?;
+
+    let file_path = worldlines_dir.join(&filename);
+    fs::write(&file_path, data).map_err(|e| e.to_string())?;
+
+    Ok(format!("世界线已保存: {}", filename))
+}
+
+// 读取自定义世界线
+#[tauri::command]
+pub fn load_worldline(filename: String) -> Result<String, String> {
+    let worldlines_dir = get_worldlines_directory()?;
+    let file_path = worldlines_dir.join(&filename);
+    fs::read_to_string(file_path).map_err(|e| e.to_string())
+}
+
+// 列出所有自定义世界线
+#[tauri::command]
+pub fn list_worldlines() -> Result<Vec<String>, String> {
+    let worldlines_dir = get_worldlines_directory()?;
+
+    if !worldlines_dir.exists() {
+        return Ok(Vec::new());
+    }
+
+    let entries = fs::read_dir(worldlines_dir).map_err(|e| e.to_string())?;
+    let worldlines: Vec<String> = entries
+        .filter_map(|e| e.ok())
+        .filter(|e| {
+            e.path()
+                .extension()
+                .and_then(|s| s.to_str())
+                == Some("json")
+        })
+        .filter_map(|e| e.file_name().to_str().map(String::from))
+        .collect();
+
+    Ok(worldlines)
+}
+
+// 删除自定义世界线
+#[tauri::command]
+pub fn delete_worldline(filename: String) -> Result<String, String> {
+    let worldlines_dir = get_worldlines_directory()?;
+    let file_path = worldlines_dir.join(&filename);
+    fs::remove_file(file_path).map_err(|e| e.to_string())?;
+    Ok(format!("世界线已删除: {}", filename))
+}
+
+// 导出世界线（返回JSON字符串）
+#[tauri::command]
+pub fn export_worldline(filename: String) -> Result<String, String> {
+    load_worldline(filename)
+}
+
+// 导入世界线（从JSON字符串）
+#[tauri::command]
+pub fn import_worldline(filename: String, data: String) -> Result<String, String> {
+    save_worldline(filename, data)
 }

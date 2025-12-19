@@ -11,6 +11,12 @@ pub fn run() {
             commands::delete_save,
             commands::save_config,
             commands::load_config,
+            commands::save_worldline,
+            commands::load_worldline,
+            commands::list_worldlines,
+            commands::delete_worldline,
+            commands::export_worldline,
+            commands::import_worldline,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

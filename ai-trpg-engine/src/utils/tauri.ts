@@ -139,3 +139,95 @@ export async function loadConfig(): Promise<string> {
   }
   return JSON.stringify(mockConfig, null, 2);
 }
+
+// ============ 世界线管理 ============
+
+/**
+ * 模拟的世界线列表（用于浏览器开发）
+ */
+const mockWorldlines: string[] = [];
+
+/**
+ * 保存自定义世界线
+ */
+export async function saveWorldline(filename: string, data: string): Promise<string> {
+  if (isTauriEnvironment()) {
+    return invokeTauri<string>('save_worldline', { filename, data });
+  }
+
+  // 浏览器环境：使用localStorage模拟
+  localStorage.setItem(`worldline_${filename}`, data);
+  if (!mockWorldlines.includes(filename)) {
+    mockWorldlines.push(filename);
+  }
+  return `世界线已保存: ${filename}`;
+}
+
+/**
+ * 加载自定义世界线
+ */
+export async function loadWorldline(filename: string): Promise<string> {
+  if (isTauriEnvironment()) {
+    return invokeTauri<string>('load_worldline', { filename });
+  }
+
+  // 浏览器环境：从localStorage读取
+  const data = localStorage.getItem(`worldline_${filename}`);
+  if (!data) {
+    throw new Error('世界线不存在');
+  }
+  return data;
+}
+
+/**
+ * 列出所有自定义世界线
+ */
+export async function listWorldlines(): Promise<string[]> {
+  if (isTauriEnvironment()) {
+    return invokeTauri<string[]>('list_worldlines');
+  }
+
+  // 浏览器环境：返回模拟的世界线列表
+  return [...mockWorldlines];
+}
+
+/**
+ * 删除自定义世界线
+ */
+export async function deleteWorldline(filename: string): Promise<string> {
+  if (isTauriEnvironment()) {
+    return invokeTauri<string>('delete_worldline', { filename });
+  }
+
+  // 浏览器环境：从localStorage删除
+  localStorage.removeItem(`worldline_${filename}`);
+  const index = mockWorldlines.indexOf(filename);
+  if (index > -1) {
+    mockWorldlines.splice(index, 1);
+  }
+  return `世界线已删除: ${filename}`;
+}
+
+/**
+ * 导出世界线
+ */
+export async function exportWorldline(filename: string): Promise<string> {
+  if (isTauriEnvironment()) {
+    return invokeTauri<string>('export_worldline', { filename });
+  }
+
+  // 浏览器环境：直接返回数据
+  return loadWorldline(filename);
+}
+
+/**
+ * 导入世界线
+ */
+export async function importWorldline(filename: string, data: string): Promise<string> {
+  if (isTauriEnvironment()) {
+    return invokeTauri<string>('import_worldline', { filename, data });
+  }
+
+  // 浏览器环境：保存数据
+  return saveWorldline(filename, data);
+}

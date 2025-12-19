@@ -1,34 +1,74 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { loadConfig as loadConfigTauri, saveConfig as saveConfigTauri } from '../utils/tauri';
+import type { AppConfig, ModelPreset } from '../utils/types';
 
-interface AppConfig {
-  ai: {
-    provider: string;
-    apiKey: string;
-    apiBaseUrl: string;
-    modelName: string;
-    temperature?: number;
-    maxTokens?: number;
-  };
-  game: {
-    dmStyle: string;
-    autoSave: boolean;
-    autoSaveInterval: number;
-    language: string;
-  };
-  ui: {
-    theme: string;
-    fontSize: number;
-    animationEnabled: boolean;
-  };
-}
+// AI模型预设配置
+const MODEL_PRESETS: ModelPreset[] = [
+  {
+    id: 'deepseek',
+    name: 'DeepSeek V3',
+    provider: 'deepseek',
+    apiBaseUrl: 'https://api.deepseek.com/v1',
+    modelName: 'deepseek-chat'
+  },
+  {
+    id: 'openai-gpt4',
+    name: 'OpenAI GPT-4',
+    provider: 'openai',
+    apiBaseUrl: 'https://api.openai.com/v1',
+    modelName: 'gpt-4'
+  },
+  {
+    id: 'openai-gpt4-turbo',
+    name: 'OpenAI GPT-4 Turbo',
+    provider: 'openai',
+    apiBaseUrl: 'https://api.openai.com/v1',
+    modelName: 'gpt-4-turbo-preview'
+  },
+  {
+    id: 'claude',
+    name: 'Claude 3.5 Sonnet',
+    provider: 'anthropic',
+    apiBaseUrl: 'https://api.anthropic.com/v1',
+    modelName: 'claude-3-5-sonnet-20241022'
+  },
+  {
+    id: 'custom',
+    name: '自定义端点 (Custom)',
+    provider: 'custom',
+    apiBaseUrl: '',
+    modelName: ''
+  }
+];
+
+// 默认DM提示词
+const DEFAULT_DM_PROMPT = `你是一位经验丰富的桌面角色扮演游戏(TRPG)的游戏主持人(Dungeon Master)。
+
+你的职责是：
+1. 根据角色的世界线背景、属性、天赋，创造沉浸式的叙事体验
+2. 描述场景时要生动、具体，调动玩家的感官体验
+3. 尊重历史背景的真实性，同时保持故事的戏剧性
+4. 根据判定结果(大成功/成功/失败/大失败)给出合理的叙事发展
+5. 让玩家的选择真正影响故事走向
+
+叙事风格：
+- 使用第二人称("你")与玩家互动
+- 段落简洁有力，避免冗长描写
+- 在关键时刻给玩家选择的机会
+- 平衡叙事节奏，有张有弛
+
+请记住：你不是在写小说，而是在与玩家共同创造故事。`;
+
+type TabType = 'ai' | 'game' | 'ui';
 
 export default function Config() {
   const navigate = useNavigate();
   const [config, setConfig] = useState<AppConfig | null>(null);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
+  const [activeTab, setActiveTab] = useState<TabType>('ai');
+  const [showDmPromptEditor, setShowDmPromptEditor] = useState(false);
 
   useEffect(() => {
     loadConfig();
@@ -37,7 +77,14 @@ export default function Config() {
   const loadConfig = async () => {
     try {
       const configData = await loadConfigTauri();
-      setConfig(JSON.parse(configData));
+      const loadedConfig = JSON.parse(configData);
+
+      // 确保有默认的DM提示词
+      if (!loadedConfig.game.dmPrompt) {
+        loadedConfig.game.dmPrompt = DEFAULT_DM_PROMPT;
+      }
+
+      setConfig(loadedConfig);
     } catch (error) {
       console.error('Failed to load config:', error);
       setMessage('加载配置失败');
@@ -76,211 +123,416 @@ export default function Config() {
     setConfig(newConfig);
   };
 
+  // 处理模型预设切换
+  const handleModelPresetChange = (presetId: string) => {
+    const preset = MODEL_PRESETS.find(p => p.id === presetId);
+    if (!preset || !config) return;
+
+    const newConfig = { ...config };
+    newConfig.ai.provider = preset.provider;
+
+    // 只在非自定义模式下更新URL和模型名
+    if (preset.id !== 'custom') {
+      newConfig.ai.apiBaseUrl = preset.apiBaseUrl;
+      newConfig.ai.modelName = preset.modelName;
+    }
+
+    setConfig(newConfig);
+  };
+
+  // 获取当前选中的预设
+  const getCurrentPreset = (): string => {
+    if (!config) return 'custom';
+
+    const matchedPreset = MODEL_PRESETS.find(p =>
+      p.provider === config.ai.provider &&
+      p.apiBaseUrl === config.ai.apiBaseUrl &&
+      p.modelName === config.ai.modelName
+    );
+
+    return matchedPreset?.id || 'custom';
+  };
+
   if (!config) {
     return (
       <div className="flex items-center justify-center min-h-screen grid-bg">
-        <div className="terminal-text text-xl font-mono">
+        <div className="terminal-text text-xl font-mono animate-pulse">
           [ LOADING CONFIGURATION... ]
         </div>
       </div>
     );
   }
 
+  const currentPreset = getCurrentPreset();
+  const isCustomPreset = currentPreset === 'custom';
+
   return (
     <div className="min-h-screen p-8 grid-bg">
-      <div className="max-w-4xl mx-auto space-y-6">
+      <div className="max-w-6xl mx-auto space-y-6">
         {/* Header */}
         <div className="bg-card rounded-none p-6 border-4 border-border">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="led" style={{ background: 'var(--color-neon-cyan)' }}></div>
-              <h1 className="text-4xl font-bold">CONFIG.SYS</h1>
-            </div>
-            <button
-              onClick={() => navigate('/')}
-              className="px-6 py-2 bg-secondary text-secondary-foreground rounded-none"
-            >
-              ◀ BACK
-            </button>
-          </div>
-          <div className="label mt-2">SYSTEM CONFIGURATION INTERFACE</div>
-        </div>
-
-        {/* AI Configuration */}
-        <div className="bg-card rounded-none p-6 border-4 border-border space-y-4">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="led indicator"></div>
-            <h2 className="text-2xl font-bold">AI MODULE CONFIG</h2>
-          </div>
-
-          <div className="space-y-4">
-            <div>
-              <label className="label block mb-2">AI PROVIDER:</label>
-              <select
-                value={config.ai.provider}
-                onChange={(e) => updateConfig(['ai', 'provider'], e.target.value)}
-                className="w-full px-4 py-3 rounded-none"
-              >
-                <option value="deepseek">DEEPSEEK v3.2</option>
-                <option value="openai">OPENAI GPT-4</option>
-                <option value="custom">CUSTOM ENDPOINT</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="label block mb-2">API SECRET KEY:</label>
-              <input
-                type="password"
-                value={config.ai.apiKey}
-                onChange={(e) => updateConfig(['ai', 'apiKey'], e.target.value)}
-                placeholder="sk-********************************"
-                className="w-full px-4 py-3 rounded-none font-mono"
-              />
-              <p className="text-xs text-muted-foreground mt-2 font-mono">
-                &gt; ENCRYPTED LOCAL STORAGE | NEVER TRANSMITTED
-              </p>
-            </div>
-
-            <div>
-              <label className="label block mb-2">API ENDPOINT URL:</label>
-              <input
-                type="text"
-                value={config.ai.apiBaseUrl}
-                onChange={(e) => updateConfig(['ai', 'apiBaseUrl'], e.target.value)}
-                placeholder="https://api.deepseek.com/v1"
-                className="w-full px-4 py-3 rounded-none font-mono"
-              />
-            </div>
-
-            <div>
-              <label className="label block mb-2">MODEL IDENTIFIER:</label>
-              <input
-                type="text"
-                value={config.ai.modelName}
-                onChange={(e) => updateConfig(['ai', 'modelName'], e.target.value)}
-                placeholder="deepseek-chat"
-                className="w-full px-4 py-3 rounded-none font-mono"
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="label block mb-2">TEMPERATURE [0-2]:</label>
-                <input
-                  type="number"
-                  min="0"
-                  max="2"
-                  step="0.1"
-                  value={config.ai.temperature || 0.7}
-                  onChange={(e) => updateConfig(['ai', 'temperature'], parseFloat(e.target.value))}
-                  className="w-full px-4 py-3 rounded-none font-mono"
-                />
-              </div>
-
-              <div>
-                <label className="label block mb-2">MAX TOKENS:</label>
-                <input
-                  type="number"
-                  min="100"
-                  max="4000"
-                  step="100"
-                  value={config.ai.maxTokens || 2000}
-                  onChange={(e) => updateConfig(['ai', 'maxTokens'], parseInt(e.target.value))}
-                  className="w-full px-4 py-3 rounded-none font-mono"
-                />
+                <h1 className="text-4xl font-bold">CONFIG.SYS</h1>
+                <div className="label mt-1">SYSTEM CONFIGURATION v2.0</div>
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* Game Configuration */}
-        <div className="bg-card rounded-none p-6 border-4 border-border space-y-4">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="led" style={{ background: 'var(--color-neon-orange)' }}></div>
-            <h2 className="text-2xl font-bold">GAME PARAMETERS</h2>
-          </div>
-
-          <div className="space-y-4">
-            <div>
-              <label className="label block mb-2">DM NARRATIVE STYLE:</label>
-              <select
-                value={config.game.dmStyle}
-                onChange={(e) => updateConfig(['game', 'dmStyle'], e.target.value)}
-                className="w-full px-4 py-3 rounded-none"
-              >
-                <option value="humanistic">HUMANISTIC - 人性与情感</option>
-                <option value="realistic">REALISTIC - 历史真实性</option>
-                <option value="dramatic">DRAMATIC - 戏剧性冲突</option>
-              </select>
-            </div>
-
-            <div className="flex items-center gap-3 p-4 bg-background border-2 border-border rounded-none">
-              <input
-                type="checkbox"
-                id="autoSave"
-                checked={config.game.autoSave}
-                onChange={(e) => updateConfig(['game', 'autoSave'], e.target.checked)}
-                className="w-5 h-5 rounded-none"
-              />
-              <label htmlFor="autoSave" className="label cursor-pointer">
-                ENABLE AUTO-SAVE PROTOCOL
-              </label>
-            </div>
-
-            {config.game.autoSave && (
-              <div>
-                <label className="label block mb-2">
-                  AUTO-SAVE INTERVAL (SECONDS):
-                </label>
-                <input
-                  type="number"
-                  min="10"
-                  max="300"
-                  step="10"
-                  value={config.game.autoSaveInterval}
-                  onChange={(e) => updateConfig(['game', 'autoSaveInterval'], parseInt(e.target.value))}
-                  className="w-full px-4 py-3 rounded-none font-mono"
-                />
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Save Controls */}
-        <div className="bg-card rounded-none p-6 border-4 border-border">
-          <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               {message && (
-                <span className={`terminal-text font-mono ${message.includes('失败') ? 'text-destructive' : ''}`}>
+                <span className={`terminal-text font-mono text-sm ${message.includes('失败') ? 'text-destructive' : ''}`}>
                   [ {message.toUpperCase()} ]
                 </span>
               )}
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="px-6 py-3 bg-primary text-primary-foreground rounded-none disabled:opacity-50"
+              >
+                {saving ? '保存中...' : '💾 保存配置'}
+              </button>
+              <button
+                onClick={() => navigate('/')}
+                className="px-6 py-3 bg-secondary text-secondary-foreground rounded-none"
+              >
+                ◀ 返回
+              </button>
             </div>
-            <button
-              onClick={handleSave}
-              disabled={saving}
-              className="px-8 py-3 bg-primary text-primary-foreground rounded-none disabled:opacity-50 flex items-center gap-3"
-            >
-              {saving ? (
-                <>
-                  <span className="indicator">●</span>
-                  SAVING...
-                </>
-              ) : (
-                <>
-                  <span>💾</span>
-                  WRITE TO DISK
-                </>
-              )}
-            </button>
           </div>
         </div>
 
-        {/* System Info */}
+        {/* Tab Navigation */}
+        <div className="bg-card rounded-none border-4 border-border overflow-hidden">
+          <div className="flex">
+            {[
+              { id: 'ai' as TabType, label: 'AI 模块配置', icon: '🤖' },
+              { id: 'game' as TabType, label: '游戏参数', icon: '🎲' },
+              { id: 'ui' as TabType, label: '界面设置', icon: '🎨' }
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex-1 px-6 py-4 font-bold transition-all ${
+                  activeTab === tab.id
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-background text-muted-foreground hover:bg-muted'
+                }`}
+              >
+                <span className="mr-2">{tab.icon}</span>
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* AI Configuration Tab */}
+        {activeTab === 'ai' && (
+          <div className="space-y-6">
+            {/* Model Preset Selection */}
+            <div className="bg-card rounded-none p-6 border-4 border-border">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="led" style={{ background: 'var(--color-neon-cyan)' }}></div>
+                <h2 className="text-2xl font-bold">模型预设选择</h2>
+              </div>
+              <label className="label block mb-3">选择AI模型预设:</label>
+              <select
+                value={currentPreset}
+                onChange={(e) => handleModelPresetChange(e.target.value)}
+                className="w-full px-4 py-3 rounded-none font-bold"
+              >
+                {MODEL_PRESETS.map(preset => (
+                  <option key={preset.id} value={preset.id}>
+                    {preset.name}
+                  </option>
+                ))}
+              </select>
+              <p className="text-xs text-muted-foreground mt-3 font-mono">
+                &gt; 选择预设会自动配置API端点和模型名称
+              </p>
+            </div>
+
+            {/* API Configuration */}
+            <div className="bg-card rounded-none p-6 border-4 border-border space-y-4">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="led indicator"></div>
+                <h2 className="text-2xl font-bold">API 连接配置</h2>
+              </div>
+
+              <div>
+                <label className="label block mb-2">API密钥 (API KEY):</label>
+                <input
+                  type="password"
+                  value={config.ai.apiKey}
+                  onChange={(e) => updateConfig(['ai', 'apiKey'], e.target.value)}
+                  placeholder="sk-********************************"
+                  className="w-full px-4 py-3 rounded-none font-mono"
+                />
+                <p className="text-xs text-muted-foreground mt-2 font-mono">
+                  &gt; 本地加密存储 | 不会上传到任何服务器
+                </p>
+              </div>
+
+              <div>
+                <label className="label block mb-2">API端点URL:</label>
+                <input
+                  type="text"
+                  value={config.ai.apiBaseUrl}
+                  onChange={(e) => updateConfig(['ai', 'apiBaseUrl'], e.target.value)}
+                  placeholder="https://api.example.com/v1"
+                  disabled={!isCustomPreset}
+                  className="w-full px-4 py-3 rounded-none font-mono disabled:opacity-50"
+                />
+              </div>
+
+              <div>
+                <label className="label block mb-2">模型标识符:</label>
+                <input
+                  type="text"
+                  value={config.ai.modelName}
+                  onChange={(e) => updateConfig(['ai', 'modelName'], e.target.value)}
+                  placeholder="gpt-4-turbo-preview"
+                  disabled={!isCustomPreset}
+                  className="w-full px-4 py-3 rounded-none font-mono disabled:opacity-50"
+                />
+              </div>
+            </div>
+
+            {/* Temperature Control - Highlighted */}
+            <div className="bg-card rounded-none p-6 border-4 border-primary">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="led" style={{ background: 'var(--color-neon-orange)' }}></div>
+                <h2 className="text-2xl font-bold">创造性控制 (Temperature)</h2>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <div className="flex justify-between items-center mb-3">
+                    <label className="label">Temperature 值:</label>
+                    <span className="text-2xl font-bold terminal-text font-mono">
+                      {(config.ai.temperature || 0.7).toFixed(2)}
+                    </span>
+                  </div>
+                  <input
+                    type="range"
+                    min="0"
+                    max="2"
+                    step="0.05"
+                    value={config.ai.temperature || 0.7}
+                    onChange={(e) => updateConfig(['ai', 'temperature'], parseFloat(e.target.value))}
+                    className="w-full h-3 bg-muted rounded-none appearance-none cursor-pointer"
+                    style={{
+                      background: `linear-gradient(to right, var(--color-terminal-green) 0%, var(--color-terminal-green) ${((config.ai.temperature || 0.7) / 2) * 100}%, var(--color-muted) ${((config.ai.temperature || 0.7) / 2) * 100}%, var(--color-muted) 100%)`
+                    }}
+                  />
+                  <div className="flex justify-between text-xs text-muted-foreground mt-2 font-mono">
+                    <span>0.0 (精确/保守)</span>
+                    <span>1.0 (平衡)</span>
+                    <span>2.0 (创造/随机)</span>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground font-mono">
+                  &gt; 较低值使AI更保守和确定性；较高值使AI更有创造性和随机性
+                </p>
+              </div>
+            </div>
+
+            {/* Advanced Parameters */}
+            <div className="bg-card rounded-none p-6 border-4 border-border">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="led" style={{ background: 'var(--color-neon-magenta)' }}></div>
+                <h2 className="text-2xl font-bold">高级参数</h2>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="label block mb-2">Max Tokens:</label>
+                  <input
+                    type="number"
+                    min="100"
+                    max="8000"
+                    step="100"
+                    value={config.ai.maxTokens || 2000}
+                    onChange={(e) => updateConfig(['ai', 'maxTokens'], parseInt(e.target.value))}
+                    className="w-full px-4 py-3 rounded-none font-mono"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">最大生成长度</p>
+                </div>
+
+                <div>
+                  <label className="label block mb-2">Top P:</label>
+                  <input
+                    type="number"
+                    min="0"
+                    max="1"
+                    step="0.05"
+                    value={config.ai.topP ?? 1.0}
+                    onChange={(e) => updateConfig(['ai', 'topP'], parseFloat(e.target.value))}
+                    className="w-full px-4 py-3 rounded-none font-mono"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">核采样概率</p>
+                </div>
+
+                <div>
+                  <label className="label block mb-2">Presence Penalty:</label>
+                  <input
+                    type="number"
+                    min="-2"
+                    max="2"
+                    step="0.1"
+                    value={config.ai.presencePenalty ?? 0}
+                    onChange={(e) => updateConfig(['ai', 'presencePenalty'], parseFloat(e.target.value))}
+                    className="w-full px-4 py-3 rounded-none font-mono"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">话题新鲜度</p>
+                </div>
+
+                <div>
+                  <label className="label block mb-2">Frequency Penalty:</label>
+                  <input
+                    type="number"
+                    min="-2"
+                    max="2"
+                    step="0.1"
+                    value={config.ai.frequencyPenalty ?? 0}
+                    onChange={(e) => updateConfig(['ai', 'frequencyPenalty'], parseFloat(e.target.value))}
+                    className="w-full px-4 py-3 rounded-none font-mono"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">重复惩罚</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Game Configuration Tab */}
+        {activeTab === 'game' && (
+          <div className="space-y-6">
+            {/* DM Style */}
+            <div className="bg-card rounded-none p-6 border-4 border-border">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="led" style={{ background: 'var(--color-neon-orange)' }}></div>
+                <h2 className="text-2xl font-bold">DM 叙事风格</h2>
+              </div>
+              <label className="label block mb-3">选择游戏主持风格:</label>
+              <select
+                value={config.game.dmStyle}
+                onChange={(e) => updateConfig(['game', 'dmStyle'], e.target.value)}
+                className="w-full px-4 py-3 rounded-none font-bold"
+              >
+                <option value="humanistic">人文主义 - 关注人性、情感与内心世界</option>
+                <option value="realistic">现实主义 - 强调历史真实性与因果逻辑</option>
+                <option value="dramatic">戏剧主义 - 追求冲突张力与戏剧性转折</option>
+              </select>
+            </div>
+
+            {/* DM Prompt Editor */}
+            <div className="bg-card rounded-none p-6 border-4 border-border">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="led indicator"></div>
+                  <h2 className="text-2xl font-bold">DM 系统提示词</h2>
+                </div>
+                <button
+                  onClick={() => setShowDmPromptEditor(!showDmPromptEditor)}
+                  className="px-4 py-2 bg-secondary text-secondary-foreground rounded-none"
+                >
+                  {showDmPromptEditor ? '▲ 收起编辑器' : '▼ 展开编辑器'}
+                </button>
+              </div>
+
+              {!showDmPromptEditor ? (
+                <div className="p-4 bg-background border-2 border-border rounded-none">
+                  <p className="text-sm font-mono text-muted-foreground line-clamp-3">
+                    {config.game.dmPrompt || DEFAULT_DM_PROMPT}
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <textarea
+                    value={config.game.dmPrompt || DEFAULT_DM_PROMPT}
+                    onChange={(e) => updateConfig(['game', 'dmPrompt'], e.target.value)}
+                    className="w-full px-4 py-3 rounded-none font-mono text-sm min-h-[400px] resize-y"
+                    placeholder="输入DM系统提示词..."
+                  />
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => updateConfig(['game', 'dmPrompt'], DEFAULT_DM_PROMPT)}
+                      className="px-4 py-2 bg-secondary text-secondary-foreground rounded-none"
+                    >
+                      恢复默认提示词
+                    </button>
+                    <p className="text-xs text-muted-foreground font-mono flex items-center">
+                      &gt; 此提示词决定了AI如何扮演游戏主持人
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Auto-save Settings */}
+            <div className="bg-card rounded-none p-6 border-4 border-border space-y-4">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="led" style={{ background: 'var(--color-neon-cyan)' }}></div>
+                <h2 className="text-2xl font-bold">自动保存设置</h2>
+              </div>
+
+              <div className="flex items-center gap-4 p-4 bg-background border-2 border-border rounded-none">
+                <input
+                  type="checkbox"
+                  id="autoSave"
+                  checked={config.game.autoSave}
+                  onChange={(e) => updateConfig(['game', 'autoSave'], e.target.checked)}
+                  className="w-6 h-6 rounded-none cursor-pointer"
+                />
+                <label htmlFor="autoSave" className="label cursor-pointer text-base">
+                  启用自动保存协议
+                </label>
+              </div>
+
+              {config.game.autoSave && (
+                <div>
+                  <label className="label block mb-2">自动保存间隔 (秒):</label>
+                  <input
+                    type="number"
+                    min="10"
+                    max="300"
+                    step="10"
+                    value={config.game.autoSaveInterval}
+                    onChange={(e) => updateConfig(['game', 'autoSaveInterval'], parseInt(e.target.value))}
+                    className="w-full px-4 py-3 rounded-none font-mono"
+                  />
+                  <p className="text-xs text-muted-foreground mt-2 font-mono">
+                    &gt; 推荐值: 60-120秒
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* UI Configuration Tab */}
+        {activeTab === 'ui' && (
+          <div className="space-y-6">
+            <div className="bg-card rounded-none p-6 border-4 border-border">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="led" style={{ background: 'var(--color-neon-magenta)' }}></div>
+                <h2 className="text-2xl font-bold">界面设置</h2>
+              </div>
+              <p className="text-muted-foreground font-mono text-sm">
+                &gt; UI配置功能即将推出...
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* System Info Footer */}
         <div className="bg-card rounded-none p-4 border-4 border-border">
           <div className="flex items-center justify-between text-xs font-mono">
-            <span className="label">CONFIG.SYS v1.0</span>
-            <span className="terminal-text">[ READY ]</span>
+            <span className="label">CONFIG.SYS v2.0 | Cassette Futurism Edition</span>
+            <span className="terminal-text flex items-center gap-2">
+              <div className="led" style={{ width: '8px', height: '8px' }}></div>
+              [ SYSTEM READY ]
+            </span>
           </div>
         </div>
       </div>

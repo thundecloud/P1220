@@ -1,65 +1,113 @@
 [
   {
-    "id": "byzantine_1075",
-    "name": "十字军阴影下的波斯山区 (AD 1075)",
-    "description": "这里是11世纪的波斯北部山区，塞尔柱突厥人的统治下,当地山民在伊斯兰文化与古老传统之间寻求平衡。远方,十字军的战旗正在东进,预示着剧变的来临。",
-    "era": "中世纪早期",
-    "region": "波斯北部山区",
-    "culture": ["伊斯兰文化", "山地部落", "商队贸易", "手工艺传统"],
-    "historicalBackground": "公元1075年,塞尔柱突厥帝国正值鼎盛时期,但内部已现分裂迹象。山区居民多为古老的波斯部落后裔,在表面接受伊斯兰教的同时保留着祖先的传统。商队贸易将东西方连接起来,也带来了文化冲突与机遇。",
+    "id": "victorian_london_1880",
+    "name": "雾都迷影 · 维多利亚伦敦",
+    "description": "1880年代的伦敦，工业革命的蒸汽与煤烟笼罩着这座帝国之都。在煤气灯昏黄的街道上，侦探追踪着连环凶案的线索，工人在血汗工厂中挣扎求生，贵族在舞会上谈笑风生。科学与迷信、文明与野蛮在这里交织碰撞。",
+    "era": "维多利亚时代",
+    "region": "伦敦",
+    "culture": ["大英帝国", "工业革命", "侦探文化", "阶级社会"],
+    "historicalBackground": "维多利亚女王统治下的大英帝国正值巅峰。伦敦是世界上最大的城市，人口超过500万。工业化带来了前所未有的财富，也制造了贫富悬殊和社会问题。开膛手杰克的阴影尚未散去，福尔摩斯式的理性推理成为时尚。电气化刚刚开始，煤气灯仍是主要照明。殖民地的财富源源不断流入，但底层民众生活困苦。",
+    "imageUrl": "",
     "special": {
-      "challenges": ["十字军东征的冲击", "部落间冲突", "自然灾害", "商路危机"],
-      "opportunities": ["商贸繁荣", "文化交流", "技艺传承", "社群凝聚"]
+      "challenges": [
+        "严格的阶级制度限制社会流动",
+        "工业污染导致健康问题",
+        "犯罪率高企，治安混乱",
+        "传染病频发"
+      ],
+      "opportunities": [
+        "科学技术快速发展",
+        "侦探、记者等新职业兴起",
+        "全球贸易带来致富机会",
+        "社会改革运动萌芽"
+      ]
     },
     "attributeParams": {
+      "strength": { "mu": 50, "sigma": 15 },
+      "constitution": { "mu": 45, "sigma": 15 },
+      "dexterity": { "mu": 50, "sigma": 15 },
+      "intelligence": { "mu": 55, "sigma": 14 },
+      "education": { "mu": 40, "sigma": 20 },
+      "power": { "mu": 50, "sigma": 15 },
+      "charisma": { "mu": 50, "sigma": 15 },
+      "luck": { "mu": 50, "sigma": 15 }
+    },
+    "talentPoolIds": ["victorian_common", "detective_skills", "industrial_age"],
+    "skillPoolIds": ["victorian_skills"],
+    "isCustom": false
+  },
+  {
+    "id": "cold_war_berlin_1961",
+    "name": "柏林谍影 · 冷战前线",
+    "description": "1961年，柏林墙刚刚建起。这座分裂的城市是东西方冷战的最前线，间谍、叛徒、双面特工在此交织。每一个陌生人都可能是情报人员，每一次对话都可能被监听。在意识形态的对抗中，人性、忠诚和背叛的界限变得模糊不清。",
+    "era": "冷战时期",
+    "region": "柏林",
+    "culture": ["冷战文化", "间谍活动", "意识形态对抗", "分裂城市"],
+    "historicalBackground": "1961年8月13日，东德开始建造柏林墙，将柏林一分为二。这是冷战最紧张的时期之一，美苏两国在柏林对峙。东柏林在苏联控制下，实行计划经济和严密监控；西柏林则是自由世界的橱窗，享受马歇尔计划的援助。间谍活动猖獗，CIA、克格勃、东德秘密警察史塔西在暗中角力。普通市民在恐惧和不确定中生活，家庭因墙分离，朋友因立场反目。",
+    "imageUrl": "",
+    "special": {
+      "challenges": [
+        "无处不在的监视和告密",
+        "家庭和友情因政治立场撕裂",
+        "逃亡风险极高",
+        "核战争的恐惧阴影"
+      ],
+      "opportunities": [
+        "情报交易可获巨额报酬",
+        "利用双方对抗谋取利益",
+        "西方的经济援助和就业机会",
+        "在历史转折点留下印记"
+      ]
+    },
+    "attributeParams": {
+      "strength": { "mu": 50, "sigma": 15 },
       "constitution": { "mu": 50, "sigma": 15 },
-      "perception": { "mu": 52, "sigma": 14 },
-      "adaptability": { "mu": 48, "sigma": 16 },
-      "familyBond": { "mu": 55, "sigma": 13 },
-      "latentTalent": { "mu": 45, "sigma": 17 }
+      "dexterity": { "mu": 55, "sigma": 14 },
+      "intelligence": { "mu": 55, "sigma": 14 },
+      "education": { "mu": 50, "sigma": 15 },
+      "power": { "mu": 50, "sigma": 15 },
+      "charisma": { "mu": 50, "sigma": 15 },
+      "luck": { "mu": 45, "sigma": 16 }
     },
-    "talentPoolIds": ["medieval_common", "mountain_life", "trade_skills", "cultural_identity"]
+    "talentPoolIds": ["cold_war_common", "espionage_skills", "survival_skills"],
+    "skillPoolIds": ["cold_war_skills"],
+    "isCustom": false
   },
   {
-    "id": "song_dynasty_1120",
-    "name": "宋徽宗时代的汴京 (公元1120年)",
-    "description": "北宋末年的汴京城,繁华与危机并存。艺术与文化达到巅峰,但北方金国虎视眈眈,朝廷腐败,民不聊生。你将在这个时代的洪流中寻找自己的命运。",
-    "era": "北宋末期",
-    "region": "汴京(开封)",
-    "culture": ["儒家文化", "市井文化", "商业发达", "艺术繁荣"],
-    "historicalBackground": "宋徽宗赵佶在位,虽然是艺术大师,但政治昏庸。蔡京等奸臣把持朝政,花石纲等弊政横行。金国在北方日益强大,靖康之难即将到来。但汴京仍是世界上最繁华的城市之一,商业、艺术、科技都达到了前所未有的高度。",
+    "id": "edo_kyoto_1700",
+    "name": "花见小路 · 元禄京都",
+    "description": "元禄时代的京都，德川幕府统治下的和平年代已持续近百年。在这座古都，武士阶层渐渐没落，町人文化蓬勃发展。艺伎在祇园表演，僧侣在寺庙修行，商人在锦市场讨价还价。严格的身份制度下，每个人都在寻找自己的生存之道。",
+    "era": "江户时代（元禄期）",
+    "region": "京都",
+    "culture": ["武士道", "町人文化", "茶道花道", "佛教传统"],
+    "historicalBackground": "元禄时代（1688-1704）是江户时代的文化鼎盛期。德川幕府的锁国政策已经稳固，日本进入长期和平。京都虽然不再是政治中心，但仍是文化和宗教的核心。士农工商的身份制度严格，但町人（商人和手工业者）阶层通过经济实力获得了文化话语权。浮世绘、歌舞伎、俳句等艺术形式兴盛。茶道、花道等精神文化达到巅峰。同时，严格的等级制度和锁国政策也限制了社会活力。",
+    "imageUrl": "",
     "special": {
-      "challenges": ["政治腐败", "外族入侵威胁", "社会阶层固化", "天灾人祸"],
-      "opportunities": ["文化繁荣", "商业发达", "科技进步", "社会流动机会"]
+      "challenges": [
+        "严格的身份等级制度",
+        "锁国导致的信息和技术闭塞",
+        "武士阶层的特权和压迫",
+        "自然灾害频发"
+      ],
+      "opportunities": [
+        "长期和平促进文化艺术发展",
+        "町人经济繁荣",
+        "传统技艺精益求精",
+        "独特的美学追求"
+      ]
     },
     "attributeParams": {
-      "constitution": { "mu": 48, "sigma": 14 },
-      "perception": { "mu": 55, "sigma": 13 },
-      "adaptability": { "mu": 50, "sigma": 15 },
-      "familyBond": { "mu": 52, "sigma": 14 },
-      "latentTalent": { "mu": 48, "sigma": 16 }
+      "strength": { "mu": 50, "sigma": 15 },
+      "constitution": { "mu": 50, "sigma": 15 },
+      "dexterity": { "mu": 55, "sigma": 14 },
+      "intelligence": { "mu": 50, "sigma": 15 },
+      "education": { "mu": 45, "sigma": 16 },
+      "power": { "mu": 55, "sigma": 14 },
+      "charisma": { "mu": 50, "sigma": 15 },
+      "luck": { "mu": 50, "sigma": 15 }
     },
-    "talentPoolIds": ["medieval_common", "urban_life", "artistic_talents", "scholarly_pursuits"]
-  },
-  {
-    "id": "edo_japan_1650",
-    "name": "德川幕府的江户时代 (公元1650年)",
-    "description": "日本进入了长达两个半世纪的和平时期。严格的身份制度,锁国政策下独特的文化发展,武士精神与町人文化的碰撞,构成了这个时代的独特风貌。",
-    "era": "江户时代中期",
-    "region": "江户(东京)及周边",
-    "culture": ["武士道", "町人文化", "艺能发达", "匠人精神"],
-    "historicalBackground": "德川家光确立的幕藩体制已经稳固,日本进入锁国状态。严格的士农工商身份制度,但町人(商人)阶层逐渐富裕并发展出独特的文化。歌舞伎、浮世绘等艺术形式蓬勃发展,同时武士阶层在和平时代寻找新的存在意义。",
-    "special": {
-      "challenges": ["严格的身份制度", "锁国导致的信息闭塞", "自然灾害频发", "武士阶层的没落"],
-      "opportunities": ["长期和平", "文化艺术繁荣", "工商业发展", "独特的美学追求"]
-    },
-    "attributeParams": {
-      "constitution": { "mu": 52, "sigma": 13 },
-      "perception": { "mu": 50, "sigma": 15 },
-      "adaptability": { "mu": 45, "sigma": 16 },
-      "familyBond": { "mu": 58, "sigma": 12 },
-      "latentTalent": { "mu": 47, "sigma": 15 }
-    },
-    "talentPoolIds": ["medieval_common", "japanese_traditions", "artisan_skills", "warrior_spirit"]
+    "talentPoolIds": ["edo_common", "artisan_skills", "warrior_spirit", "aesthetic_pursuits"],
+    "skillPoolIds": ["edo_skills"],
+    "isCustom": false
   }
 ]
