@@ -28,6 +28,23 @@
   - [x] 自动将大型设定拆分为 Lorebook 条目
   - [x] 修复 CharacterCreation 页面"管理自定义世界线"按钮
   - [x] 集成世界线保存/删除功能
+  - [x] **文件夹导入功能**（选择文件夹，自动递归读取所有.md/.txt文件）
+  - [x] SettingImportService 服务（目录结构解析为 SettingCategory 层次）
+  - [x] Tauri 目录读取命令（read_directory_structure）
+  - [x] 文件夹选择对话框集成
+
+- **自由世界观支持**
+  - [x] Worldline 类型扩展：世界类型、物理规则、魔法体系等
+  - [x] 支持完全架空世界（科幻、奇幻、赛博朋克等）
+  - [x] 社会结构、货币系统等自定义字段
+
+- **简历级角色详细信息**
+  - [x] DetailedProfile 类型定义
+  - [x] 教育经历、工作经历、人际关系等结构化数据
+  - [x] 性格特征、外貌描述、信仰价值观
+  - [x] 恐惧弱点、目标动机、爱好兴趣
+  - [x] DetailedProfileEditor 组件（高级设置折叠面板）
+  - [ ] CharacterCreation 集成 DetailedProfileEditor
 
 ## 当前开发阶段
 

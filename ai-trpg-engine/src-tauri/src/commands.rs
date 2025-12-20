@@ -191,3 +191,85 @@ pub fn export_worldline(filename: String) -> Result<String, String> {
 pub fn import_worldline(filename: String, data: String) -> Result<String, String> {
     save_worldline(filename, data)
 }
+
+// ============ 设定集目录导入 ============
+
+use serde::{Deserialize, Serialize};
+
+#[derive(Serialize, Deserialize, Clone)]
+pub struct FileNode {
+    pub name: String,
+    pub path: String,
+    pub is_dir: bool,
+    pub content: Option<String>,  // 文件内容（仅对.md和.txt文件）
+    pub children: Option<Vec<FileNode>>,  // 子节点（仅对目录）
+}
+
+// 递归读取目录结构和文件内容
+#[tauri::command]
+pub fn read_directory_structure(dir_path: String) -> Result<FileNode, String> {
+    let path = PathBuf::from(&dir_path);
+
+    if !path.exists() {
+        return Err(format!("路径不存在: {}", dir_path));
+    }
+
+    read_dir_recursive(&path)
+}
+
+fn read_dir_recursive(path: &PathBuf) -> Result<FileNode, String> {
+    let metadata = fs::metadata(path).map_err(|e| e.to_string())?;
+    let file_name = path
+        .file_name()
+        .and_then(|n| n.to_str())
+        .unwrap_or("unknown")
+        .to_string();
+
+    if metadata.is_dir() {
+        // 读取目录
+        let entries = fs::read_dir(path).map_err(|e| e.to_string())?;
+        let mut children = Vec::new();
+
+        for entry in entries {
+            let entry = entry.map_err(|e| e.to_string())?;
+            let child_path = entry.path();
+
+            // 递归读取子节点
+            match read_dir_recursive(&child_path) {
+                Ok(node) => children.push(node),
+                Err(_) => continue,  // 跳过无法读取的文件
+            }
+        }
+
+        Ok(FileNode {
+            name: file_name,
+            path: path.to_str().unwrap_or("").to_string(),
+            is_dir: true,
+            content: None,
+            children: Some(children),
+        })
+    } else {
+        // 读取文件
+        let extension = path
+            .extension()
+            .and_then(|e| e.to_str())
+            .unwrap_or("");
+
+        let content = if extension == "md" || extension == "txt" || extension == "markdown" {
+            match fs::read_to_string(path) {
+                Ok(text) => Some(text),
+                Err(_) => None,
+            }
+        } else {
+            None
+        };
+
+        Ok(FileNode {
+            name: file_name,
+            path: path.to_str().unwrap_or("").to_string(),
+            is_dir: false,
+            content,
+            children: None,
+        })
+    }
+}

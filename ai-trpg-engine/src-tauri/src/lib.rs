@@ -17,6 +17,7 @@ pub fn run() {
             commands::delete_worldline,
             commands::export_worldline,
             commands::import_worldline,
+            commands::read_directory_structure,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

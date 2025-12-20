@@ -231,3 +231,45 @@ export async function importWorldline(filename: string, data: string): Promise<s
   // 浏览器环境：保存数据
   return saveWorldline(filename, data);
 }
+
+// ============ 设定集目录导入 ============
+
+/**
+ * 文件节点类型（与Rust后端FileNode对应）
+ */
+export interface FileNode {
+  name: string;
+  path: string;
+  is_dir: boolean;
+  content?: string;
+  children?: FileNode[];
+}
+
+/**
+ * 读取目录结构和文件内容
+ */
+export async function readDirectoryStructure(dirPath: string): Promise<FileNode> {
+  if (isTauriEnvironment()) {
+    return invokeTauri<FileNode>('read_directory_structure', { dirPath });
+  }
+
+  // 浏览器环境：不支持目录读取，抛出错误
+  throw new Error('目录读取功能仅在桌面应用中可用');
+}
+
+/**
+ * 打开文件夹选择对话框
+ */
+export async function selectDirectory(): Promise<string | null> {
+  if (!isTauriEnvironment()) {
+    throw new Error('文件夹选择功能仅在桌面应用中可用');
+  }
+
+  const { open } = await import('@tauri-apps/plugin-dialog');
+  const selected = await open({
+    directory: true,
+    multiple: false,
+  });
+
+  return selected as string | null;
+}

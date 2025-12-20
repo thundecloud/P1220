@@ -86,14 +86,26 @@ export interface Worldline {
   id: string;
   name: string;
   description: string;
-  era: string;
-  region: string;
-  culture: string[];
-  historicalBackground: string;
-  imageUrl?: string;  // 世界线封面图
+
+  // ★ 基础设定（可选，支持完全架空世界）
+  era: string;                            // 时代（可以是架空的，如"星历2347年"）
+  region: string;                         // 地区（可以是架空的，如"赛博都市夜之城"）
+  culture: string[];                      // 文化标签
+  historicalBackground: string;           // 历史背景
+  imageUrl?: string;                      // 世界线封面图
+
+  // ★ 自由世界观设定（支持完全自定义的世界）
+  worldType?: 'historical' | 'alternate_history' | 'fantasy' | 'sci-fi' | 'cyberpunk' | 'post_apocalyptic' | 'custom';
+  physicsRules?: string;                  // 物理规则（如"魔法存在"、"赛博改造普及"）
+  technologyLevel?: string;               // 科技水平（如"中世纪"、"星际时代"）
+  magicSystem?: string;                   // 魔法体系描述
+  socialStructure?: string;               // 社会结构（如"赛博朋克企业统治"、"封建制度"）
+  currency?: string;                      // 货币系统（如"金币"、"信用点"、"以太币"）
+
   special: {
-    challenges?: string[];
-    opportunities?: string[];
+    challenges?: string[];                // 世界特有挑战
+    opportunities?: string[];             // 世界特有机遇
+    uniqueFeatures?: string[];            // 独特特性（如"AI觉醒"、"龙族存在"）
   };
 
   // 新版COC风格属性生成参数
@@ -114,11 +126,12 @@ export interface Worldline {
   // ★ Lorebook配置（用于动态上下文注入）
   lorebook?: Lorebook;
 
-  // ★ 新增：大型设定集支持
+  // ★ 新增：大型设定集支持（多文件、目录结构）
   settingDocument?: SettingDocument;      // 单个大型设定文档
-  settingCategories?: SettingCategory[];  // 分类的设定集合
+  settingCategories?: SettingCategory[];  // 分类的设定集合（支持目录层次结构）
   settingSize?: number;                   // 设定总大小（字节）
   settingAutoSplit?: boolean;             // 是否自动将大型设定拆分为Lorebook条目
+  settingFileCount?: number;              // 设定文件数量
 
   // 自定义世界线标记
   isCustom?: boolean;
@@ -257,7 +270,123 @@ export interface CharacterCardV2 {
   data: CharacterCardV2Data;
 }
 
-// 角色类型（更新为支持新COC风格 + SillyTavern V2兼容）
+// ============ 简历级角色详细信息 ============
+
+/**
+ * 教育经历
+ */
+export interface Education {
+  institution: string;      // 机构名称
+  degree?: string;          // 学位/证书
+  field?: string;           // 专业领域
+  startYear?: number;
+  endYear?: number;
+  description?: string;     // 描述
+}
+
+/**
+ * 工作/职业经历
+ */
+export interface WorkExperience {
+  organization: string;     // 组织/雇主
+  position: string;         // 职位
+  startYear?: number;
+  endYear?: number;
+  description?: string;     // 职责描述
+  achievements?: string[];  // 成就
+}
+
+/**
+ * 人际关系
+ */
+export interface Relationship {
+  name: string;             // 关系对象名称
+  relation: string;         // 关系类型（父母、朋友、导师等）
+  description?: string;     // 关系描述
+  status?: 'alive' | 'deceased' | 'unknown';  // 状态
+  influence?: string;       // 对角色的影响
+}
+
+/**
+ * 性格特征
+ */
+export interface PersonalityTrait {
+  trait: string;            // 特征名称
+  description?: string;     // 描述
+  intensity?: number;       // 强度 (0-100)
+}
+
+/**
+ * 外貌描述
+ */
+export interface PhysicalAppearance {
+  height?: string;          // 身高
+  weight?: string;          // 体重
+  eyeColor?: string;        // 眼睛颜色
+  hairColor?: string;       // 发色
+  skinTone?: string;        // 肤色
+  distinguishingFeatures?: string[];  // 显著特征
+  generalDescription?: string;        // 总体描述
+}
+
+/**
+ * 简历级详细信息（放在高级设置中）
+ */
+export interface DetailedProfile {
+  // 教育背景
+  education?: Education[];
+
+  // 工作经历
+  workExperience?: WorkExperience[];
+
+  // 人际关系
+  relationships?: Relationship[];
+
+  // 性格特征
+  personality?: PersonalityTrait[];
+
+  // 外貌描述
+  appearance?: PhysicalAppearance;
+
+  // 信仰与价值观
+  beliefs?: string[];
+  values?: string[];
+
+  // 恐惧与弱点
+  fears?: string[];
+  weaknesses?: string[];
+
+  // 目标与动机
+  goals?: string[];
+  motivations?: string[];
+
+  // 爱好与兴趣
+  hobbies?: string[];
+  interests?: string[];
+
+  // 语言能力
+  languages?: Array<{
+    language: string;
+    proficiency: 'native' | 'fluent' | 'conversational' | 'basic';
+  }>;
+
+  // 财产与资源
+  wealth?: string;          // 财富等级
+  property?: string[];      // 财产列表
+  connections?: string[];   // 人脉资源
+
+  // 重要事件
+  majorEvents?: Array<{
+    year: number;
+    event: string;
+    impact?: string;
+  }>;
+
+  // 其他备注
+  notes?: string;
+}
+
+// 角色类型（更新为支持新COC风格 + SillyTavern V2兼容 + 简历级详细信息）
 export interface Character {
   id: string;
   name: string;
@@ -284,6 +413,9 @@ export interface Character {
 
   // ★ SillyTavern V2 兼容字段
   characterCard?: CharacterCardV2Data;  // 完整的 V2 数据
+
+  // ★ 简历级详细信息（高级设置）
+  detailedProfile?: DetailedProfile;
 }
 
 // 判定结果类型

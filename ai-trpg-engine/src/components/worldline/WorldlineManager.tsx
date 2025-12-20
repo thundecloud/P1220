@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import type { Worldline, SettingDocument } from '../../utils/types';
 import { LorebookService } from '../../services/lorebookService';
+import { SettingImportService } from '../../services/settingImportService';
+import { selectDirectory, readDirectoryStructure } from '../../utils/tauri';
 
 interface WorldlineManagerProps {
   customWorldlines: Worldline[];
@@ -19,7 +21,7 @@ export default function WorldlineManager({
 }: WorldlineManagerProps) {
   const [selectedWorldline, setSelectedWorldline] = useState<Worldline | null>(null);
   const [isCreating, setIsCreating] = useState(false);
-  const [importMode, setImportMode] = useState<'file' | 'paste'>('file');
+  const [importMode, setImportMode] = useState<'file' | 'folder' | 'paste'>('folder');
 
   // 新建世界线表单状态
   const [formData, setFormData] = useState({
@@ -72,6 +74,48 @@ export default function WorldlineManager({
     } catch (error) {
       console.error('Failed to read file:', error);
       alert('文件读取失败');
+    }
+  };
+
+  const handleImportFolder = async () => {
+    try {
+      // 打开文件夹选择对话框
+      const selectedPath = await selectDirectory();
+      if (!selectedPath) return;
+
+      // 读取目录结构
+      const rootNode = await readDirectoryStructure(selectedPath);
+
+      // 转换为 SettingCategory 层次结构
+      const categories = SettingImportService.convertToSettingCategories(rootNode);
+
+      // 收集所有文档
+      const allDocuments = SettingImportService.collectAllDocuments(categories);
+
+      // 计算总大小和文件数量
+      const totalSize = SettingImportService.calculateTotalSize(allDocuments);
+      const fileCount = allDocuments.length;
+
+      // 合并所有文档内容作为完整设定文本（用于显示）
+      const combinedText = allDocuments
+        .map(doc => `# ${doc.title}\n\n${doc.content}`)
+        .join('\n\n---\n\n');
+
+      setSettingText(combinedText);
+
+      // 自动填充基础信息
+      if (!formData.name) {
+        setFormData(prev => ({
+          ...prev,
+          name: rootNode.name,
+          description: SettingImportService.generateSummary(categories)
+        }));
+      }
+
+      alert(`成功导入 ${fileCount} 个文件，总计 ${(totalSize / 1024).toFixed(1)} KB`);
+    } catch (error) {
+      console.error('Failed to import folder:', error);
+      alert('文件夹导入失败: ' + (error instanceof Error ? error.message : '未知错误'));
     }
   };
 
@@ -310,10 +354,16 @@ export default function WorldlineManager({
 
             <div className="flex gap-4 mb-4">
               <button
+                onClick={() => setImportMode('folder')}
+                className={`px-4 py-2 ${importMode === 'folder' ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}
+              >
+                选择文件夹 ★推荐
+              </button>
+              <button
                 onClick={() => setImportMode('file')}
                 className={`px-4 py-2 ${importMode === 'file' ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}
               >
-                从文件导入
+                单个文件
               </button>
               <button
                 onClick={() => setImportMode('paste')}
@@ -323,7 +373,25 @@ export default function WorldlineManager({
               </button>
             </div>
 
-            {importMode === 'file' ? (
+            {importMode === 'folder' ? (
+              <div>
+                <label className="label block mb-2">选择设定集文件夹</label>
+                <button
+                  onClick={handleImportFolder}
+                  className="w-full px-6 py-3 bg-accent-teal text-black font-bold"
+                >
+                  📁 打开文件夹选择器
+                </button>
+                <p className="text-xs text-muted-foreground mt-2">
+                  自动读取文件夹内所有 .md 和 .txt 文件，保留目录结构
+                </p>
+                {settingText && (
+                  <p className="text-sm text-accent-amber mt-2">
+                    ✓ 已导入设定集（{(settingText.length / 1024).toFixed(1)} KB）
+                  </p>
+                )}
+              </div>
+            ) : importMode === 'file' ? (
               <div>
                 <label className="label block mb-2">选择设定文件（.txt, .md）</label>
                 <input
