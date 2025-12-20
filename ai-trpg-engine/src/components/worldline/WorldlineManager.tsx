@@ -215,7 +215,6 @@ export default function WorldlineManager({
   };
 
   const handleDeleteWorldline = (worldlineId: string) => {
-    if (!confirm('确定要删除这个世界线吗？')) return;
     onWorldlineDeleted(worldlineId);
   };
 
@@ -277,7 +276,11 @@ export default function WorldlineManager({
                         编辑
                       </button>
                       <button
-                        onClick={() => handleDeleteWorldline(wl.id)}
+                        onClick={() => {
+                          if (confirm('确定要删除这个世界线吗？')) {
+                            handleDeleteWorldline(wl.id);
+                          }
+                        }}
                         className="px-3 py-1 text-sm bg-destructive text-destructive-foreground"
                       >
                         删除
