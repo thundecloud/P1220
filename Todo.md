@@ -3,9 +3,16 @@
 ## 项目概况
 基于 Tauri 2 + React + TypeScript 的 TRPG 桌面应用，结合 COC 风格属性系统与 AI 叙事生成能力。
 
-## 最近更新 (2025-12-20)
+## 最近更新 (2025-12-21)
 
 ### ✅ 已完成
+- **Tauri v2 迁移**
+  - [x] 修复 Cargo.toml 中的 feature flags（移除 dialog-all, fs-all, path-all）
+  - [x] 添加 Tauri v2 插件依赖（tauri-plugin-dialog, tauri-plugin-fs）
+  - [x] 更新 lib.rs 初始化插件
+  - [x] 更新 tauri.conf.json 配置插件权限
+  - [x] 安装 Rust 工具链（rustc 1.92.0）
+
 - **SillyTavern 系统对齐**
   - [x] Lorebook 系统完整实现（lorebookService.ts）
   - [x] Character Card V2 类型兼容
@@ -251,6 +258,8 @@
 
 ---
 
-**最后更新**: 2025-12-20
+**最后更新**: 2025-12-21
 **当前版本**: v0.1.0-dev
-**构建状态**: ✅ 通过
+**Tauri 版本**: 2.9.x（已完成 v2 迁移）
+**Rust 版本**: 1.92.0
+**构建状态**: ⏳ 待验证（需重启终端以加载 Rust 环境变量）
