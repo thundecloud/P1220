@@ -71,8 +71,8 @@
 - [x] Lorebook 数据结构定义
 - [x] Lorebook 触发和激活服务
 - [x] Lorebook 编辑界面组件
-- [ ] 路由配置集成（添加 /lorebook 路由）
-- [ ] Tauri 命令：保存/加载 Lorebook
+- [x] 路由配置集成（添加 /lorebook 路由）
+- [x] Tauri 命令：保存/加载 Lorebook
 - [ ] 世界线与 Lorebook 关联
 - [ ] 游戏运行时 Lorebook 激活测试
 

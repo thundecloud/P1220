@@ -1499,9 +1499,26 @@ npm run tauri build
 
 ---
 
-## 最近更新 (2025-12-20)
+## 最近更新 (2025-12-21)
 
-### Lorebook 编辑界面实现 ✅
+### Lorebook 管理系统完整实现 ✅
+- **路由集成**：添加 `/lorebook` 路由，从 Config 页面可直接访问
+- **后端命令**：完整的 Tauri 命令支持（save_lorebook, load_lorebook, list_lorebooks, delete_lorebook）
+- **前端功能**：LorebookManagement 页面实现增删改查、加载状态、错误处理
+- **持久化存储**：本地存储在 `$DOCUMENTS/AI-TRPG/lorebooks/`
+- **浏览器支持**：开发环境使用 localStorage 模拟
+
+### 权限和交互修复 ✅
+- **选择文件夹功能修复**：
+  - 添加 `dialog:allow-open` 权限
+  - 扩展文件系统读取权限（`fs:read-all` 支持 `**`）
+  - 修复在 `npm run tauri dev` 环境下无法选择文件夹的问题
+
+- **删除确认弹窗时序修复**：
+  - 统一 WorldlineManager 和 LorebookManagement 的确认对话框模式
+  - 确保确认对话框在删除操作之前同步弹出
+
+### Lorebook 编辑界面实现 ✅ (2025-12-20)
 - 完整的 Lorebook 管理和编辑系统
 - 4个主要组件：LorebookManagement, LorebookEditor, LorebookEntryCard, LorebookEntryForm
 - 支持全部 SillyTavern World Info 特性
@@ -1511,7 +1528,7 @@ npm run tauri build
 
 ---
 
-**文档版本**: 1.1
-**最后更新**: 2025-12-20
+**文档版本**: 1.2
+**最后更新**: 2025-12-21
 **维护者**: Cinder
 **许可证**: MIT（或根据项目需求选择）
