@@ -2,7 +2,7 @@
  * 检查是否在Tauri环境中运行
  */
 export function isTauriEnvironment(): boolean {
-  return typeof window !== 'undefined' && '__TAURI__' in window;
+  return typeof window !== 'undefined' && ('__TAURI__' in window || '__TAURI_INTERNALS__' in window);
 }
 
 /**
