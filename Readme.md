@@ -109,34 +109,39 @@ ai-trpg-engine/
 │   ├── components/          # UI组件
 │   │   ├── common/          # 通用组件（按钮、卡片等）
 │   │   ├── character/       # 角色相关组件
-│   │   │   ├── AttributeDisplay.jsx   # 五维属性展示
-│   │   │   ├── TalentCard.jsx         # 天赋卡片
-│   │   │   └── CharacterSheet.jsx     # 角色面板
+│   │   │   ├── AttributeDisplay.tsx   # COC属性展示
+│   │   │   ├── TalentCard.tsx         # 天赋卡片
+│   │   │   └── CharacterSheet.tsx     # 角色面板
 │   │   ├── game/            # 游戏界面组件
-│   │   │   ├── StoryDisplay.jsx       # 故事文本展示
-│   │   │   ├── CheckRoller.jsx        # 判定UI
-│   │   │   └── ActionInput.jsx        # 行动输入
-│   │   └── worldline/       # 世界线组件
-│   │       └── WorldlineCard.jsx      # 世界线选择卡片
+│   │   │   ├── StoryDisplay.tsx       # 故事文本展示
+│   │   │   ├── CheckRoller.tsx        # 判定UI
+│   │   │   └── ActionInput.tsx        # 行动输入
+│   │   ├── worldline/       # 世界线组件
+│   │   │   └── WorldlineCard.tsx      # 世界线选择卡片
+│   │   └── lorebook/        # Lorebook组件 (★新增)
+│   │       ├── LorebookEditor.tsx     # Lorebook主编辑器
+│   │       ├── LorebookEntryCard.tsx  # 条目卡片
+│   │       ├── LorebookEntryForm.tsx  # 条目编辑表单
+│   │       └── index.ts               # 组件导出
 │   ├── pages/               # 页面组件
-│   │   ├── Landing.jsx      # 启动页
-│   │   ├── Config.jsx       # 配置页
-│   │   ├── CharacterCreation.jsx  # 角色创建页
-│   │   └── GameMain.jsx     # 游戏主界面
+│   │   ├── Landing.tsx      # 启动页
+│   │   ├── Config.tsx       # 配置页
+│   │   ├── CharacterCreation.tsx  # 角色创建页
+│   │   ├── GameMain.tsx     # 游戏主界面
+│   │   └── LorebookManagement.tsx  # Lorebook管理页 (★新增)
 │   ├── stores/              # 状态管理
-│   │   ├── gameStore.js     # 游戏状态
-│   │   ├── characterStore.js # 角色状态
-│   │   └── configStore.js   # 配置状态
+│   │   ├── gameStore.ts     # 游戏状态
+│   │   └── characterStore.ts # 角色状态
 │   ├── services/            # 业务逻辑服务
-│   │   ├── characterService.js  # 角色生成逻辑
-│   │   ├── diceService.js       # 判定系统
-│   │   ├── aiService.js         # AI调用封装
-│   │   ├── fileService.js       # 文件操作（调用Tauri命令）
-│   │   └── promptService.js     # 提示词管理
+│   │   ├── characterService.ts  # 角色生成逻辑
+│   │   ├── lorebookService.ts   # Lorebook激活逻辑 (★已实现)
+│   │   ├── diceService.ts       # 判定系统
+│   │   ├── aiService.ts         # AI调用封装
+│   │   └── promptService.ts     # 提示词管理
 │   ├── utils/               # 工具函数
-│   │   ├── random.js        # 随机数生成（正态分布等）
-│   │   ├── validation.js    # 数据验证
-│   │   └── constants.js     # 常量定义
+│   │   ├── types.ts         # TypeScript类型定义 (★完整)
+│   │   ├── random.ts        # 随机数生成（正态分布等）
+│   │   └── tauri.ts         # Tauri API封装
 │   ├── data/                # 静态数据（打包进应用）
 │   │   ├── worldlines.json  # 世界线配置
 │   │   ├── talents.json     # 天赋池
@@ -268,6 +273,41 @@ README.md                # 本文档
 - Lorebook服务 (`lorebookService.ts`) 处理动态激活
 - 支持动态加载和扩展
 - 前端展示为选择卡片，包含详细信息
+
+**Lorebook 编辑界面** (★已实现)：
+完整的 Lorebook 管理和编辑系统，包含以下组件：
+
+1. **LorebookManagement 页面** (`src/pages/LorebookManagement.tsx`)
+   - Lorebook 列表视图
+   - 创建、删除、选择知识库
+   - 知识库统计信息展示
+
+2. **LorebookEditor 组件** (`src/components/lorebook/LorebookEditor.tsx`)
+   - 全局设置编辑（扫描深度、递归扫描、Token预算）
+   - 条目搜索和过滤
+   - 条目列表管理
+   - 条目状态切换（启用/禁用）
+
+3. **LorebookEntryCard 组件** (`src/components/lorebook/LorebookEntryCard.tsx`)
+   - 条目信息展示（标题、关键词、内容预览）
+   - 高级选项指示器（次级过滤、Sticky、Cooldown等）
+   - 快速操作（编辑、删除、启用/禁用）
+   - Cassette Futurism 风格UI
+
+4. **LorebookEntryForm 组件** (`src/components/lorebook/LorebookEntryForm.tsx`)
+   - 分标签页编辑（基础设置、高级选项、时序控制）
+   - 关键词管理（支持正则表达式、大小写敏感）
+   - 次级关键词和过滤逻辑
+   - 包含组和权重设置
+   - Sticky/Cooldown/Delay 时序控制
+
+**编辑界面特性**：
+- 实时搜索和过滤条目
+- 拖放式关键词管理
+- 可视化高级选项指示器
+- 模态框编辑表单
+- 完整的表单验证
+- Cassette Futurism 设计风格
 
 ### 2. 角色生成系统（COC风格 + SillyTavern Character Card V2兼容）
 **功能**：基于世界线参数生成角色初始属性和天赋，支持导出为标准Character Card格式
@@ -1325,7 +1365,19 @@ npm run tauri build
 
 ---
 
-**文档版本**: 1.0  
-**最后更新**: 2025-12-19  
-**维护者**: Cinder  
+## 最近更新 (2025-12-20)
+
+### Lorebook 编辑界面实现 ✅
+- 完整的 Lorebook 管理和编辑系统
+- 4个主要组件：LorebookManagement, LorebookEditor, LorebookEntryCard, LorebookEntryForm
+- 支持全部 SillyTavern World Info 特性
+- Cassette Futurism 设计风格
+- TypeScript 完整类型支持
+- 项目构建测试通过
+
+---
+
+**文档版本**: 1.1
+**最后更新**: 2025-12-20
+**维护者**: Cinder
 **许可证**: MIT（或根据项目需求选择）
