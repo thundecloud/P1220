@@ -3,6 +3,7 @@ import Landing from './pages/Landing';
 import Config from './pages/Config';
 import CharacterCreation from './pages/CharacterCreation';
 import GameMain from './pages/GameMain';
+import LorebookManagement from './pages/LorebookManagement';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route path="/config" element={<Config />} />
           <Route path="/character-creation" element={<CharacterCreation />} />
           <Route path="/game" element={<GameMain />} />
+          <Route path="/lorebook" element={<LorebookManagement />} />
         </Routes>
       </div>
     </Router>

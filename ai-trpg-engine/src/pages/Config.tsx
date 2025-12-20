@@ -186,6 +186,12 @@ export default function Config() {
                 </span>
               )}
               <button
+                onClick={() => navigate('/lorebook')}
+                className="px-6 py-3 bg-accent-teal text-black rounded-none font-bold"
+              >
+                📚 Lorebook 管理
+              </button>
+              <button
                 onClick={handleSave}
                 disabled={saving}
                 className="px-6 py-3 bg-primary text-primary-foreground rounded-none disabled:opacity-50"

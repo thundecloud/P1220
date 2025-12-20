@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LorebookEditor } from '../components/lorebook';
 import { LorebookService } from '../services/lorebookService';
+import { listLorebooks as listLorebooksTauri, loadLorebook, saveLorebook as saveLorebookTauri, deleteLorebook as deleteLorebookTauri } from '../utils/tauri';
 import type { Lorebook } from '../utils/types';
 
 export default function LorebookManagement() {
@@ -9,26 +10,34 @@ export default function LorebookManagement() {
   const [lorebooks, setLorebooks] = useState<Lorebook[]>([]);
   const [selectedLorebook, setSelectedLorebook] = useState<Lorebook | null>(null);
   const [isCreating, setIsCreating] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     loadLorebooks();
   }, []);
 
-  const loadLorebooks = () => {
-    // TODO: 从 Tauri 加载所有 Lorebook
-    // 暂时使用示例数据
-    const exampleLorebook: Lorebook = {
-      id: 'example_lorebook',
-      name: '示例世界知识库',
-      description: '这是一个示例 Lorebook，用于演示功能',
-      entries: [],
-      scanDepth: 10,
-      recursiveScanning: true,
-      budgetEnabled: false,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
-    setLorebooks([exampleLorebook]);
+  const loadLorebooks = async () => {
+    try {
+      setLoading(true);
+      const filenames = await listLorebooksTauri();
+      const loadedLorebooks: Lorebook[] = [];
+
+      for (const filename of filenames) {
+        try {
+          const data = await loadLorebook(filename);
+          const lorebook = JSON.parse(data) as Lorebook;
+          loadedLorebooks.push(lorebook);
+        } catch (error) {
+          console.error(`Failed to load lorebook ${filename}:`, error);
+        }
+      }
+
+      setLorebooks(loadedLorebooks);
+    } catch (error) {
+      console.error('Failed to list lorebooks:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCreateLorebook = () => {
@@ -40,25 +49,51 @@ export default function LorebookManagement() {
     setIsCreating(true);
   };
 
-  const handleSaveLorebook = (lorebook: Lorebook) => {
-    if (isCreating) {
-      setLorebooks(prev => [...prev, lorebook]);
-      setIsCreating(false);
-    } else {
-      setLorebooks(prev => prev.map(lb => lb.id === lorebook.id ? lorebook : lb));
+  const handleSaveLorebook = async (lorebook: Lorebook) => {
+    try {
+      const filename = `${lorebook.id}.json`;
+      await saveLorebookTauri(filename, JSON.stringify(lorebook, null, 2));
+
+      if (isCreating) {
+        setLorebooks(prev => [...prev, lorebook]);
+        setIsCreating(false);
+      } else {
+        setLorebooks(prev => prev.map(lb => lb.id === lorebook.id ? lorebook : lb));
+      }
+
+      alert('Lorebook 保存成功！');
+    } catch (error) {
+      console.error('Failed to save lorebook:', error);
+      alert('保存失败');
     }
-    // TODO: 保存到 Tauri
-    console.log('Saving lorebook:', lorebook);
   };
 
-  const handleDeleteLorebook = (id: string) => {
-    if (!confirm('确定要删除这个知识库吗？')) return;
-    setLorebooks(prev => prev.filter(lb => lb.id !== id));
-    if (selectedLorebook?.id === id) {
-      setSelectedLorebook(null);
+  const handleDeleteLorebook = async (id: string) => {
+    try {
+      const filename = `${id}.json`;
+      await deleteLorebookTauri(filename);
+
+      setLorebooks(prev => prev.filter(lb => lb.id !== id));
+      if (selectedLorebook?.id === id) {
+        setSelectedLorebook(null);
+      }
+
+      alert('Lorebook 删除成功！');
+    } catch (error) {
+      console.error('Failed to delete lorebook:', error);
+      alert('删除失败');
     }
-    // TODO: 从 Tauri 删除
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-background">
+        <div className="text-xl font-mono animate-pulse">
+          [ LOADING LOREBOOKS... ]
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background p-6">
@@ -129,7 +164,9 @@ export default function LorebookManagement() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleDeleteLorebook(lorebook.id);
+                            if (confirm('确定要删除这个知识库吗？')) {
+                              handleDeleteLorebook(lorebook.id);
+                            }
                           }}
                           className="text-xs text-destructive hover:underline"
                         >

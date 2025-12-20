@@ -192,6 +192,67 @@ pub fn import_worldline(filename: String, data: String) -> Result<String, String
     save_worldline(filename, data)
 }
 
+// ============ Lorebook 管理 ============
+
+// 获取 Lorebook 目录路径
+fn get_lorebooks_directory() -> Result<PathBuf, String> {
+    let home_dir = dirs::document_dir().ok_or("无法获取文档目录")?;
+    Ok(home_dir.join("AI-TRPG").join("lorebooks"))
+}
+
+// 保存 Lorebook
+#[tauri::command]
+pub fn save_lorebook(filename: String, data: String) -> Result<String, String> {
+    let lorebooks_dir = get_lorebooks_directory()?;
+    fs::create_dir_all(&lorebooks_dir).map_err(|e| e.to_string())?;
+
+    let file_path = lorebooks_dir.join(&filename);
+    fs::write(&file_path, data).map_err(|e| e.to_string())?;
+
+    Ok(format!("Lorebook 已保存: {}", filename))
+}
+
+// 读取 Lorebook
+#[tauri::command]
+pub fn load_lorebook(filename: String) -> Result<String, String> {
+    let lorebooks_dir = get_lorebooks_directory()?;
+    let file_path = lorebooks_dir.join(&filename);
+    fs::read_to_string(file_path).map_err(|e| e.to_string())
+}
+
+// 列出所有 Lorebook
+#[tauri::command]
+pub fn list_lorebooks() -> Result<Vec<String>, String> {
+    let lorebooks_dir = get_lorebooks_directory()?;
+
+    if !lorebooks_dir.exists() {
+        return Ok(Vec::new());
+    }
+
+    let entries = fs::read_dir(lorebooks_dir).map_err(|e| e.to_string())?;
+    let lorebooks: Vec<String> = entries
+        .filter_map(|e| e.ok())
+        .filter(|e| {
+            e.path()
+                .extension()
+                .and_then(|s| s.to_str())
+                == Some("json")
+        })
+        .filter_map(|e| e.file_name().to_str().map(String::from))
+        .collect();
+
+    Ok(lorebooks)
+}
+
+// 删除 Lorebook
+#[tauri::command]
+pub fn delete_lorebook(filename: String) -> Result<String, String> {
+    let lorebooks_dir = get_lorebooks_directory()?;
+    let file_path = lorebooks_dir.join(&filename);
+    fs::remove_file(file_path).map_err(|e| e.to_string())?;
+    Ok(format!("Lorebook 已删除: {}", filename))
+}
+
 // ============ 设定集目录导入 ============
 
 use serde::{Deserialize, Serialize};

@@ -20,6 +20,10 @@ pub fn run() {
             commands::export_worldline,
             commands::import_worldline,
             commands::read_directory_structure,
+            commands::save_lorebook,
+            commands::load_lorebook,
+            commands::list_lorebooks,
+            commands::delete_lorebook,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

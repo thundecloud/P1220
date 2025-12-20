@@ -273,3 +273,71 @@ export async function selectDirectory(): Promise<string | null> {
 
   return selected as string | null;
 }
+
+// ============ Lorebook 管理 ============
+
+/**
+ * 模拟的 Lorebook 列表（用于浏览器开发）
+ */
+const mockLorebooks: string[] = [];
+
+/**
+ * 保存 Lorebook
+ */
+export async function saveLorebook(filename: string, data: string): Promise<string> {
+  if (isTauriEnvironment()) {
+    return invokeTauri<string>('save_lorebook', { filename, data });
+  }
+
+  // 浏览器环境：使用 localStorage 模拟
+  localStorage.setItem(`lorebook_${filename}`, data);
+  if (!mockLorebooks.includes(filename)) {
+    mockLorebooks.push(filename);
+  }
+  return `Lorebook 已保存: ${filename}`;
+}
+
+/**
+ * 加载 Lorebook
+ */
+export async function loadLorebook(filename: string): Promise<string> {
+  if (isTauriEnvironment()) {
+    return invokeTauri<string>('load_lorebook', { filename });
+  }
+
+  // 浏览器环境：从 localStorage 读取
+  const data = localStorage.getItem(`lorebook_${filename}`);
+  if (!data) {
+    throw new Error('Lorebook 不存在');
+  }
+  return data;
+}
+
+/**
+ * 列出所有 Lorebook
+ */
+export async function listLorebooks(): Promise<string[]> {
+  if (isTauriEnvironment()) {
+    return invokeTauri<string[]>('list_lorebooks');
+  }
+
+  // 浏览器环境：返回模拟的 Lorebook 列表
+  return [...mockLorebooks];
+}
+
+/**
+ * 删除 Lorebook
+ */
+export async function deleteLorebook(filename: string): Promise<string> {
+  if (isTauriEnvironment()) {
+    return invokeTauri<string>('delete_lorebook', { filename });
+  }
+
+  // 浏览器环境：从 localStorage 删除
+  localStorage.removeItem(`lorebook_${filename}`);
+  const index = mockLorebooks.indexOf(filename);
+  if (index > -1) {
+    mockLorebooks.splice(index, 1);
+  }
+  return `Lorebook 已删除: ${filename}`;
+}
