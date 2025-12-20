@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useCharacterStore } from '../stores/characterStore';
+import WorldlineManager from '../components/worldline/WorldlineManager';
 import worldlinesData from '../data/worldlines.json';
 import talentsData from '../data/talents.json';
 import backgroundsData from '../data/backgrounds.json';
@@ -18,8 +19,8 @@ import {
 import {
   listWorldlines,
   loadWorldline,
-  // saveWorldline,
-  // deleteWorldline,
+  saveWorldline,
+  deleteWorldline,
 } from '../utils/tauri';
 import type {
   Worldline,
@@ -94,6 +95,44 @@ export default function CharacterCreation() {
       setCustomWorldlines(loaded);
     } catch (error) {
       console.error('Failed to list worldlines:', error);
+    }
+  };
+
+  // ============ 世界线管理 ============
+
+  const handleWorldlineCreated = async (worldline: Worldline) => {
+    try {
+      const filename = `${worldline.id}.json`;
+      await saveWorldline(filename, JSON.stringify(worldline, null, 2));
+      setCustomWorldlines(prev => [...prev, worldline]);
+      alert('世界线创建成功！');
+    } catch (error) {
+      console.error('Failed to save worldline:', error);
+      alert('保存失败');
+    }
+  };
+
+  const handleWorldlineUpdated = async (worldline: Worldline) => {
+    try {
+      const filename = `${worldline.id}.json`;
+      await saveWorldline(filename, JSON.stringify(worldline, null, 2));
+      setCustomWorldlines(prev => prev.map(w => w.id === worldline.id ? worldline : w));
+      alert('世界线更新成功！');
+    } catch (error) {
+      console.error('Failed to update worldline:', error);
+      alert('更新失败');
+    }
+  };
+
+  const handleWorldlineDeleted = async (worldlineId: string) => {
+    try {
+      const filename = `${worldlineId}.json`;
+      await deleteWorldline(filename);
+      setCustomWorldlines(prev => prev.filter(w => w.id !== worldlineId));
+      alert('世界线删除成功！');
+    } catch (error) {
+      console.error('Failed to delete worldline:', error);
+      alert('删除失败');
     }
   };
 
@@ -332,7 +371,20 @@ export default function CharacterCreation() {
               <p className="text-sm text-muted-foreground font-mono mb-6">
                 &gt; 你将在哪个历史时空中展开人生？每个世界线都有独特的挑战与机遇
               </p>
+            </div>
 
+            {/* 世界线管理器 */}
+            {showWorldlineManager && (
+              <WorldlineManager
+                customWorldlines={customWorldlines}
+                onWorldlineCreated={handleWorldlineCreated}
+                onWorldlineUpdated={handleWorldlineUpdated}
+                onWorldlineDeleted={handleWorldlineDeleted}
+                onClose={() => setShowWorldlineManager(false)}
+              />
+            )}
+
+            <div className="bg-card rounded-none p-6 border-4 border-border">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {allWorldlines.map((wl) => (
                   <div

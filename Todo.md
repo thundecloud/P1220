@@ -20,6 +20,15 @@
   - [x] TypeScript 类型检查通过
   - [x] 项目构建成功
 
+- **大型设定集支持**
+  - [x] SettingDocument 和 SettingCategory 类型定义
+  - [x] Worldline 扩展支持大型设定文档
+  - [x] WorldlineManager 组件实现
+  - [x] 文件导入和文本粘贴两种模式
+  - [x] 自动将大型设定拆分为 Lorebook 条目
+  - [x] 修复 CharacterCreation 页面"管理自定义世界线"按钮
+  - [x] 集成世界线保存/删除功能
+
 ## 当前开发阶段
 
 ### Phase 1: 核心功能完善 (进行中)

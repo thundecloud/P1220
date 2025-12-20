@@ -309,6 +309,42 @@ README.md                # 本文档
 - 完整的表单验证
 - Cassette Futurism 设计风格
 
+**大型设定集支持** (★已实现)：
+完整支持导入和管理大型世界设定文档（如45KB+的复杂设定集）
+
+1. **WorldlineManager 组件** (`src/components/worldline/WorldlineManager.tsx`)
+   - 自定义世界线创建和管理
+   - 两种导入模式：文件上传（.txt, .md）和文本粘贴
+   - 自动检测文件格式（Markdown/纯文本）
+   - 设定文档大小显示（KB/MB）
+
+2. **自动拆分为 Lorebook**：
+   - 将大型设定文档自动拆分为多个 Lorebook 条目
+   - 按段落智能分割（最多50个条目）
+   - 自动提取关键词（每段落前3个有意义词汇）
+   - 自动设置插入优先级（100-150范围）
+   - 限制单条目长度（最大500字符）
+
+3. **数据结构扩展** (`src/utils/types.ts`)：
+   - `SettingDocument`: 单个大型设定文档（支持Markdown和纯文本）
+   - `SettingCategory`: 分层级的设定集合结构
+   - Worldline 扩展字段：
+     - `settingDocument`: 完整设定文本
+     - `settingSize`: 设定大小（字节）
+     - `settingAutoSplit`: 是否启用自动拆分
+     - `version`, `author`, `createdAt`, `updatedAt`: 版本控制
+
+4. **持久化支持**：
+   - 通过 Tauri 命令保存/加载自定义世界线
+   - JSON 格式存储在 `~/Documents/AI-TRPG/worldlines/`
+   - 完整保留原始设定文档和生成的 Lorebook
+
+**使用场景**：
+- 导入完整的世界观设定文档（如赛博朋克2077设定集、克苏鲁神话背景）
+- 复杂历史背景资料（如拜占庭帝国全史）
+- 自创世界的详细设定（地理、历史、文化、政治等）
+- AI 可根据对话内容动态加载相关设定片段，无需一次性加载全部内容
+
 ### 2. 角色生成系统（COC风格 + SillyTavern Character Card V2兼容）
 **功能**：基于世界线参数生成角色初始属性和天赋，支持导出为标准Character Card格式
 

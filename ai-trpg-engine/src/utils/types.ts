@@ -56,7 +56,32 @@ export interface Lorebook {
   updatedAt?: string;
 }
 
-// 世界线类型（新版本，支持COC风格 + Lorebook）
+// ============ 大型设定集支持 ============
+
+/**
+ * 设定文档类型
+ */
+export interface SettingDocument {
+  title: string;
+  content: string;              // Markdown或纯文本格式
+  format: 'markdown' | 'plaintext';
+  category?: string;            // 分类：世界观、历史、地理、文化、政治等
+  tags?: string[];              // 标签
+  lastModified?: string;
+}
+
+/**
+ * 设定集分类
+ */
+export interface SettingCategory {
+  id: string;
+  name: string;
+  description?: string;
+  documents: SettingDocument[];
+  subcategories?: SettingCategory[];
+}
+
+// 世界线类型（新版本，支持COC风格 + Lorebook + 大型设定集）
 export interface Worldline {
   id: string;
   name: string;
@@ -86,13 +111,21 @@ export interface Worldline {
   talentPoolIds: string[];
   skillPoolIds: string[];  // 该世界线特有的技能池ID列表
 
-  // ★ 新增: Lorebook配置
+  // ★ Lorebook配置（用于动态上下文注入）
   lorebook?: Lorebook;
+
+  // ★ 新增：大型设定集支持
+  settingDocument?: SettingDocument;      // 单个大型设定文档
+  settingCategories?: SettingCategory[];  // 分类的设定集合
+  settingSize?: number;                   // 设定总大小（字节）
+  settingAutoSplit?: boolean;             // 是否自动将大型设定拆分为Lorebook条目
 
   // 自定义世界线标记
   isCustom?: boolean;
   createdAt?: string;
+  updatedAt?: string;
   author?: string;
+  version?: string;
 }
 
 // 天赋稀有度
