@@ -13,8 +13,8 @@
     {
       "identifier": "fs:scope-documents",
       "allow": [
-        { "path": "$DOCUMENT/*" },
-        { "path": "$DOCUMENT/**" }
+        { "path": "$DOCUMENTS/*" },
+        { "path": "$DOCUMENTS/**" }
       ]
     }
   ]
