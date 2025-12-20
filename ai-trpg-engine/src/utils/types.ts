@@ -188,7 +188,43 @@ export interface Attributes {
 export type AttributeKey = keyof Attributes;
 export type BasicAttributeKey = keyof BasicAttributes;
 
-// 角色类型（更新为支持新COC风格）
+// ============ SillyTavern Character Card V2 兼容 ============
+
+/**
+ * Character Card V2 数据结构
+ * 完全兼容 SillyTavern 的 Character Card V2 规范
+ */
+export interface CharacterCardV2Data {
+  // V1 继承字段
+  name: string;
+  description: string;              // 角色描述
+  personality: string;              // 性格特征
+  scenario: string;                 // 场景设定
+  first_mes: string;                // 首条问候语
+  mes_example: string;              // 消息示例
+
+  // V2 新增字段
+  creator_notes?: string;           // 创作者备注（不用于提示）
+  system_prompt?: string;           // 自定义系统提示
+  post_history_instructions?: string; // 对话历史后的指令
+  alternate_greetings?: string[];   // 备选问候语
+  character_book?: Lorebook;        // 嵌入式 Lorebook
+  tags?: string[];                  // 标签（用于分类，不用于提示）
+  creator?: string;                 // 创建者
+  character_version?: string;       // 版本号
+  extensions?: Record<string, any>; // 扩展数据
+}
+
+/**
+ * Character Card V2 完整结构
+ */
+export interface CharacterCardV2 {
+  spec: 'chara_card_v2';
+  spec_version: '2.0';
+  data: CharacterCardV2Data;
+}
+
+// 角色类型（更新为支持新COC风格 + SillyTavern V2兼容）
 export interface Character {
   id: string;
   name: string;
@@ -212,6 +248,9 @@ export interface Character {
 
   // 角色故事/背景描述
   story?: string;
+
+  // ★ SillyTavern V2 兼容字段
+  characterCard?: CharacterCardV2Data;  // 完整的 V2 数据
 }
 
 // 判定结果类型

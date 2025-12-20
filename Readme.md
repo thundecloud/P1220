@@ -5,9 +5,11 @@
 AI人生引擎是一个基于大语言模型的动态叙事TRPG桌面应用。系统将传统TRPG的数值判定机制与AI叙事生成能力相结合，在历史背景的世界线中创造沉浸式的角色扮演体验。
 
 **核心机制**：
-- 属性系统驱动数值判定(类似coc)
-- 天赋特质系统通过AI提示词影响叙事走向
-- 两套系统独立运作又相互配合，创造既有规则约束又富有叙事灵活性的游戏体验
+- **COC风格属性系统**：8项基础属性(力量/体质/敏捷/智力/教育/意志/魅力/幸运) + 派生属性(HP/SAN/MP/MOV)
+- **天赋特质系统**：通过AI提示词影响叙事走向
+- **Lorebook世界知识库**：采用SillyTavern风格的动态上下文注入系统，支持关键词触发、递归扫描、条件过滤
+- **Cassette Futurism视觉风格**：1970-90年代复古未来主义美学，温暖塑料材质、实体按钮、单色显示器
+- 系统间独立运作又相互配合，创造既有规则约束又富有叙事灵活性的游戏体验
 
 ## 技术架构
 
@@ -48,13 +50,17 @@ AI人生引擎是一个基于大语言模型的动态叙事TRPG桌面应用。�
   - 原生系统API访问
 
 ### 前端技术
-- **框架**：React 18+ 或 Vue 3+
-- **构建工具**：Vite
-- **路由**：React Router / Vue Router
-- **状态管理**：Zustand / Pinia
-- **样式方案**：Tailwind CSS
-- **UI组件**：Headless UI / Radix UI
-- **动画库**：Framer Motion（可选）
+- **框架**：React 19.2.0
+- **构建工具**：Vite 7.2.4
+- **路由**：React Router 7.11.0
+- **状态管理**：Zustand 5.0.9
+- **样式方案**：Tailwind CSS 4.1.18 (全新 @theme 语法)
+- **视觉风格**：Cassette Futurism - 复古未来主义美学
+  - 温暖塑料米色色调 (oklch color space)
+  - 实体按钮凸起效果 (box-shadow bevels)
+  - 点阵字体 (Press Start 2P + IBM Plex Mono)
+  - CRT扫描线效果 (subtle scanlines)
+  - 物理LED指示灯动画
 - **HTTP客户端**：Fetch API（调用AI API用）
 
 ### 本地后端（Tauri）
@@ -236,22 +242,46 @@ README.md                # 本文档
 
 ## 核心功能模块
 
-### 1. 世界线系统
-**功能**：管理不同的历史时期背景设定
+### 1. 世界线系统 + Lorebook
+**功能**：管理不同的历史时期背景设定，并为每个世界线提供动态知识库
 
 **数据结构**：
 - 世界线ID、名称、时代、地理描述
 - 文化特征、历史背景文本
-- 五维属性生成参数（μ和σ值）
-- 该世界特有的天赋池引用
+- COC风格8维属性生成参数（μ和σ值）
+- 该世界特有的天赋池和技能池引用
+- **嵌入式Lorebook**：每个世界线可配置独立的知识库
+
+**Lorebook系统**（基于SillyTavern规范）：
+- **触发机制**：关键词匹配（支持正则表达式、大小写敏感）
+- **次级过滤**：AND_ANY / AND_ALL / NOT_ANY / NOT_ALL 逻辑
+- **递归扫描**：激活的条目内容可以触发其他条目（最多3层深度）
+- **时序控制**：
+  - Sticky: 激活后保持N条消息
+  - Cooldown: 激活后N条消息内不可重新触发
+  - Delay: 至少有N条消息才可激活
+- **包含组**：同组内仅一个条目被激活（避免冲突）
+- **插入顺序**：控制上下文注入的优先级
 
 **实现要点**：
 - 世界线数据存储在JSON配置文件中
+- Lorebook服务 (`lorebookService.ts`) 处理动态激活
 - 支持动态加载和扩展
 - 前端展示为选择卡片，包含详细信息
 
-### 2. 角色生成系统
-**功能**：基于世界线参数生成角色初始属性和天赋
+### 2. 角色生成系统（COC风格 + SillyTavern Character Card V2兼容）
+**功能**：基于世界线参数生成角色初始属性和天赋，支持导出为标准Character Card格式
+
+**COC风格属性系统**：
+- **基础属性** (8项，0-100)：
+  - STR (力量)、CON (体质)、DEX (敏捷)、INT (智力)
+  - EDU (教育)、POW (意志)、CHA (魅力)、LUC (幸运)
+- **派生属性**：
+  - HP = (CON + STR) / 2
+  - SAN = POW
+  - MP = POW / 5
+  - MOV = 根据年龄和DEX/STR计算
+- **技能系统**：通用技能 + 世界线特有技能
 
 **核心算法**：
 - 属性生成：使用Box-Muller变换实现正态分布随机数
@@ -260,12 +290,20 @@ README.md                # 本文档
 
 **天赋抽取机制**：
 - 从天赋池中按稀有度加权随机抽取9个天赋
+- 稀有度权重：common(50), uncommon(25), rare(15), epic(8), legendary(2)
 - 分为3组，每组3选1
 - 用户选择3个天赋作为角色核心特质
 
+**Character Card V2兼容**：
+角色数据可导出为SillyTavern Character Card V2格式，包含：
+- 基础字段：name, description, personality, scenario, first_mes, mes_example
+- V2扩展：system_prompt, post_history_instructions, alternate_greetings
+- 嵌入式character_book (Lorebook)
+- tags, creator, character_version, extensions
+
 **前端交互**：
 - 角色名称、性别、身份背景输入
-- 属性展示（表格+ 数值）
+- 属性展示（COC风格属性面板）
 - 天赋选择UI：3组9宫格，每组必选1个
 - 只有完成所有选择后"开始游戏"按钮才可用
 
