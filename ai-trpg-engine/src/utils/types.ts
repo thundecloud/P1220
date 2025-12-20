@@ -1,4 +1,62 @@
-// 世界线类型（新版本，支持COC风格）
+// ============ Lorebook / World Info 系统 ============
+
+/**
+ * Lorebook条目 - 用于动态注入世界背景信息
+ * 基于SillyTavern的World Info系统设计
+ */
+export interface LorebookEntry {
+  id: string;
+  title: string;                    // 条目标题(便于管理)
+  keys: string[];                   // 触发关键词列表
+  content: string;                  // 注入到AI提示词的内容
+  enabled: boolean;                 // 是否启用此条目
+  insertionOrder: number;           // 优先级(越大越靠后,影响力越强)
+  memo?: string;                    // 备注信息
+
+  // 高级选项
+  caseSensitive?: boolean;          // 是否区分大小写(默认false)
+  useRegex?: boolean;               // 是否使用正则表达式(默认false)
+
+  // 次级过滤
+  secondaryKeys?: string[];         // 次级关键词
+  secondaryKeysLogic?: 'AND_ANY' | 'AND_ALL' | 'NOT_ANY' | 'NOT_ALL';
+
+  // 定时机制
+  sticky?: number;                  // 激活后保持N条消息
+  cooldown?: number;                // 激活后N条消息内不可重新触发
+  delay?: number;                   // 至少有N条消息才可激活
+
+  // 包含组(同组内仅一个被激活)
+  inclusionGroup?: string;
+  groupWeight?: number;             // 组内权重(默认100)
+
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+/**
+ * Lorebook配置
+ */
+export interface Lorebook {
+  id: string;
+  name: string;
+  description?: string;
+  entries: LorebookEntry[];
+
+  // 扫描配置
+  scanDepth?: number;               // 扫描最后N条消息(0=仅递归,默认10)
+  recursiveScanning?: boolean;      // 是否启用递归扫描(默认true)
+
+  // 上下文预算
+  budgetEnabled?: boolean;
+  budgetCap?: number;               // 最大token数
+  budgetPriority?: 'order' | 'activation'; // 预算分配策略
+
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+// 世界线类型（新版本，支持COC风格 + Lorebook）
 export interface Worldline {
   id: string;
   name: string;
@@ -27,6 +85,9 @@ export interface Worldline {
 
   talentPoolIds: string[];
   skillPoolIds: string[];  // 该世界线特有的技能池ID列表
+
+  // ★ 新增: Lorebook配置
+  lorebook?: Lorebook;
 
   // 自定义世界线标记
   isCustom?: boolean;

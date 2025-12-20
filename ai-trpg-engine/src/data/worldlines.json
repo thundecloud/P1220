@@ -34,6 +34,74 @@
     },
     "talentPoolIds": ["victorian_common", "detective_skills", "industrial_age"],
     "skillPoolIds": ["victorian_skills"],
+    "lorebook": {
+      "id": "lorebook_victorian_london_1880",
+      "name": "雾都迷影 - 世界背景知识库",
+      "description": "维多利亚时代伦敦的历史、文化、社会背景信息",
+      "scanDepth": 10,
+      "recursiveScanning": true,
+      "budgetEnabled": false,
+      "entries": [
+        {
+          "id": "entry_vic_001",
+          "title": "开膛手杰克",
+          "keys": ["开膛手", "杰克", "ripper", "白教堂", "谋杀案"],
+          "content": "1888年白教堂连环谋杀案震惊伦敦。凶手被称为'开膛手杰克'，至今未被抓获。案件手法残忍，受害者多为妓女。恐慌弥漫东区，警方束手无策。",
+          "enabled": true,
+          "insertionOrder": 100,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_vic_002",
+          "title": "蒸汽技术",
+          "keys": ["蒸汽", "机械", "发动机", "齿轮", "工厂"],
+          "content": "蒸汽动力是这个时代的核心技术。蒸汽机驱动工厂、火车和轮船。复杂的齿轮和传动装置随处可见。工程师和机械师是备受尊敬的职业。",
+          "enabled": true,
+          "insertionOrder": 80,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_vic_003",
+          "title": "贫民窟生活",
+          "keys": ["贫民窟", "东区", "穷人", "童工", "疾病"],
+          "content": "东区贫民窟是伦敦的阴暗面。拥挤的公寓、恶臭的街道、猖獗的犯罪。霍乱和肺结核夺走无数生命。童工在工厂和煤矿中劳作。",
+          "enabled": true,
+          "insertionOrder": 90,
+          "caseSensitive": false,
+          "useRegex": false,
+          "secondaryKeys": ["工人", "劳动"],
+          "secondaryKeysLogic": "AND_ANY",
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_vic_004",
+          "title": "上流社会",
+          "keys": ["贵族", "舞会", "沙龙", "绅士", "淑女"],
+          "content": "上流社会过着奢华的生活。豪华舞会、文学沙龙、赛马会是他们的日常。严格的礼仪和着装规范。男士穿燕尾服，女士戴紧身胸衣。社交季节是年轻贵族寻找配偶的时机。",
+          "enabled": true,
+          "insertionOrder": 85,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_vic_005",
+          "title": "福尔摩斯式推理",
+          "keys": ["推理", "侦探", "线索", "演绎", "观察"],
+          "content": "福尔摩斯式的科学侦查方法在这个时代兴起。通过细致观察、逻辑演绎和科学分析破案。指纹识别、血迹分析等法医学技术开始应用。私家侦探成为热门职业。",
+          "enabled": true,
+          "insertionOrder": 110,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        }
+      ],
+      "createdAt": "2025-01-01T00:00:00Z"
+    },
     "isCustom": false
   },
   {
@@ -71,6 +139,74 @@
     },
     "talentPoolIds": ["cold_war_common", "espionage_skills", "survival_skills"],
     "skillPoolIds": ["cold_war_skills"],
+    "lorebook": {
+      "id": "lorebook_cold_war_berlin_1961",
+      "name": "柏林谍影 - 世界背景知识库",
+      "description": "冷战时期柏林的历史、间谍活动、意识形态对抗背景",
+      "scanDepth": 10,
+      "recursiveScanning": true,
+      "budgetEnabled": false,
+      "entries": [
+        {
+          "id": "entry_cold_001",
+          "title": "柏林墙",
+          "keys": ["柏林墙", "the wall", "检查站", "查理检查站", "边境"],
+          "content": "1961年8月13日凌晨，东德突然开始建造柏林墙。混凝土墙高3.6米，顶部布满铁丝网和玻璃碎片。查理检查站是东西柏林的主要通道，戒备森严。逃亡者常在此被射杀。",
+          "enabled": true,
+          "insertionOrder": 100,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_cold_002",
+          "title": "史塔西",
+          "keys": ["史塔西", "stasi", "秘密警察", "监视", "告密者"],
+          "content": "东德国家安全部(史塔西)是世界上最高效的情报机构之一。拥有9万正式员工和17万线人。监听电话、拆阅信件、秘密摄影。邻居、同事、甚至家人都可能是告密者。",
+          "enabled": true,
+          "insertionOrder": 110,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_cold_003",
+          "title": "间谍技术",
+          "keys": ["间谍", "情报", "密码", "微缩胶卷", "死信箱"],
+          "content": "冷战时期间谍技术高度发达。微缩胶卷可以隐藏在硬币、钮扣中。死信箱用于秘密传递情报。一次性密码本几乎无法破解。CIA和克格勃在柏林展开激烈的情报战。",
+          "enabled": true,
+          "insertionOrder": 90,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_cold_004",
+          "title": "核恐慌",
+          "keys": ["核武器", "核战争", "防空洞", "古巴导弹危机"],
+          "content": "核战争的恐惧笼罩着冷战时期。美苏两国拥有足以毁灭世界多次的核武库。古巴导弹危机让人类距离核战争仅一步之遥。民众建造防空洞，进行核攻击演习。",
+          "enabled": true,
+          "insertionOrder": 85,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_cold_005",
+          "title": "双重特工",
+          "keys": ["双面间谍", "叛徒", "投诚", "背叛"],
+          "content": "双重特工在冷战中扮演关键角色。他们假装效忠一方，实际为另一方工作。有些甚至是三重特工。背叛的代价是死刑，但成功投诚可获得巨额奖赏和新身份。",
+          "enabled": true,
+          "insertionOrder": 105,
+          "caseSensitive": false,
+          "useRegex": false,
+          "secondaryKeys": ["间谍", "情报"],
+          "secondaryKeysLogic": "AND_ANY",
+          "createdAt": "2025-01-01T00:00:00Z"
+        }
+      ],
+      "createdAt": "2025-01-01T00:00:00Z"
+    },
     "isCustom": false
   },
   {
@@ -108,6 +244,85 @@
     },
     "talentPoolIds": ["edo_common", "artisan_skills", "warrior_spirit", "aesthetic_pursuits"],
     "skillPoolIds": ["edo_skills"],
+    "lorebook": {
+      "id": "lorebook_edo_kyoto_1700",
+      "name": "花见小路 - 世界背景知识库",
+      "description": "元禄时代京都的文化、艺术、社会制度背景",
+      "scanDepth": 10,
+      "recursiveScanning": true,
+      "budgetEnabled": false,
+      "entries": [
+        {
+          "id": "entry_edo_001",
+          "title": "士农工商",
+          "keys": ["士农工商", "身份", "等级", "武士", "町人"],
+          "content": "江户时代严格的身份等级制度。士（武士）、农、工、商，世袭不可改变。武士拥有特权，可佩刀、有俸禄。町人（商人和手工业者）虽然富有，但社会地位低下。跨越等级的婚姻和交往被严格禁止。",
+          "enabled": true,
+          "insertionOrder": 100,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_edo_002",
+          "title": "茶道与侘寂",
+          "keys": ["茶道", "茶室", "侘寂", "禅宗", "茶会"],
+          "content": "茶道在元禄时期达到巅峰。千利休的侘茶美学强调简朴、自然、不完美。茶室设计精妙，每个细节都有深意。茶会是社交和精神修行的场合。侘寂美学影响了整个日本文化。",
+          "enabled": true,
+          "insertionOrder": 90,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_edo_003",
+          "title": "浮世绘与歌舞伎",
+          "keys": ["浮世绘", "歌舞伎", "艺伎", "花街", "祇园"],
+          "content": "町人文化催生了浮世绘和歌舞伎的繁荣。浮世绘描绘市井生活、美人和风景。歌舞伎是平民的娱乐，演员成为偶像。祇园花街的艺伎精通音乐、舞蹈和茶道，是高级娱乐的象征。",
+          "enabled": true,
+          "insertionOrder": 95,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_edo_004",
+          "title": "武士道精神",
+          "keys": ["武士道", "切腹", "忠义", "刀", "名誉"],
+          "content": "武士道是武士阶层的行为准则。强调忠诚、勇气、名誉。切腹是恢复名誉的最后手段。武士佩刀是身份象征，侮辱武士可能招致杀身之祸。长期和平使许多武士沦为闲职，靠微薄俸禄度日。",
+          "enabled": true,
+          "insertionOrder": 105,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_edo_005",
+          "title": "锁国政策",
+          "keys": ["锁国", "长崎", "荷兰", "基督教", "外国"],
+          "content": "德川幕府实行严格的锁国政策。禁止日本人出国，驱逐传教士，禁止基督教。只有长崎一地允许与荷兰和中国进行有限贸易。信息闭塞导致技术落后，但也保持了文化纯粹性。",
+          "enabled": true,
+          "insertionOrder": 85,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_edo_006",
+          "title": "匠人精神",
+          "keys": ["匠人", "手工艺", "职人", "传承", "精益求精"],
+          "content": "江户时代的手工艺人追求极致。刀匠、陶艺师、木匠、织工，每个行业都有严格的学徒制度。技艺父传子、师传徒，世代相传。对细节的苛求和对完美的追求成为日本文化的标志。",
+          "enabled": true,
+          "insertionOrder": 92,
+          "caseSensitive": false,
+          "useRegex": false,
+          "secondaryKeys": ["工匠", "技艺"],
+          "secondaryKeysLogic": "AND_ANY",
+          "createdAt": "2025-01-01T00:00:00Z"
+        }
+      ],
+      "createdAt": "2025-01-01T00:00:00Z"
+    },
     "isCustom": false
   }
 ]
