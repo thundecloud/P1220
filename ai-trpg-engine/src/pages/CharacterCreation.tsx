@@ -28,8 +28,12 @@ import type {
   Background,
   CharacterAttributes,
   BasicAttributes,
+  CharacterCreationMode,
+  NarrativeDescription,
 } from '../utils/types';
 import { RARITY_LABELS, RARITY_COLORS } from '../utils/types';
+import CreationModeSelector from '../components/character/CreationModeSelector';
+import NarrativeDescriptionEditor from '../components/character/NarrativeDescriptionEditor';
 
 type Step = 'worldline' | 'character';
 
@@ -46,7 +50,24 @@ export default function CharacterCreation() {
   const [allWorldlines, setAllWorldlines] = useState<Worldline[]>([]);
   const [selectedWorldline, setSelectedWorldline] = useState<Worldline | null>(null);
 
-  // 角色数据
+  // 创建模式
+  const [creationMode, setCreationMode] = useState<CharacterCreationMode>('narrative');
+
+  // 叙事描述（narrative/hybrid 模式）
+  const [narrativeDescription, setNarrativeDescription] = useState<NarrativeDescription>({
+    description: '',
+    personality: '',
+    scenario: '',
+    firstMessage: '',
+    exampleDialogs: '',
+    likes: '',
+    dislikes: '',
+    background: '',
+    speech: '',
+    thinking: '',
+  });
+
+  // 角色数据（COC 模式）
   const [characterAttributes, setCharacterAttributes] = useState<CharacterAttributes | null>(null);
   const [characterAge, setCharacterAge] = useState(20);
   const [characterName, setCharacterName] = useState('');
@@ -484,7 +505,7 @@ export default function CharacterCreation() {
         )}
 
         {/* Character Creation */}
-        {step === 'character' && selectedWorldline && characterAttributes && (
+        {step === 'character' && selectedWorldline && (
           <div className="space-y-6">
             {/* 世界线信息 */}
             <div className="bg-card rounded-none p-4 border-4 border-primary">
@@ -502,6 +523,20 @@ export default function CharacterCreation() {
               </div>
             </div>
 
+            {/* 创建模式选择 */}
+            <CreationModeSelector mode={creationMode} onChange={setCreationMode} />
+
+            {/* 叙事模式表单 */}
+            {(creationMode === 'narrative' || creationMode === 'hybrid') && (
+              <NarrativeDescriptionEditor
+                description={narrativeDescription}
+                onChange={setNarrativeDescription}
+              />
+            )}
+
+            {/* COC 模式表单 */}
+            {(creationMode === 'coc' || creationMode === 'hybrid') && characterAttributes && (
+              <>
             {/* 基础信息 */}
             <div className="bg-card rounded-none p-6 border-4 border-border space-y-4">
               <div className="flex items-center gap-3 mb-4">
@@ -738,7 +773,7 @@ export default function CharacterCreation() {
               </div>
             )}
 
-            {/* 角色故事 */}
+            {/* 角色故事（COC模式）*/}
             <div className="bg-card rounded-none p-6 border-4 border-border">
               <div className="flex items-center gap-3 mb-4">
                 <div className="led indicator"></div>
@@ -751,23 +786,32 @@ export default function CharacterCreation() {
                 className="w-full px-4 py-3 rounded-none font-mono text-sm min-h-[120px] resize-y"
               />
             </div>
+            </>
+            )}
 
-            {/* 创建按钮 */}
+            {/* 创建按钮（所有模式）*/}
             <div className="bg-card rounded-none p-6 border-4 border-primary">
               <button
                 onClick={handleCreateCharacter}
-                disabled={!characterName.trim() || selectedTalents.length !== 3}
+                disabled={
+                  !characterName.trim() ||
+                  (creationMode === 'narrative' && (!narrativeDescription.description || !narrativeDescription.personality || !narrativeDescription.scenario)) ||
+                  ((creationMode === 'coc' || creationMode === 'hybrid') && selectedTalents.length !== 3)
+                }
                 className="w-full py-4 bg-primary text-primary-foreground rounded-none disabled:opacity-50 flex items-center justify-center gap-3 text-xl font-bold"
               >
                 <span>✓</span>
                 开始新人生
               </button>
-              {(!characterName.trim() || selectedTalents.length !== 3) && (
-                <p className="text-center text-sm text-muted-foreground mt-3 font-mono">
-                  {!characterName.trim() && '> 请输入角色姓名'}
-                  {characterName.trim() && selectedTalents.length !== 3 && '> 请从每组选择一个天赋'}
-                </p>
-              )}
+              <div className="text-center text-sm text-muted-foreground mt-3 font-mono">
+                {!characterName.trim() && <p>&gt; 请输入角色姓名</p>}
+                {creationMode === 'narrative' && (!narrativeDescription.description || !narrativeDescription.personality || !narrativeDescription.scenario) && (
+                  <p>&gt; 请完成角色描述、性格、场景三项必填字段</p>
+                )}
+                {(creationMode === 'coc' || creationMode === 'hybrid') && selectedTalents.length !== 3 && (
+                  <p>&gt; 请从每组选择一个天赋</p>
+                )}
+              </div>
             </div>
           </div>
         )}

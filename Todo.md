@@ -46,6 +46,16 @@
   - [x] DetailedProfileEditor 组件（高级设置折叠面板）
   - [ ] CharacterCreation 集成 DetailedProfileEditor
 
+- **角色创建模式系统**（★SillyTavern 风格对齐）
+  - [x] CharacterCreationMode 类型（narrative/coc/hybrid）
+  - [x] NarrativeDescription 类型（描述、性格、场景等）
+  - [x] Character 类型灵活化（COC字段全部改为可选）
+  - [x] CreationModeSelector 组件（模式选择卡片）
+  - [x] NarrativeDescriptionEditor 组件（叙事描述编辑器）
+  - [x] CharacterCreation STEP2 重构：支持三种模式
+  - [x] 灵活验证逻辑：根据模式验证不同字段
+  - [ ] 创建角色逻辑更新：保存 narrativeDescription 和 creationMode
+
 ## 当前开发阶段
 
 ### Phase 1: 核心功能完善 (进行中)

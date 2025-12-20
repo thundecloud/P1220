@@ -386,35 +386,69 @@ export interface DetailedProfile {
   notes?: string;
 }
 
-// 角色类型（更新为支持新COC风格 + SillyTavern V2兼容 + 简历级详细信息）
+// ============ 角色创建模式 ============
+
+/**
+ * 角色创建模式
+ */
+export type CharacterCreationMode = 'narrative' | 'coc' | 'hybrid';
+
+/**
+ * 叙事导向的角色描述（SillyTavern风格）
+ */
+export interface NarrativeDescription {
+  // 核心描述性字段
+  description: string;          // 角色描述（外貌、性格、背景的自由文本）
+  personality: string;          // 性格特征（自由文本）
+  scenario: string;             // 场景/情境（角色所处的情境）
+  firstMessage?: string;        // 首条问候语（角色的第一句话）
+  exampleDialogs?: string;      // 对话示例（用\n分隔的多轮对话）
+
+  // 补充信息
+  likes?: string;               // 喜好
+  dislikes?: string;            // 厌恶
+  background?: string;          // 详细背景故事
+  speech?: string;              // 说话风格
+  thinking?: string;            // 思维方式
+}
+
+// 角色类型（更新为支持新COC风格 + SillyTavern V2兼容 + 简历级详细信息 + 自由创建模式）
 export interface Character {
   id: string;
   name: string;
-  birthYear: number;
-  gender: 'male' | 'female' | 'other';
-  worldlineId: string;
-  backgrounds: string[];
 
-  // 新版COC风格属性（优先使用）
+  // ★ 创建模式（决定使用哪些字段）
+  creationMode?: CharacterCreationMode;  // 默认 'coc'
+
+  // ★ 叙事导向字段（narrative/hybrid 模式）
+  narrativeDescription?: NarrativeDescription;
+
+  // COC/游戏化字段（coc/hybrid 模式）
+  birthYear?: number;           // 可选，叙事模式不需要
+  gender?: 'male' | 'female' | 'other';  // 可选
+  worldlineId: string;
+  backgrounds?: string[];       // 可选
+
+  // 新版COC风格属性（可选，仅 coc/hybrid 模式）
   characterAttributes?: CharacterAttributes;
 
-  // 旧版属性（向后兼容）
-  attributes: Attributes;
+  // 旧版属性（向后兼容，可选）
+  attributes?: Attributes;
 
-  talents: Talent[];
-  currentAge: number;
+  talents?: Talent[];           // 可选
+  currentAge?: number;          // 可选
   createdAt: string;
 
   // 角色头像（可选）
   avatarUrl?: string;
 
-  // 角色故事/背景描述
+  // 角色故事/背景描述（已废弃，使用 narrativeDescription.background）
   story?: string;
 
   // ★ SillyTavern V2 兼容字段
   characterCard?: CharacterCardV2Data;  // 完整的 V2 数据
 
-  // ★ 简历级详细信息（高级设置）
+  // ★ 简历级详细信息（高级设置，可选）
   detailedProfile?: DetailedProfile;
 }
 
