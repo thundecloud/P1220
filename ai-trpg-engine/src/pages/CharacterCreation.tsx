@@ -18,8 +18,8 @@ import {
 import {
   listWorldlines,
   loadWorldline,
-  saveWorldline,
-  deleteWorldline,
+  // saveWorldline,
+  // deleteWorldline,
 } from '../utils/tauri';
 import type {
   Worldline,

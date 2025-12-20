@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Character, Worldline, Talent, Background } from '../utils/types';
+import type { Character, Worldline, Talent } from '../utils/types';
 
 interface CharacterStore {
   // 当前角色

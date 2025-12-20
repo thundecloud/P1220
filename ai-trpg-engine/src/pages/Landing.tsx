@@ -35,7 +35,7 @@ export default function Landing() {
 
   const handleLoadGame = async (filename: string) => {
     try {
-      const saveData = await loadGameTauri(filename);
+      void await loadGameTauri(filename);
       // TODO: Load save data into game store
       navigate('/game');
     } catch (error) {

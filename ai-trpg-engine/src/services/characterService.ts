@@ -214,7 +214,7 @@ export function createCharacter(
   name: string,
   gender: 'male' | 'female' | 'other',
   worldlineId: string,
-  worldline: Worldline,
+  _worldline: Worldline,
   backgrounds: string[],
   selectedTalents: Talent[],
   characterAttributes: CharacterAttributes,
