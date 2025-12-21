@@ -501,28 +501,66 @@ export interface SaveData {
   };
 }
 
-// AI模型预设配置
+// ============ AI 服务类型 ============
+
+/**
+ * 支持的 AI 提供商
+ */
+export type AIProvider = 'openai' | 'gemini' | 'anthropic' | 'custom';
+
+/**
+ * AI 模型预设配置
+ */
 export interface ModelPreset {
   id: string;
   name: string;
-  provider: string;
+  provider: AIProvider;
   apiBaseUrl: string;
   modelName: string;
+  maxTokens?: number;
 }
 
-// 应用配置
-export interface AppConfig {
-  ai: {
-    provider: string;
-    apiKey: string;
-    apiBaseUrl: string;
-    modelName: string;
-    temperature?: number;
-    maxTokens?: number;
-    topP?: number;
-    presencePenalty?: number;
-    frequencyPenalty?: number;
+/**
+ * AI 请求消息
+ */
+export interface AIMessage {
+  role: 'system' | 'user' | 'assistant';
+  content: string;
+}
+
+/**
+ * AI 响应
+ */
+export interface AIResponse {
+  content: string;
+  finishReason?: 'stop' | 'length' | 'content_filter' | 'tool_calls';
+  usage?: {
+    promptTokens: number;
+    completionTokens: number;
+    totalTokens: number;
   };
+}
+
+/**
+ * AI 配置
+ */
+export interface AIConfig {
+  provider: AIProvider;
+  apiKey: string;
+  apiBaseUrl?: string;        // 自定义端点（可选）
+  modelName: string;
+  temperature?: number;       // 0-2，默认 1.0
+  maxTokens?: number;         // 最大生成 token 数
+  topP?: number;              // 0-1，默认 1.0
+  presencePenalty?: number;   // -2 到 2（OpenAI）
+  frequencyPenalty?: number;  // -2 到 2（OpenAI）
+}
+
+/**
+ * 应用配置
+ */
+export interface AppConfig {
+  ai: AIConfig;
   game: {
     dmStyle: string;
     dmPrompt: string;

@@ -1,45 +1,52 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { loadConfig as loadConfigTauri, saveConfig as saveConfigTauri } from '../utils/tauri';
-import type { AppConfig, ModelPreset } from '../utils/types';
+import type { AppConfig, AIProvider } from '../utils/types';
+import { MODEL_PRESETS as AI_MODEL_PRESETS, testAIConfig } from '../services/aiService';
 
-// AI模型预设配置
-const MODEL_PRESETS: ModelPreset[] = [
-  {
-    id: 'deepseek',
-    name: 'DeepSeek V3',
-    provider: 'deepseek',
-    apiBaseUrl: 'https://api.deepseek.com/v1',
-    modelName: 'deepseek-chat'
-  },
-  {
-    id: 'openai-gpt4',
-    name: 'OpenAI GPT-4',
-    provider: 'openai',
+// 扁平化的模型预设列表（用于选择器）
+interface FlatModelPreset {
+  id: string;
+  name: string;
+  provider: AIProvider;
+  apiBaseUrl: string;
+  modelName: string;
+}
+
+// 将 AI 服务的预设转换为扁平列表
+const MODEL_PRESETS: FlatModelPreset[] = [
+  // Gemini 预设
+  ...AI_MODEL_PRESETS.gemini.map((preset, idx) => ({
+    id: `gemini-${idx}`,
+    name: `Gemini - ${preset.name}`,
+    provider: 'gemini' as AIProvider,
+    apiBaseUrl: '',
+    modelName: preset.model,
+  })),
+  // OpenAI 预设
+  ...AI_MODEL_PRESETS.openai.map((preset, idx) => ({
+    id: `openai-${idx}`,
+    name: `OpenAI - ${preset.name}`,
+    provider: 'openai' as AIProvider,
     apiBaseUrl: 'https://api.openai.com/v1',
-    modelName: 'gpt-4'
-  },
-  {
-    id: 'openai-gpt4-turbo',
-    name: 'OpenAI GPT-4 Turbo',
-    provider: 'openai',
-    apiBaseUrl: 'https://api.openai.com/v1',
-    modelName: 'gpt-4-turbo-preview'
-  },
-  {
-    id: 'claude',
-    name: 'Claude 3.5 Sonnet',
-    provider: 'anthropic',
+    modelName: preset.model,
+  })),
+  // Anthropic 预设
+  ...AI_MODEL_PRESETS.anthropic.map((preset, idx) => ({
+    id: `anthropic-${idx}`,
+    name: `Anthropic - ${preset.name}`,
+    provider: 'anthropic' as AIProvider,
     apiBaseUrl: 'https://api.anthropic.com/v1',
-    modelName: 'claude-3-5-sonnet-20241022'
-  },
+    modelName: preset.model,
+  })),
+  // 自定义
   {
     id: 'custom',
     name: '自定义端点 (Custom)',
-    provider: 'custom',
+    provider: 'custom' as AIProvider,
     apiBaseUrl: '',
-    modelName: ''
-  }
+    modelName: '',
+  },
 ];
 
 // 默认DM提示词
@@ -69,6 +76,8 @@ export default function Config() {
   const [message, setMessage] = useState('');
   const [activeTab, setActiveTab] = useState<TabType>('ai');
   const [showDmPromptEditor, setShowDmPromptEditor] = useState(false);
+  const [testingAPI, setTestingAPI] = useState(false);
+  const [testResult, setTestResult] = useState<'success' | 'failure' | null>(null);
 
   useEffect(() => {
     loadConfig();
@@ -146,11 +155,40 @@ export default function Config() {
 
     const matchedPreset = MODEL_PRESETS.find(p =>
       p.provider === config.ai.provider &&
-      p.apiBaseUrl === config.ai.apiBaseUrl &&
+      (p.apiBaseUrl === config.ai.apiBaseUrl || p.apiBaseUrl === '') &&
       p.modelName === config.ai.modelName
     );
 
     return matchedPreset?.id || 'custom';
+  };
+
+  // 测试 API 连接
+  const handleTestAPI = async () => {
+    if (!config) return;
+
+    setTestingAPI(true);
+    setTestResult(null);
+    setMessage('');
+
+    try {
+      const success = await testAIConfig(config.ai);
+      setTestResult(success ? 'success' : 'failure');
+      setMessage(success ? '✅ API 连接测试成功' : '❌ API 连接测试失败');
+      setTimeout(() => {
+        setMessage('');
+        setTestResult(null);
+      }, 5000);
+    } catch (error) {
+      console.error('API test error:', error);
+      setTestResult('failure');
+      setMessage(`❌ API 连接失败: ${error instanceof Error ? error.message : '未知错误'}`);
+      setTimeout(() => {
+        setMessage('');
+        setTestResult(null);
+      }, 5000);
+    } finally {
+      setTestingAPI(false);
+    }
   };
 
   if (!config) {
@@ -266,9 +304,25 @@ export default function Config() {
 
             {/* API Configuration */}
             <div className="bg-card rounded-none p-6 border-4 border-border space-y-4">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="led indicator"></div>
-                <h2 className="text-2xl font-bold">API 连接配置</h2>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="led indicator"></div>
+                  <h2 className="text-2xl font-bold">API 连接配置</h2>
+                </div>
+                <button
+                  onClick={handleTestAPI}
+                  disabled={testingAPI || !config.ai.apiKey}
+                  className={`px-6 py-3 rounded-none font-bold disabled:opacity-50 ${
+                    testResult === 'success' ? 'bg-terminal-green text-black' :
+                    testResult === 'failure' ? 'bg-destructive text-white' :
+                    'bg-accent-cyan text-black'
+                  }`}
+                >
+                  {testingAPI ? '⏳ 测试中...' :
+                   testResult === 'success' ? '✅ 连接成功' :
+                   testResult === 'failure' ? '❌ 连接失败' :
+                   '🔌 测试连接'}
+                </button>
               </div>
 
               <div>
@@ -277,22 +331,30 @@ export default function Config() {
                   type="password"
                   value={config.ai.apiKey}
                   onChange={(e) => updateConfig(['ai', 'apiKey'], e.target.value)}
-                  placeholder="sk-********************************"
+                  placeholder={config.ai.provider === 'gemini' ? 'AIza***************************' : 'sk-********************************'}
                   className="w-full px-4 py-3 rounded-none font-mono"
                 />
                 <p className="text-xs text-muted-foreground mt-2 font-mono">
                   &gt; 本地加密存储 | 不会上传到任何服务器
+                  {config.ai.provider === 'gemini' && (
+                    <span className="block mt-1">
+                      &gt; Gemini API Key 获取: <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer" className="text-neon-cyan underline">Google AI Studio</a>
+                    </span>
+                  )}
                 </p>
               </div>
 
               <div>
-                <label className="label block mb-2">API端点URL:</label>
+                <label className="label block mb-2">API端点URL{config.ai.provider === 'gemini' ? ' (可选，留空使用默认)' : ''}:</label>
                 <input
                   type="text"
-                  value={config.ai.apiBaseUrl}
+                  value={config.ai.apiBaseUrl || ''}
                   onChange={(e) => updateConfig(['ai', 'apiBaseUrl'], e.target.value)}
-                  placeholder="https://api.example.com/v1"
-                  disabled={!isCustomPreset}
+                  placeholder={
+                    config.ai.provider === 'gemini' ? 'https://generativelanguage.googleapis.com/v1beta' :
+                    'https://api.example.com/v1'
+                  }
+                  disabled={!isCustomPreset && config.ai.provider !== 'gemini'}
                   className="w-full px-4 py-3 rounded-none font-mono disabled:opacity-50"
                 />
               </div>
