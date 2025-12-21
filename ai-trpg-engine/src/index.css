@@ -1,59 +1,57 @@
 @import "tailwindcss";
 
 /* === FONTS === */
-/* Monospaced for code/data, bitmap-inspired for headings */
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Press+Start+2P&display=swap');
+/* Historical Codex Typography: Elegant serifs + handwritten accents */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Tangerine:wght@400;700&display=swap');
 
-/* === CASSETTE FUTURISM - 1980s Analog Future === */
-/* Warm, physical, optimistic technology aesthetic */
+/* === HISTORICAL CODEX - Ancient Manuscript Aesthetic === */
+/* Dark parchment with candlelight, ink, and wax seal accents */
 
 @theme {
-  /* Base: Warm plastic cream/beige (PRIMARY SURFACE) */
-  --color-background: oklch(88% 0.02 80);  /* Warm cream plastic */
-  --color-foreground: oklch(25% 0.03 60);  /* Dark charcoal text */
+  /* Parchment tones: Deep aged paper */
+  --color-background: #1a1612;  /* Dark parchment night */
+  --color-foreground: #f5e6d3;  /* Ivory ink */
 
-  /* Panel colors: Layered beige/tan plastic */
-  --color-card: oklch(92% 0.015 85);       /* Light warm panel */
-  --color-card-foreground: oklch(25% 0.03 60);
+  /* Layered paper panels */
+  --color-card: #2d2621;        /* Mid parchment */
+  --color-card-foreground: #f5e6d3;
 
-  /* Secondary panels: Darker beige/tan */
-  --color-secondary: oklch(78% 0.025 75);  /* Mid-tan panel */
-  --color-secondary-foreground: oklch(20% 0.02 60);
+  /* Secondary surfaces: Lighter parchment */
+  --color-secondary: #3a332b;   /* Warm tan paper */
+  --color-secondary-foreground: #f5e6d3;
 
-  /* Muted backgrounds: Olive/warm gray */
-  --color-muted: oklch(70% 0.02 100);
-  --color-muted-foreground: oklch(40% 0.03 70);
+  /* Muted backgrounds */
+  --color-muted: #2a241f;
+  --color-muted-foreground: #c4b5a0;
 
-  /* Borders: Dark warm brown (thick physical edges) */
-  --color-border: oklch(45% 0.04 70);
+  /* Borders: Gold leaf and dark ink */
+  --color-border: #4a3f2f;
+  --color-border-accent: #d4a574;  /* Gold leaf */
 
-  /* Input fields: Recessed dark plastic */
-  --color-input: oklch(82% 0.02 80);
+  /* Input fields: Recessed writing surface */
+  --color-input: #24201b;
 
-  /* Primary accent: Muted teal (retro CRT green) */
-  --color-primary: oklch(58% 0.12 180);
-  --color-primary-foreground: oklch(98% 0.01 80);
+  /* Primary accent: Amber candlelight */
+  --color-primary: #d4a574;
+  --color-primary-foreground: #1a1612;
 
-  /* Accent colors: Muted neon (NOT bright) */
-  --color-accent-teal: oklch(60% 0.10 190);    /* Muted teal */
-  --color-accent-amber: oklch(68% 0.12 70);    /* Muted amber */
-  --color-accent-magenta: oklch(55% 0.14 330); /* Muted magenta */
+  /* Accent colors: Wax seals and illuminations */
+  --color-accent-amber: #e8b973;      /* Warm gold */
+  --color-accent-crimson: #8b2e2e;    /* Wax seal red */
+  --color-accent-sapphire: #1e3a5f;   /* Ink blue */
+  --color-accent-emerald: #2d5747;    /* Antique green */
 
   /* Status colors */
-  --color-destructive: oklch(50% 0.15 25);
-  --color-destructive-foreground: oklch(98% 0.01 80);
+  --color-destructive: #a03939;
+  --color-destructive-foreground: #f5e6d3;
 
-  /* Physical material simulation */
-  --shadow-inset-light: inset 1px 1px 2px rgba(255, 255, 255, 0.8);
-  --shadow-inset-dark: inset -1px -1px 2px rgba(0, 0, 0, 0.15);
-  --shadow-bevel:
-    inset 2px 2px 4px rgba(255, 255, 255, 0.6),
-    inset -2px -2px 4px rgba(0, 0, 0, 0.2);
+  /* Shadows: Candlelight and depth */
+  --shadow-candle: 0 0 20px rgba(212, 165, 116, 0.15);
+  --shadow-deep: 0 8px 24px rgba(0, 0, 0, 0.6);
+  --shadow-inset: inset 0 2px 8px rgba(0, 0, 0, 0.4);
   --shadow-raised:
-    2px 2px 0 rgba(0, 0, 0, 0.15),
-    4px 4px 0 rgba(0, 0, 0, 0.1);
-  --shadow-pressed:
-    inset 2px 2px 4px rgba(0, 0, 0, 0.25);
+    0 1px 2px rgba(212, 165, 116, 0.1),
+    0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
 /* === BASE STYLES === */
@@ -65,42 +63,43 @@
 body {
   background-color: var(--color-background);
   color: var(--color-foreground);
-  font-family: 'IBM Plex Mono', 'Courier New', monospace;
-  font-size: 14px;
-  line-height: 1.6;
+  font-family: 'Crimson Text', 'Georgia', serif;
+  font-size: 16px;
+  line-height: 1.7;
   position: relative;
-  /* Subtle plastic texture */
+
+  /* Parchment texture */
   background-image:
-    repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 2px,
-      rgba(0, 0, 0, 0.02) 2px,
-      rgba(0, 0, 0, 0.02) 4px
+    /* Fine paper grain */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E"),
+    /* Vignette gradient */
+    radial-gradient(
+      ellipse at center,
+      rgba(26, 22, 18, 0) 0%,
+      rgba(0, 0, 0, 0.3) 100%
     );
 }
 
-/* Subtle CRT scanline effect (very light) */
+/* Ambient candlelight glow overlay */
 body::before {
   content: '';
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0.03),
-    rgba(0, 0, 0, 0.03) 1px,
-    transparent 1px,
-    transparent 3px
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle at 50% 0%,
+    rgba(212, 165, 116, 0.08) 0%,
+    rgba(212, 165, 116, 0.02) 30%,
+    transparent 60%
   );
   pointer-events: none;
-  z-index: 9999;
-  opacity: 0.5;
+  z-index: 1;
+  animation: flicker 4s ease-in-out infinite;
 }
 
-/* Very subtle vignette (not dark corners) */
+/* Subtle page texture overlay */
 body::after {
   content: '';
   position: fixed;
@@ -108,242 +107,519 @@ body::after {
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(0, 0, 0, 0) 60%,
-    rgba(0, 0, 0, 0.05) 100%
-  );
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.02) 2px,
+      rgba(0, 0, 0, 0.02) 4px
+    );
   pointer-events: none;
-  z-index: 9998;
+  z-index: 2;
+  opacity: 0.3;
+}
+
+/* Main content layer above overlays */
+#root {
+  position: relative;
+  z-index: 10;
 }
 
 /* === TYPOGRAPHY === */
-/* Bitmap-inspired headers with physical embossing */
-h1, h2, h3 {
-  font-family: 'Press Start 2P', 'IBM Plex Mono', monospace;
-  font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--color-border);
-  /* Embossed text effect */
-  text-shadow:
-    1px 1px 0 rgba(255, 255, 255, 0.8),
-    2px 2px 0 rgba(0, 0, 0, 0.2);
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Cinzel', 'Times New Roman', serif;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--color-primary);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  margin-bottom: 0.75em;
 }
 
-h1 { font-size: 1.5rem; line-height: 1.8; }
-h2 { font-size: 1.1rem; line-height: 1.6; }
-h3 { font-size: 0.9rem; line-height: 1.5; }
+h1 {
+  font-size: 2.5rem;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+h2 {
+  font-size: 1.875rem;
+  line-height: 1.3;
+}
+
+h3 {
+  font-size: 1.5rem;
+  line-height: 1.4;
+}
+
+h4 {
+  font-size: 1.25rem;
+  line-height: 1.4;
+}
+
+/* Handwritten accent style */
+.handwritten {
+  font-family: 'Tangerine', cursive;
+  font-size: 1.8em;
+  font-weight: 700;
+  color: var(--color-accent-amber);
+}
+
+/* Small caps for labels */
+.label-text {
+  font-variant: small-caps;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  color: var(--color-muted-foreground);
+}
 
 /* === BUTTONS === */
-/* Chunky physical buttons with beveled edges */
+
 button {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Cinzel', serif;
   font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  border: 3px solid var(--color-border);
-  border-radius: 6px;
+
   background: linear-gradient(
-    180deg,
+    135deg,
     var(--color-secondary) 0%,
-    oklch(from var(--color-secondary) calc(l - 0.08) c h) 100%
+    #322920 100%
   );
-  /* Beveled button surface */
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+
+  /* Wax seal inspired shadow */
   box-shadow:
-    inset 2px 2px 3px rgba(255, 255, 255, 0.5),
-    inset -2px -2px 3px rgba(0, 0, 0, 0.2),
-    3px 3px 0 rgba(0, 0, 0, 0.15);
-  transition: all 0.08s ease;
+    0 0 0 1px var(--color-border-accent),
+    0 4px 12px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(212, 165, 116, 0.15);
+
+  padding: 0.65em 1.5em;
   position: relative;
-  padding: 0.6em 1.2em;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Golden shimmer on hover */
+button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(212, 165, 116, 0.2) 50%,
+    transparent 100%
+  );
+  transition: left 0.5s ease;
 }
 
 button:hover:not(:disabled) {
-  transform: translateY(-1px);
+  border-color: var(--color-border-accent);
   box-shadow:
-    inset 2px 2px 3px rgba(255, 255, 255, 0.6),
-    inset -2px -2px 3px rgba(0, 0, 0, 0.25),
-    4px 4px 0 rgba(0, 0, 0, 0.2);
+    0 0 0 1px var(--color-border-accent),
+    0 0 20px rgba(212, 165, 116, 0.3),
+    0 6px 16px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(212, 165, 116, 0.25);
+  transform: translateY(-2px);
+}
+
+button:hover:not(:disabled)::before {
+  left: 100%;
 }
 
 button:active:not(:disabled) {
-  transform: translateY(2px);
+  transform: translateY(0);
   box-shadow:
-    inset -1px -1px 2px rgba(255, 255, 255, 0.3),
-    inset 3px 3px 5px rgba(0, 0, 0, 0.3);
+    0 0 0 1px var(--color-border-accent),
+    0 2px 8px rgba(0, 0, 0, 0.5),
+    inset 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 button:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
-/* === INPUT FIELDS === */
-/* Recessed input fields with inset shadow */
-input, select, textarea {
-  font-family: 'IBM Plex Mono', monospace;
-  background-color: var(--color-input);
-  border: 3px solid var(--color-border);
-  border-radius: 4px;
-  padding: 0.5em 0.8em;
-  /* Recessed effect */
+/* Primary action button */
+button.primary {
+  background: linear-gradient(
+    135deg,
+    var(--color-accent-amber) 0%,
+    #c9944a 100%
+  );
+  color: var(--color-background);
+  border-color: #b8894d;
+}
+
+button.primary:hover:not(:disabled) {
   box-shadow:
-    inset 2px 2px 4px rgba(0, 0, 0, 0.2),
-    inset -1px -1px 2px rgba(255, 255, 255, 0.5);
-  transition: all 0.15s ease;
+    0 0 0 2px #b8894d,
+    0 0 30px rgba(212, 165, 116, 0.5),
+    0 8px 20px rgba(0, 0, 0, 0.6);
+}
+
+/* === INPUT FIELDS === */
+
+input, select, textarea {
+  font-family: 'Crimson Text', serif;
+  font-size: 1rem;
+  background-color: var(--color-input);
+  color: var(--color-foreground);
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  padding: 0.65em 1em;
+
+  /* Recessed writing surface */
+  box-shadow: var(--shadow-inset);
+
+  transition: all 0.3s ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-muted-foreground);
+  font-style: italic;
+  opacity: 0.6;
 }
 
 input:focus, select:focus, textarea:focus {
   outline: none;
-  border-color: var(--color-primary);
-  background-color: oklch(from var(--color-input) calc(l + 0.02) c h);
-  /* Subtle glow on focus */
+  border-color: var(--color-border-accent);
+  background-color: #2a231d;
+
+  /* Candlelight glow */
   box-shadow:
-    inset 2px 2px 4px rgba(0, 0, 0, 0.2),
-    inset -1px -1px 2px rgba(255, 255, 255, 0.5),
-    0 0 0 2px oklch(from var(--color-primary) l c h / 0.3);
+    var(--shadow-inset),
+    0 0 0 1px var(--color-border-accent),
+    0 0 20px rgba(212, 165, 116, 0.2);
 }
 
-/* === PANELS === */
-/* Layered plastic panels with thick borders */
+/* === PANELS & CARDS === */
+
 .card, [class*="bg-card"] {
   background: var(--color-card);
-  border: 4px solid var(--color-border);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
-  /* Raised panel effect */
-  box-shadow:
-    inset 3px 3px 6px rgba(255, 255, 255, 0.4),
-    inset -3px -3px 6px rgba(0, 0, 0, 0.15),
-    6px 6px 0 rgba(0, 0, 0, 0.1),
-    8px 8px 12px rgba(0, 0, 0, 0.08);
-  position: relative;
+
+  /* Decorative corner accents */
+  background-image:
+    /* Top-left corner */
+    linear-gradient(135deg, var(--color-border-accent) 0%, transparent 10%),
+    /* Top-right corner */
+    linear-gradient(225deg, var(--color-border-accent) 0%, transparent 10%),
+    /* Bottom-right corner */
+    linear-gradient(315deg, var(--color-border-accent) 0%, transparent 10%),
+    /* Bottom-left corner */
+    linear-gradient(45deg, var(--color-border-accent) 0%, transparent 10%);
+  background-size: 30px 30px;
+  background-position: top left, top right, bottom right, bottom left;
+  background-repeat: no-repeat;
+
+  box-shadow: var(--shadow-raised);
   padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
 }
 
-/* === ANIMATIONS === */
-@keyframes blink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0.4; }
+/* Paper fiber texture on cards */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.02'/%3E%3C/svg%3E");
+  pointer-events: none;
+  border-radius: 8px;
 }
 
-@keyframes pulse-subtle {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+/* Highlighted card (selected state) */
+.card.highlighted {
+  border-color: var(--color-border-accent);
+  box-shadow:
+    var(--shadow-raised),
+    0 0 30px rgba(212, 165, 116, 0.25),
+    inset 0 0 40px rgba(212, 165, 116, 0.05);
 }
 
-/* === STATUS INDICATORS === */
-/* Physical LED indicators */
-.led {
-  width: 10px;
-  height: 10px;
+/* === DECORATIVE ELEMENTS === */
+
+/* Ornamental divider */
+.divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-border) 10%,
+    var(--color-border-accent) 50%,
+    var(--color-border) 90%,
+    transparent 100%
+  );
+  margin: 2rem 0;
+  position: relative;
+}
+
+.divider::before {
+  content: '◆';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--color-card);
+  color: var(--color-border-accent);
+  padding: 0 1rem;
+  font-size: 0.8rem;
+}
+
+/* Wax seal badge */
+.seal {
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   background: radial-gradient(
     circle at 30% 30%,
-    var(--color-accent-teal),
-    oklch(from var(--color-accent-teal) calc(l - 0.2) c h)
+    var(--color-accent-crimson),
+    #6b1e1e
   );
-  border: 2px solid var(--color-border);
+  border: 2px solid #4a1414;
   box-shadow:
-    inset 1px 1px 2px rgba(255, 255, 255, 0.5),
-    inset -1px -1px 2px rgba(0, 0, 0, 0.3),
-    0 0 4px oklch(from var(--color-accent-teal) l c h / 0.5);
-  animation: pulse-subtle 2s infinite;
+    0 0 0 2px rgba(139, 46, 46, 0.3),
+    inset 0 2px 4px rgba(255, 255, 255, 0.1),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.5),
+    0 4px 12px rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Tangerine', cursive;
+  font-size: 1.5rem;
+  color: #d4a574;
+  font-weight: 700;
 }
 
-.led.amber {
+/* Status indicator (like LED but candlelit) */
+.indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
   background: radial-gradient(
     circle at 30% 30%,
     var(--color-accent-amber),
-    oklch(from var(--color-accent-amber) calc(l - 0.2) c h)
+    #b8894d
   );
   box-shadow:
-    inset 1px 1px 2px rgba(255, 255, 255, 0.5),
-    inset -1px -1px 2px rgba(0, 0, 0, 0.3),
-    0 0 4px oklch(from var(--color-accent-amber) l c h / 0.5);
+    0 0 8px rgba(212, 165, 116, 0.6),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3);
+  animation: pulse-glow 2s infinite;
 }
 
-.led.magenta {
+.indicator.crimson {
   background: radial-gradient(
     circle at 30% 30%,
-    var(--color-accent-magenta),
-    oklch(from var(--color-accent-magenta) calc(l - 0.2) c h)
+    var(--color-accent-crimson),
+    #6b1e1e
   );
   box-shadow:
-    inset 1px 1px 2px rgba(255, 255, 255, 0.5),
-    inset -1px -1px 2px rgba(0, 0, 0, 0.3),
-    0 0 4px oklch(from var(--color-accent-magenta) l c h / 0.5);
+    0 0 8px rgba(139, 46, 46, 0.6),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3);
 }
 
-/* === LABELS === */
-/* Embossed label text on panels */
-.label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--color-muted-foreground);
-  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.6);
-}
-
-/* === UTILITY CLASSES === */
-/* Recessed panel (like a screen or input area) */
-.panel-recessed {
-  background: oklch(from var(--color-background) calc(l - 0.05) c h);
-  border: 3px solid var(--color-border);
-  border-radius: 6px;
-  box-shadow:
-    inset 3px 3px 6px rgba(0, 0, 0, 0.2),
-    inset -2px -2px 4px rgba(255, 255, 255, 0.3);
-  padding: 1rem;
-}
-
-/* Raised button-like panel */
-.panel-raised {
-  background: var(--color-secondary);
-  border: 3px solid var(--color-border);
-  border-radius: 6px;
-  box-shadow:
-    inset 2px 2px 4px rgba(255, 255, 255, 0.5),
-    inset -2px -2px 4px rgba(0, 0, 0, 0.15),
-    4px 4px 0 rgba(0, 0, 0, 0.1);
-}
-
-/* Divider with physical depth */
-.divider {
-  height: 3px;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0.2) 0%,
-    rgba(255, 255, 255, 0.2) 50%,
-    rgba(0, 0, 0, 0.15) 100%
+.indicator.sapphire {
+  background: radial-gradient(
+    circle at 30% 30%,
+    var(--color-accent-sapphire),
+    #132842
   );
-  border: none;
-  margin: 1.5rem 0;
+  box-shadow:
+    0 0 8px rgba(30, 58, 95, 0.6),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3);
 }
 
-/* Chunky scrollbar */
+/* === SCROLLBAR === */
+
 ::-webkit-scrollbar {
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-input);
-  border: 2px solid var(--color-border);
-  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2);
+  background: var(--color-background);
+  border-left: 1px solid var(--color-border);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-secondary);
+  background: linear-gradient(
+    180deg,
+    var(--color-secondary) 0%,
+    #2a241f 100%
+  );
   border: 2px solid var(--color-border);
-  border-radius: 4px;
-  box-shadow:
-    inset 1px 1px 2px rgba(255, 255, 255, 0.4),
-    inset -1px -1px 2px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: oklch(from var(--color-secondary) calc(l - 0.05) c h);
+  background: linear-gradient(
+    180deg,
+    var(--color-border-accent) 0%,
+    #c9944a 100%
+  );
+  box-shadow: 0 0 8px rgba(212, 165, 116, 0.4);
+}
+
+/* === ANIMATIONS === */
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.95; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(0.95);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes unfold {
+  from {
+    opacity: 0;
+    transform: perspective(800px) rotateX(-15deg);
+    transform-origin: top;
+  }
+  to {
+    opacity: 1;
+    transform: perspective(800px) rotateX(0deg);
+  }
+}
+
+/* Staggered reveal for lists */
+.stagger-reveal > * {
+  animation: fadeIn 0.6s ease-out backwards;
+}
+
+.stagger-reveal > *:nth-child(1) { animation-delay: 0.1s; }
+.stagger-reveal > *:nth-child(2) { animation-delay: 0.2s; }
+.stagger-reveal > *:nth-child(3) { animation-delay: 0.3s; }
+.stagger-reveal > *:nth-child(4) { animation-delay: 0.4s; }
+.stagger-reveal > *:nth-child(5) { animation-delay: 0.5s; }
+.stagger-reveal > *:nth-child(6) { animation-delay: 0.6s; }
+.stagger-reveal > *:nth-child(7) { animation-delay: 0.7s; }
+.stagger-reveal > *:nth-child(8) { animation-delay: 0.8s; }
+
+/* === UTILITY CLASSES === */
+
+/* Ink stain accent */
+.ink-stain {
+  position: relative;
+}
+
+.ink-stain::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  background: radial-gradient(
+    circle at 20% 30%,
+    rgba(212, 165, 116, 0.1) 0%,
+    transparent 50%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Highlight text like old manuscripts */
+.illuminated {
+  color: var(--color-accent-amber);
+  font-weight: 600;
+  text-shadow: 0 0 10px rgba(212, 165, 116, 0.3);
+}
+
+/* Recessed panel for inputs/displays */
+.panel-recessed {
+  background: var(--color-input);
+  border: 2px solid var(--color-border);
+  border-radius: 6px;
+  box-shadow: var(--shadow-inset);
+  padding: 1rem;
+}
+
+/* Raised panel for interactive elements */
+.panel-raised {
+  background: var(--color-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(212, 165, 116, 0.1);
+  padding: 1rem;
+}
+
+/* Parchment edge effect */
+.parchment-edge {
+  position: relative;
+}
+
+.parchment-edge::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      var(--color-border) 0px,
+      transparent 1px,
+      transparent 4px,
+      var(--color-border) 5px
+    );
+  opacity: 0.3;
 }

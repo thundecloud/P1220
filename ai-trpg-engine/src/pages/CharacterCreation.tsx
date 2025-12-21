@@ -316,7 +316,10 @@ export default function CharacterCreation() {
     );
 
     store.setCharacter(character);
-    navigate('/game');
+    // 保存到localStorage以便刷新后恢复
+    localStorage.setItem('currentCharacter', JSON.stringify(character));
+    // 通过state传递角色数据到游戏页面
+    navigate('/game', { state: { character } });
   };
 
   // ============ 返回世界线选择 ============

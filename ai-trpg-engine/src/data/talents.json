@@ -514,9 +514,359 @@
     "poolId": "aesthetic_pursuits",
     "name": "浮世绘鉴赏",
     "description": "对绘画艺术有独到的鉴赏力",
-    "aiPromptFragment": "角色熟悉浮世绘等艺术形式,能够欣赏其中的技法和意境。这种艺术素养提升了角色的品位,也可能成为社交资本。",
+    "aiPromptFragment": "角色熟悉浮世绘等艺术形式,能够欣赏其中的技法和意径。这种艺术素养提升了角色的品位,也可能成为社交资本。",
     "rarity": "uncommon",
     "category": "艺术鉴赏",
     "icon": "🖼️"
+  },
+  {
+    "id": "talent_universal_1",
+    "poolId": "universal_common",
+    "name": "适应能力",
+    "description": "能快速适应新环境和新挑战",
+    "aiPromptFragment": "角色拥有出色的适应能力,无论面对何种文化、环境或时代背景,都能快速调整自己的行为方式和思维模式。这使得角色在陌生环境中也能游刃有余。",
+    "rarity": "common",
+    "category": "综合能力",
+    "icon": "🌍"
+  },
+  {
+    "id": "talent_universal_2",
+    "poolId": "universal_common",
+    "name": "观察敏锐",
+    "description": "善于捕捉细节和发现异常",
+    "aiPromptFragment": "角色对周围环境有敏锐的观察力,能注意到他人容易忽略的细节。无论是人物表情、环境变化还是隐藏的线索,角色都能第一时间察觉。",
+    "rarity": "common",
+    "category": "感知能力",
+    "icon": "👁️"
+  },
+  {
+    "id": "talent_universal_3",
+    "poolId": "universal_common",
+    "name": "冷静理智",
+    "description": "在压力下保持清醒的判断力",
+    "aiPromptFragment": "角色在危机和压力下能保持冷静,不被情绪左右。即使面对生死存亡的选择,也能理性分析利弊,做出最优决策。",
+    "rarity": "uncommon",
+    "category": "心理素质",
+    "icon": "🧊"
+  },
+  {
+    "id": "talent_universal_4",
+    "poolId": "universal_common",
+    "name": "学习天赋",
+    "description": "学习新知识和技能的速度超越常人",
+    "aiPromptFragment": "角色拥有出色的学习能力,无论是语言、技艺还是知识,都能快速掌握。这种天赋使角色能够在短时间内适应新的社会角色或职业要求。",
+    "rarity": "uncommon",
+    "category": "智力才能",
+    "icon": "📚"
+  },
+  {
+    "id": "talent_universal_5",
+    "poolId": "universal_common",
+    "name": "直觉敏感",
+    "description": "对危险和机遇有超乎寻常的直觉",
+    "aiPromptFragment": "角色拥有强烈的第六感,常常能在危险来临前感知到威胁,或在关键时刻凭直觉做出正确选择。虽然无法解释原因,但这种直觉往往能救命。",
+    "rarity": "rare",
+    "category": "神秘感知",
+    "icon": "💫"
+  },
+  {
+    "id": "talent_universal_6",
+    "poolId": "universal_common",
+    "name": "魅力非凡",
+    "description": "天生具有吸引他人的个人魅力",
+    "aiPromptFragment": "角色拥有独特的个人魅力,容易获得他人的好感和信任。无论是外貌、谈吐还是气质,都能在人群中脱颖而出,这在社交场合是巨大的优势。",
+    "rarity": "uncommon",
+    "category": "社交魅力",
+    "icon": "✨"
+  },
+  {
+    "id": "talent_universal_7",
+    "poolId": "universal_common",
+    "name": "意志坚定",
+    "description": "拥有不屈不挠的精神力量",
+    "aiPromptFragment": "角色的意志力极其坚定,不易被威胁、诱惑或洗脑。即使遭受酷刑或精神折磨,也能坚守自己的信念和秘密,这种精神力量令人敬畏。",
+    "rarity": "rare",
+    "category": "精神力量",
+    "icon": "⚡"
+  },
+  {
+    "id": "talent_universal_8",
+    "poolId": "universal_common",
+    "name": "幸运儿",
+    "description": "似乎总能在关键时刻得到命运眷顾",
+    "aiPromptFragment": "角色拥有不可思议的好运气,常常能在绝境中找到生机,或在关键时刻遇到贵人相助。虽然无法控制,但这种幸运确实存在。",
+    "rarity": "epic",
+    "category": "命运特质",
+    "icon": "🍀"
+  },
+  {
+    "id": "talent_universal_9",
+    "poolId": "universal_common",
+    "name": "多语天赋",
+    "description": "学习和掌握语言的能力远超常人",
+    "aiPromptFragment": "角色对语言有天生的敏感性,能快速学会新的语言和方言。这种能力使角色能够跨越文化障碍,在多元文化环境中如鱼得水。",
+    "rarity": "uncommon",
+    "category": "语言才能",
+    "icon": "🗣️"
+  },
+  {
+    "id": "talent_universal_10",
+    "poolId": "universal_common",
+    "name": "手巧心灵",
+    "description": "双手灵巧,善于制作和修理",
+    "aiPromptFragment": "角色的双手极其灵巧,无论是精密的手工艺、修理工具还是开锁撬门,都能轻松完成。这种技能在任何时代都极具实用价值。",
+    "rarity": "common",
+    "category": "技术能力",
+    "icon": "🔧"
+  },
+  {
+    "id": "talent_byzantine_1",
+    "poolId": "byzantine_specific",
+    "name": "宫廷礼仪大师",
+    "description": "精通拜占庭帝国复杂的宫廷礼仪",
+    "aiPromptFragment": "角色深谙紫金之城的宫廷规矩,从皇帝觐见到贵族宴会,都能举止得体。这种修养能帮助角色在权力中心游刃有余,但也可能被视为过于拘谨。",
+    "rarity": "uncommon",
+    "category": "社交礼仪",
+    "icon": "👑"
+  },
+  {
+    "id": "talent_byzantine_2",
+    "poolId": "byzantine_specific",
+    "name": "希腊火秘术",
+    "description": "掌握拜占庭帝国的秘密武器知识",
+    "aiPromptFragment": "角色了解希腊火等拜占庭军事科技的秘密。这些知识在战争和防御中价值连城,但泄密可能招致杀身之祸。",
+    "rarity": "epic",
+    "category": "军事科技",
+    "icon": "🔥"
+  },
+  {
+    "id": "talent_byzantine_3",
+    "poolId": "byzantine_specific",
+    "name": "圣像辩论家",
+    "description": "精通拜占庭神学和圣像之争的论点",
+    "aiPromptFragment": "角色深入研究过圣像崇拜的神学争论,能够在宗教辩论中引经据典。在这个宗教氛围浓厚的时代,这种知识能赢得尊重,但站错队伍则可能遭受迫害。",
+    "rarity": "rare",
+    "category": "宗教学识",
+    "icon": "☦️"
+  },
+  {
+    "id": "talent_byzantine_4",
+    "poolId": "byzantine_specific",
+    "name": "丝绸之路商人",
+    "description": "熟悉东西方贸易路线和商业网络",
+    "aiPromptFragment": "角色了解从君士坦丁堡到长安的贸易路线,认识各地的商人和货物。这种商业网络能带来巨大财富,但也伴随着旅途的危险。",
+    "rarity": "uncommon",
+    "category": "商业才能",
+    "icon": "🐫"
+  },
+  {
+    "id": "talent_byzantine_5",
+    "poolId": "byzantine_specific",
+    "name": "马赛克艺术家",
+    "description": "掌握拜占庭独特的马赛克镶嵌艺术",
+    "aiPromptFragment": "角色精通制作精美的马赛克艺术作品,能够将碎片拼接成震撼人心的宗教或世俗图案。这门手艺能获得教会和贵族的赞助。",
+    "rarity": "uncommon",
+    "category": "艺术技艺",
+    "icon": "🎨"
+  },
+  {
+    "id": "talent_song_1",
+    "poolId": "song_specific",
+    "name": "科举功名",
+    "description": "精通四书五经,擅长科举应试",
+    "aiPromptFragment": "角色熟读儒家经典,精通八股文写作。在重视文教的宋代,这种学识是步入仕途、光宗耀祖的阶梯,但也可能被批评为迂腐。",
+    "rarity": "uncommon",
+    "category": "文学修养",
+    "icon": "📜"
+  },
+  {
+    "id": "talent_song_2",
+    "poolId": "song_specific",
+    "name": "商业奇才",
+    "description": "精通宋代繁荣的商业运作",
+    "aiPromptFragment": "角色深谙汴京商业之道,从交子纸币到海外贸易都了如指掌。在这个商业繁荣的时代,这种才能能带来巨大财富和社会地位。",
+    "rarity": "rare",
+    "category": "经商才能",
+    "icon": "💰"
+  },
+  {
+    "id": "talent_song_3",
+    "poolId": "song_specific",
+    "name": "诗词造诣",
+    "description": "擅长创作宋词和诗歌",
+    "aiPromptFragment": "角色具有诗词创作的天赋,能够写出意境深远的词作。在文人雅集和社交场合,这种才华能赢得广泛赞誉和文化地位。",
+    "rarity": "uncommon",
+    "category": "文学创作",
+    "icon": "🖋️"
+  },
+  {
+    "id": "talent_song_4",
+    "poolId": "song_specific",
+    "name": "理学思辨",
+    "description": "深入理解程朱理学的哲学思想",
+    "aiPromptFragment": "角色钻研理学,对天理人欲、格物致知有深刻理解。这种哲学修养在士大夫阶层备受推崇,但可能被批评为过于教条。",
+    "rarity": "rare",
+    "category": "哲学思想",
+    "icon": "☯️"
+  },
+  {
+    "id": "talent_song_5",
+    "poolId": "song_specific",
+    "name": "火药武器知识",
+    "description": "了解宋代先进的火药武器技术",
+    "aiPromptFragment": "角色掌握火药、火箭、突火枪等宋代军事科技。这些知识在战争中极具价值,但也可能招致权力者的猜忌和控制。",
+    "rarity": "epic",
+    "category": "军事科技",
+    "icon": "💣"
+  },
+  {
+    "id": "talent_renaissance_1",
+    "poolId": "renaissance_specific",
+    "name": "人文主义学者",
+    "description": "精通古典拉丁文和希腊哲学",
+    "aiPromptFragment": "角色深入研究古罗马和古希腊的经典著作,倡导人文主义思想。在文艺复兴时期,这种学识能赢得美第奇家族等赞助人的青睐。",
+    "rarity": "uncommon",
+    "category": "学术修养",
+    "icon": "📖"
+  },
+  {
+    "id": "talent_renaissance_2",
+    "poolId": "renaissance_specific",
+    "name": "绘画天才",
+    "description": "掌握透视法和油画技巧",
+    "aiPromptFragment": "角色精通文艺复兴时期的绘画技法,从线性透视到明暗对比都运用自如。这种艺术才能能获得教会和贵族的大量订单和赞助。",
+    "rarity": "rare",
+    "category": "绘画艺术",
+    "icon": "🎨"
+  },
+  {
+    "id": "talent_renaissance_3",
+    "poolId": "renaissance_specific",
+    "name": "建筑设计师",
+    "description": "精通古典建筑比例和设计原理",
+    "aiPromptFragment": "角色掌握维特鲁威建筑理论,能设计出和谐优美的建筑。在佛罗伦萨的建筑热潮中,这种才能极具价值。",
+    "rarity": "uncommon",
+    "category": "建筑设计",
+    "icon": "🏛️"
+  },
+  {
+    "id": "talent_renaissance_4",
+    "poolId": "renaissance_specific",
+    "name": "解剖学知识",
+    "description": "对人体结构有科学的认知",
+    "aiPromptFragment": "角色研究过人体解剖,掌握肌肉骨骼的精确结构。这种知识不仅能提升艺术创作的真实性,也可能引发教会的质疑。",
+    "rarity": "rare",
+    "category": "科学知识",
+    "icon": "🦴"
+  },
+  {
+    "id": "talent_renaissance_5",
+    "poolId": "renaissance_specific",
+    "name": "外交辞令",
+    "description": "精通意大利城邦间的外交手腕",
+    "aiPromptFragment": "角色深谙马基雅维利式的权谋之道,懂得在城邦政治中纵横捭阖。这种能力在动荡的意大利极为重要,但也可能被视为阴险狡诈。",
+    "rarity": "epic",
+    "category": "政治手腕",
+    "icon": "🎭"
+  },
+  {
+    "id": "talent_wildwest_1",
+    "poolId": "wild_west_specific",
+    "name": "神枪手",
+    "description": "枪法精准,拔枪速度极快",
+    "aiPromptFragment": "角色经过长期训练,枪法如神,拔枪快如闪电。在西部的无法之地,这种技能是生存的保障,也是赢得尊重的资本。",
+    "rarity": "rare",
+    "category": "枪械技巧",
+    "icon": "🔫"
+  },
+  {
+    "id": "talent_wildwest_2",
+    "poolId": "wild_west_specific",
+    "name": "驯马高手",
+    "description": "能够驯服最烈性的野马",
+    "aiPromptFragment": "角色与马有天生的亲和力,能够驯服狂野的烈马。在依赖马匹的西部,这种技能既实用又能赚取不菲收入。",
+    "rarity": "uncommon",
+    "category": "驯兽技能",
+    "icon": "🐎"
+  },
+  {
+    "id": "talent_wildwest_3",
+    "poolId": "wild_west_specific",
+    "name": "淘金经验",
+    "description": "懂得寻找金矿和辨别矿脉",
+    "aiPromptFragment": "角色参与过淘金热,知道如何寻找金矿、辨别矿石品质。这种经验能带来一夜暴富的机会,但也可能引来劫匪的觊觎。",
+    "rarity": "uncommon",
+    "category": "采矿知识",
+    "icon": "⛏️"
+  },
+  {
+    "id": "talent_wildwest_4",
+    "poolId": "wild_west_specific",
+    "name": "印第安向导",
+    "description": "熟悉印第安文化和荒野生存",
+    "aiPromptFragment": "角色与印第安部落有过接触,学会了追踪、狩猎和野外生存技能。这种知识在荒野中极其宝贵,也能帮助调解文化冲突。",
+    "rarity": "rare",
+    "category": "野外生存",
+    "icon": "🪶"
+  },
+  {
+    "id": "talent_wildwest_5",
+    "poolId": "wild_west_specific",
+    "name": "铁路先锋",
+    "description": "参与过横贯铁路的建设",
+    "aiPromptFragment": "角色参与过太平洋铁路建设,了解铁路工程和劳工组织。这段经历不仅带来技术知识,也见证了西部开拓的残酷与梦想。",
+    "rarity": "uncommon",
+    "category": "工程技术",
+    "icon": "🚂"
+  },
+  {
+    "id": "talent_weimar_1",
+    "poolId": "weimar_specific",
+    "name": "表现主义艺术家",
+    "description": "掌握表现主义的艺术理念和技法",
+    "aiPromptFragment": "角色是表现主义艺术运动的参与者,善于通过扭曲的形式表达内心情感。在魏玛时期的柏林,这种前卫艺术备受追捧。",
+    "rarity": "uncommon",
+    "category": "现代艺术",
+    "icon": "🎨"
+  },
+  {
+    "id": "talent_weimar_2",
+    "poolId": "weimar_specific",
+    "name": "包豪斯设计师",
+    "description": "精通现代主义设计理念",
+    "aiPromptFragment": "角色在包豪斯学校学习,掌握形式追随功能的设计哲学。这种革新性的设计思想正在改变建筑、家具和视觉艺术。",
+    "rarity": "rare",
+    "category": "设计理论",
+    "icon": "📐"
+  },
+  {
+    "id": "talent_weimar_3",
+    "poolId": "weimar_specific",
+    "name": "政治活动家",
+    "description": "深入了解魏玛时期的政治派系斗争",
+    "aiPromptFragment": "角色活跃于政治运动,熟悉左翼右翼各派系的主张。在政局动荡的魏玛德国,这种政治敏感性既是机遇也是危险。",
+    "rarity": "uncommon",
+    "category": "政治意识",
+    "icon": "✊"
+  },
+  {
+    "id": "talent_weimar_4",
+    "poolId": "weimar_specific",
+    "name": "爵士乐演奏家",
+    "description": "精通爵士乐和即兴演奏",
+    "aiPromptFragment": "角色是柏林夜生活的一部分,在烟雾缭绕的爵士酒吧演奏。这种音乐才华能赚取收入,也能接触到各色人物。",
+    "rarity": "uncommon",
+    "category": "音乐才能",
+    "icon": "🎷"
+  },
+  {
+    "id": "talent_weimar_5",
+    "poolId": "weimar_specific",
+    "name": "心理分析学徒",
+    "description": "学习过弗洛伊德的精神分析理论",
+    "aiPromptFragment": "角色接触过精神分析学说,了解潜意识、梦境解析等概念。这种前沿心理学知识能帮助理解人性,但也可能被视为伪科学。",
+    "rarity": "rare",
+    "category": "心理学知识",
+    "icon": "🧠"
   }
 ]

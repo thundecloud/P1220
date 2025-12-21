@@ -32,7 +32,7 @@
       "charisma": { "mu": 50, "sigma": 15 },
       "luck": { "mu": 50, "sigma": 15 }
     },
-    "talentPoolIds": ["victorian_common", "detective_skills", "industrial_age"],
+    "talentPoolIds": ["universal_common", "victorian_common", "detective_skills", "industrial_age"],
     "skillPoolIds": ["victorian_skills"],
     "lorebook": {
       "id": "lorebook_victorian_london_1880",
@@ -137,7 +137,7 @@
       "charisma": { "mu": 50, "sigma": 15 },
       "luck": { "mu": 45, "sigma": 16 }
     },
-    "talentPoolIds": ["cold_war_common", "espionage_skills", "survival_skills"],
+    "talentPoolIds": ["universal_common", "cold_war_common", "espionage_skills", "survival_skills"],
     "skillPoolIds": ["cold_war_skills"],
     "lorebook": {
       "id": "lorebook_cold_war_berlin_1961",
@@ -242,7 +242,7 @@
       "charisma": { "mu": 50, "sigma": 15 },
       "luck": { "mu": 50, "sigma": 15 }
     },
-    "talentPoolIds": ["edo_common", "artisan_skills", "warrior_spirit", "aesthetic_pursuits"],
+    "talentPoolIds": ["universal_common", "edo_common", "artisan_skills", "warrior_spirit", "aesthetic_pursuits"],
     "skillPoolIds": ["edo_skills"],
     "lorebook": {
       "id": "lorebook_edo_kyoto_1700",
@@ -358,7 +358,7 @@
       "charisma": { "mu": 51, "sigma": 15 },
       "luck": { "mu": 48, "sigma": 16 }
     },
-    "talentPoolIds": ["byzantine_common", "courtier_skills", "merchant_trade"],
+    "talentPoolIds": ["universal_common", "byzantine_specific"],
     "skillPoolIds": ["byzantine_skills"],
     "lorebook": {
       "id": "lorebook_byzantine_1075",
@@ -461,7 +461,7 @@
       "charisma": { "mu": 52, "sigma": 15 },
       "luck": { "mu": 49, "sigma": 16 }
     },
-    "talentPoolIds": ["song_common", "scholar_literati", "merchant_skills"],
+    "talentPoolIds": ["universal_common", "song_specific"],
     "skillPoolIds": ["song_skills"],
     "lorebook": {
       "id": "lorebook_song_kaifeng_1100",
@@ -564,7 +564,7 @@
       "charisma": { "mu": 54, "sigma": 14 },
       "luck": { "mu": 50, "sigma": 15 }
     },
-    "talentPoolIds": ["renaissance_common", "artist_skills", "humanist_learning"],
+    "talentPoolIds": ["universal_common", "renaissance_specific"],
     "skillPoolIds": ["renaissance_skills"],
     "lorebook": {
       "id": "lorebook_renaissance_florence_1490",
@@ -667,7 +667,7 @@
       "charisma": { "mu": 50, "sigma": 15 },
       "luck": { "mu": 52, "sigma": 15 }
     },
-    "talentPoolIds": ["wild_west_common", "gunslinger_skills", "frontier_survival"],
+    "talentPoolIds": ["universal_common", "wild_west_specific"],
     "skillPoolIds": ["wild_west_skills"],
     "lorebook": {
       "id": "lorebook_wild_west_1880",
@@ -770,7 +770,7 @@
       "charisma": { "mu": 53, "sigma": 14 },
       "luck": { "mu": 46, "sigma": 16 }
     },
-    "talentPoolIds": ["weimar_common", "modernist_arts", "political_activism"],
+    "talentPoolIds": ["universal_common", "weimar_specific"],
     "skillPoolIds": ["weimar_skills"],
     "lorebook": {
       "id": "lorebook_weimar_berlin_1925",

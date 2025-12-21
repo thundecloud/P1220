@@ -188,7 +188,7 @@ export default function WorldlineManager({
         charisma: { mu: 50, sigma: 15 },
         luck: { mu: 50, sigma: 15 },
       },
-      talentPoolIds: ['common'],
+      talentPoolIds: ['universal_common'],
       skillPoolIds: ['common'],
       lorebook,
       settingDocument,
