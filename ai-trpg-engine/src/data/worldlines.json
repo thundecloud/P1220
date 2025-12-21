@@ -324,5 +324,520 @@
       "createdAt": "2025-01-01T00:00:00Z"
     },
     "isCustom": false
+  },
+  {
+    "id": "byzantine_constantinople_1075",
+    "name": "紫金之城 · 拜占庭帝国",
+    "description": "1075年的君士坦丁堡，东罗马帝国依然屹立不倒。这座千年古城见证了罗马的荣光与基督教的兴盛。皇宫的阴谋、教会的权谋、商人的贸易，在这座连接欧亚的枢纽城市交织。塞尔柱土耳其人的威胁日益迫近，帝国正处于危机前夜。",
+    "era": "中世纪",
+    "region": "君士坦丁堡",
+    "culture": ["东正教", "希腊文化", "罗马传统", "丝绸之路"],
+    "historicalBackground": "1075年的拜占庭帝国正值科穆宁王朝前夜。帝国面临多重危机：西方的诺曼人、东方的塞尔柱土耳其人、内部的贵族纷争。君士坦丁堡是当时世界上最富庶的城市之一，人口约40万。圣索菲亚大教堂的穹顶象征着帝国的荣耀。丝绸贸易、香料贸易让城市繁荣。希腊火是帝国的秘密武器。宫廷政治错综复杂，刺杀和政变频繁。东正教会是精神支柱，但也与罗马教廷关系紧张。",
+    "imageUrl": "",
+    "special": {
+      "challenges": [
+        "外敌环伺，帝国衰落",
+        "宫廷政治险恶，刺杀频繁",
+        "教会与世俗权力斗争",
+        "经济依赖贸易，易受封锁"
+      ],
+      "opportunities": [
+        "繁荣的国际贸易中心",
+        "保存古典文化知识",
+        "先进的外交和间谍系统",
+        "强大的海军和希腊火技术"
+      ]
+    },
+    "attributeParams": {
+      "strength": { "mu": 50, "sigma": 15 },
+      "constitution": { "mu": 50, "sigma": 15 },
+      "dexterity": { "mu": 52, "sigma": 15 },
+      "intelligence": { "mu": 54, "sigma": 14 },
+      "education": { "mu": 48, "sigma": 16 },
+      "power": { "mu": 52, "sigma": 15 },
+      "charisma": { "mu": 51, "sigma": 15 },
+      "luck": { "mu": 48, "sigma": 16 }
+    },
+    "talentPoolIds": ["byzantine_common", "courtier_skills", "merchant_trade"],
+    "skillPoolIds": ["byzantine_skills"],
+    "lorebook": {
+      "id": "lorebook_byzantine_1075",
+      "name": "紫金之城 - 世界背景知识库",
+      "description": "拜占庭帝国的宫廷、贸易、宗教背景",
+      "scanDepth": 10,
+      "recursiveScanning": true,
+      "budgetEnabled": false,
+      "entries": [
+        {
+          "id": "entry_byz_001",
+          "title": "圣索菲亚大教堂",
+          "keys": ["圣索菲亚", "大教堂", "拜占庭建筑", "穹顶"],
+          "content": "圣索菲亚大教堂是拜占庭建筑的巅峰之作。巨大的穹顶似乎悬浮在空中，金色马赛克反射着烛光。这里是东正教的中心，皇帝加冕的圣地。建筑技术令人叹为观止，象征着帝国的荣耀与神的庇佑。",
+          "enabled": true,
+          "insertionOrder": 100,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_byz_002",
+          "title": "希腊火",
+          "keys": ["希腊火", "秘密武器", "海战", "燃烧"],
+          "content": "希腊火是拜占庭帝国的终极武器。这种秘密配方的易燃液体能在水面燃烧，摧毁敌舰。配方严格保密，泄密者处死。喷射器将希腊火投向敌人，火焰无法扑灭。帝国海军因此称霸地中海。",
+          "enabled": true,
+          "insertionOrder": 95,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_byz_003",
+          "title": "宫廷阴谋",
+          "keys": ["阴谋", "刺杀", "政变", "皇宫", "权谋"],
+          "content": "拜占庭宫廷以阴谋诡计闻名。夺权、投毒、刺杀是家常便饭。太监、将军、皇后都可能是阴谋家。弄瞎敌人的眼睛是常见的惩罚。紫衣贵族争夺皇位，暗杀计划层出不穷。",
+          "enabled": true,
+          "insertionOrder": 105,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_byz_004",
+          "title": "丝绸之路贸易",
+          "keys": ["丝绸之路", "贸易", "商人", "香料", "丝绸"],
+          "content": "君士坦丁堡是丝绸之路的西端终点。来自中国的丝绸、波斯的香料、印度的宝石在此交易。市场繁荣，商人富有。帝国征收重税，贸易是国库主要来源。威尼斯和热那亚商人也在此活动。",
+          "enabled": true,
+          "insertionOrder": 90,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_byz_005",
+          "title": "东正教传统",
+          "keys": ["东正教", "教会", "圣像", "礼拜", "信仰"],
+          "content": "东正教是帝国的精神支柱。圣像崇拜、华丽的礼拜仪式、僧侣的影响力。教会拥有大量土地和财富。与罗马天主教会的分裂加深。神学辩论激烈，异端会被处决。",
+          "enabled": true,
+          "insertionOrder": 92,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        }
+      ],
+      "createdAt": "2025-01-01T00:00:00Z"
+    },
+    "isCustom": false
+  },
+  {
+    "id": "song_kaifeng_1100",
+    "name": "汴京繁华 · 北宋都城",
+    "description": "1100年的开封，北宋都城，人口超过百万，是当时世界上最大最繁华的城市。清明上河图描绘的盛景真实存在：瓦肆勾栏的说书人、酒楼茶肆的文人雅士、虹桥上的商贾，科举士子的抱负与市井百姓的烟火气交织。然而靖康之耻的阴影已在不远处。",
+    "era": "北宋",
+    "region": "开封府",
+    "culture": ["儒家文化", "科举制度", "市民文化", "宋词艺术"],
+    "historicalBackground": "1100年，宋徽宗刚刚即位。北宋达到文化和经济巅峰，但军事实力孱弱。开封人口过百万，夜市繁荣，商业发达。活字印刷、火药、指南针等发明领先世界。科举制度完善，文人地位极高。宋词、书画达到黄金时代。瓦肆勾栏娱乐兴盛，市民文化繁荣。同时，冗官冗兵问题严重，财政紧张。王安石变法余波未平。辽国、西夏、金国环伺，边患不断。",
+    "imageUrl": "",
+    "special": {
+      "challenges": [
+        "重文轻武导致军事孱弱",
+        "冗官冗兵造成财政困难",
+        "外族侵扰不断",
+        "阶级矛盾激化"
+      ],
+      "opportunities": [
+        "科举入仕改变命运",
+        "商业贸易繁荣致富",
+        "文化艺术高度发展",
+        "技术创新领先世界"
+      ]
+    },
+    "attributeParams": {
+      "strength": { "mu": 48, "sigma": 15 },
+      "constitution": { "mu": 49, "sigma": 15 },
+      "dexterity": { "mu": 51, "sigma": 15 },
+      "intelligence": { "mu": 56, "sigma": 14 },
+      "education": { "mu": 52, "sigma": 15 },
+      "power": { "mu": 50, "sigma": 15 },
+      "charisma": { "mu": 52, "sigma": 15 },
+      "luck": { "mu": 49, "sigma": 16 }
+    },
+    "talentPoolIds": ["song_common", "scholar_literati", "merchant_skills"],
+    "skillPoolIds": ["song_skills"],
+    "lorebook": {
+      "id": "lorebook_song_kaifeng_1100",
+      "name": "汴京繁华 - 世界背景知识库",
+      "description": "北宋开封的文化、科举、商业背景",
+      "scanDepth": 10,
+      "recursiveScanning": true,
+      "budgetEnabled": false,
+      "entries": [
+        {
+          "id": "entry_song_001",
+          "title": "科举制度",
+          "keys": ["科举", "进士", "状元", "考试", "仕途"],
+          "content": "科举是改变命运的正途。乡试、会试、殿试层层选拔。金榜题名，一登龙门身价百倍。状元、榜眼、探花成为佳话。寒门子弟也有机会入仕。但录取率极低，多数人终生不第。",
+          "enabled": true,
+          "insertionOrder": 100,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_song_002",
+          "title": "瓦肆勾栏",
+          "keys": ["瓦肆", "勾栏", "说书", "戏曲", "娱乐"],
+          "content": "瓦肆是市民娱乐的场所。勾栏内说书、杂耍、戏曲轮番上演。《水浒传》等话本在此流传。百姓茶余饭后的消遣。艺人以此为生，名角受人追捧。",
+          "enabled": true,
+          "insertionOrder": 90,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_song_003",
+          "title": "宋词雅集",
+          "keys": ["宋词", "文人", "雅集", "诗词", "才子"],
+          "content": "宋词达到巅峰。苏轼、李清照、柳永等名家辈出。文人雅集吟诗作词，品茗论道。词牌格式严谨，意境深远。青楼也是文化沙龙，歌妓擅长诗词。",
+          "enabled": true,
+          "insertionOrder": 95,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_song_004",
+          "title": "商业繁荣",
+          "keys": ["商业", "交子", "市场", "贸易", "经济"],
+          "content": "宋代商业空前繁荣。世界上最早的纸币'交子'在四川出现。夜市打破宵禁，通宵营业。商税是国家重要收入。海上丝绸之路繁盛，泉州港贸易发达。",
+          "enabled": true,
+          "insertionOrder": 88,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_song_005",
+          "title": "火药与印刷",
+          "keys": ["火药", "印刷", "发明", "技术", "创新"],
+          "content": "宋代技术领先世界。火药用于军事，火箭、火炮开始应用。活字印刷术发明，书籍传播加速。指南针用于航海。但重文轻武，技术优势未转化为军事实力。",
+          "enabled": true,
+          "insertionOrder": 92,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        }
+      ],
+      "createdAt": "2025-01-01T00:00:00Z"
+    },
+    "isCustom": false
+  },
+  {
+    "id": "renaissance_florence_1490",
+    "name": "美第奇之光 · 文艺复兴佛罗伦萨",
+    "description": "1490年的佛罗伦萨，文艺复兴运动的中心。美第奇家族统治下的城市充满艺术与财富。达·芬奇、米开朗基罗在此创作，马基雅维利思考政治哲学。银行家与艺术家、教士与人文主义者在此共存。古典文化复兴，但教会的禁忌与世俗的欲望也在暗中碰撞。",
+    "era": "文艺复兴",
+    "region": "佛罗伦萨",
+    "culture": ["人文主义", "艺术复兴", "银行业", "古典文化"],
+    "historicalBackground": "1490年代的佛罗伦萨是文艺复兴的心脏。美第奇家族的洛伦佐统治城市，资助艺术家。达·芬奇刚离开佛罗伦萨，米开朗基罗正崭露头角。古希腊罗马文化被重新发现，人文主义兴起。银行业发达，美第奇银行的分行遍布欧洲。艺术学院、图书馆繁荣。同时，萨沃纳罗拉的宗教狂热开始蔓延。教会权威与世俗精神的冲突加剧。瘟疫的记忆尚未远去。",
+    "imageUrl": "",
+    "special": {
+      "challenges": [
+        "教会与世俗思想冲突",
+        "政治阴谋和家族斗争",
+        "瘟疫的威胁",
+        "外国势力干涉"
+      ],
+      "opportunities": [
+        "艺术与科学的黄金时代",
+        "银行业带来的财富",
+        "人文主义教育兴起",
+        "古典知识的重新发现"
+      ]
+    },
+    "attributeParams": {
+      "strength": { "mu": 49, "sigma": 15 },
+      "constitution": { "mu": 48, "sigma": 16 },
+      "dexterity": { "mu": 53, "sigma": 14 },
+      "intelligence": { "mu": 57, "sigma": 13 },
+      "education": { "mu": 53, "sigma": 14 },
+      "power": { "mu": 51, "sigma": 15 },
+      "charisma": { "mu": 54, "sigma": 14 },
+      "luck": { "mu": 50, "sigma": 15 }
+    },
+    "talentPoolIds": ["renaissance_common", "artist_skills", "humanist_learning"],
+    "skillPoolIds": ["renaissance_skills"],
+    "lorebook": {
+      "id": "lorebook_renaissance_florence_1490",
+      "name": "美第奇之光 - 世界背景知识库",
+      "description": "文艺复兴佛罗伦萨的艺术、人文、政治背景",
+      "scanDepth": 10,
+      "recursiveScanning": true,
+      "budgetEnabled": false,
+      "entries": [
+        {
+          "id": "entry_ren_001",
+          "title": "美第奇家族",
+          "keys": ["美第奇", "洛伦佐", "银行家", "赞助人"],
+          "content": "美第奇家族是佛罗伦萨的实际统治者。银行业务遍布欧洲，富可敌国。洛伦佐·美第奇被称为'伟大者'，慷慨资助艺术家和学者。家族宫殿收藏无数艺术珍品。政治手腕高超，平衡各方势力。",
+          "enabled": true,
+          "insertionOrder": 100,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_ren_002",
+          "title": "艺术大师",
+          "keys": ["达·芬奇", "米开朗基罗", "艺术", "雕塑", "绘画"],
+          "content": "文艺复兴催生了伟大的艺术家。达·芬奇的全才让人惊叹，米开朗基罗的雕塑栩栩如生。透视法、解剖学研究提升了艺术水平。艺术家地位提高，不再只是工匠。富豪竞相委托创作。",
+          "enabled": true,
+          "insertionOrder": 105,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_ren_003",
+          "title": "人文主义",
+          "keys": ["人文主义", "古典", "学者", "柏拉图", "哲学"],
+          "content": "人文主义运动重新发现古希腊罗马文化。柏拉图学院研究哲学，古典文献被翻译。强调人的价值和理性。拉丁语、希腊语学习兴盛。与中世纪神学形成对比。",
+          "enabled": true,
+          "insertionOrder": 95,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_ren_004",
+          "title": "银行与贸易",
+          "keys": ["银行", "贸易", "商人", "财富", "经济"],
+          "content": "佛罗伦萨的银行业领先欧洲。美第奇银行发明复式记账法。羊毛和丝绸贸易繁荣。金币佛罗林是国际货币。商人公会权力强大。财富积累为艺术资助提供基础。",
+          "enabled": true,
+          "insertionOrder": 88,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_ren_005",
+          "title": "萨沃纳罗拉的警告",
+          "keys": ["萨沃纳罗拉", "宗教", "道德", "虚荣之火"],
+          "content": "修士萨沃纳罗拉谴责奢华和腐败。预言灾难，呼吁道德改革。他的布道吸引大批追随者。'虚荣之火'焚烧艺术品和奢侈品。与美第奇的世俗文化形成对立。不久后他将被处死。",
+          "enabled": true,
+          "insertionOrder": 92,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        }
+      ],
+      "createdAt": "2025-01-01T00:00:00Z"
+    },
+    "isCustom": false
+  },
+  {
+    "id": "wild_west_1880",
+    "name": "荒野镖客 · 美国西部",
+    "description": "1880年的美国西部，拓荒时代接近尾声。牛仔驱赶牛群穿越大平原，淘金者在山区寻找财富，枪手在酒馆决斗。铁路正在改变一切，印第安人的土地被侵占，法律与无法地带并存。在这片充满机遇与危险的荒野，每个人都在寻找属于自己的美国梦。",
+    "era": "拓荒时代",
+    "region": "美国西部",
+    "culture": ["牛仔文化", "拓荒精神", "枪手传说", "印第安冲突"],
+    "historicalBackground": "1880年代是美国西部拓荒的黄金时代。南北战争结束后，大批移民涌向西部寻找土地和财富。横贯大陆的铁路已经完成，加速了西部开发。牛仔驱赶牛群从德克萨斯到铁路终点，长途跋涉数月。淘金热余波未平，矿镇如雨后春笋。枪手、赏金猎人、警长维持粗糙的秩序。印第安人被迫进入保留地，抵抗被残酷镇压。电报、左轮手枪、温彻斯特步枪是这个时代的象征。",
+    "imageUrl": "",
+    "special": {
+      "challenges": [
+        "法律缺失，暴力横行",
+        "恶劣的自然环境",
+        "印第安人与移民冲突",
+        "疾病和医疗条件差"
+      ],
+      "opportunities": [
+        "自由的土地和淘金机会",
+        "牛仔和牧场主致富",
+        "铁路和城镇建设商机",
+        "新的开始和无限可能"
+      ]
+    },
+    "attributeParams": {
+      "strength": { "mu": 54, "sigma": 14 },
+      "constitution": { "mu": 53, "sigma": 14 },
+      "dexterity": { "mu": 54, "sigma": 14 },
+      "intelligence": { "mu": 48, "sigma": 15 },
+      "education": { "mu": 43, "sigma": 17 },
+      "power": { "mu": 51, "sigma": 15 },
+      "charisma": { "mu": 50, "sigma": 15 },
+      "luck": { "mu": 52, "sigma": 15 }
+    },
+    "talentPoolIds": ["wild_west_common", "gunslinger_skills", "frontier_survival"],
+    "skillPoolIds": ["wild_west_skills"],
+    "lorebook": {
+      "id": "lorebook_wild_west_1880",
+      "name": "荒野镖客 - 世界背景知识库",
+      "description": "美国西部的牛仔、枪手、淘金文化背景",
+      "scanDepth": 10,
+      "recursiveScanning": true,
+      "budgetEnabled": false,
+      "entries": [
+        {
+          "id": "entry_west_001",
+          "title": "牛仔生活",
+          "keys": ["牛仔", "cattle drive", "牧场", "套索"],
+          "content": "牛仔驱赶数千头牛穿越荒野，历时数月抵达铁路终点。工作艰苦危险，薪水微薄。但牛仔精神代表自由和勇气。套索技术、骑术是必备技能。晚上围着篝火唱歌，白天面对暴晒和风沙。",
+          "enabled": true,
+          "insertionOrder": 100,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_west_002",
+          "title": "左轮手枪决斗",
+          "keys": ["决斗", "枪手", "左轮", "colt", "快枪手"],
+          "content": "左轮手枪是西部的象征。柯尔特和史密斯-韦森是著名品牌。快枪手传奇流传，决斗在大街上上演。'先拔枪者生存'是残酷现实。许多争端以枪战解决。赏金猎人追捕通缉犯。",
+          "enabled": true,
+          "insertionOrder": 105,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_west_003",
+          "title": "淘金热",
+          "keys": ["淘金", "矿工", "黄金", "矿镇", "发财"],
+          "content": "淘金热吸引无数冒险者。矿镇一夜兴起，金矿枯竭后成为鬼城。淘金盘、水槽、炸药是基本工具。真正发财的往往是卖铲子和补给的商人。赌博、酒馆、妓院在矿镇繁荣。",
+          "enabled": true,
+          "insertionOrder": 92,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_west_004",
+          "title": "铁路时代",
+          "keys": ["铁路", "火车", "太平洋铁路", "locomotiv"],
+          "content": "横贯大陆的铁路改变了西部。火车运输牛、货物和乘客。铁路终点成为繁荣城镇。华工在恶劣条件下修建铁路。火车劫匪成为新威胁。电报沿着铁路延伸，加速信息传播。",
+          "enabled": true,
+          "insertionOrder": 88,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_west_005",
+          "title": "印第安战争",
+          "keys": ["印第安人", "原住民", "保留地", "部落", "骑兵"],
+          "content": "印第安人与移民的冲突血腥而悲剧。部落被迫迁入保留地，抵抗被骑兵镇压。水牛被大量猎杀，摧毁印第安人的生活方式。一些部落领袖试图和平，另一些选择战斗。边疆上袭击和报复循环不止。",
+          "enabled": true,
+          "insertionOrder": 95,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        }
+      ],
+      "createdAt": "2025-01-01T00:00:00Z"
+    },
+    "isCustom": false
+  },
+  {
+    "id": "weimar_berlin_1925",
+    "name": "黄金年代 · 魏玛共和国",
+    "description": "1925年的柏林，魏玛共和国的黄金时代。一战的创伤尚未愈合，但城市充满了前卫艺术和颓废狂欢。包豪斯设计、表现主义电影、爵士乐俱乐部，传统与现代激烈碰撞。经济暂时稳定，但政治极端势力暗潮涌动。人们在不确定的未来前疯狂地享受当下。",
+    "era": "两次世界大战之间",
+    "region": "柏林",
+    "culture": ["现代主义艺术", "表现主义", "包豪斯", "爵士时代"],
+    "historicalBackground": "1925年是魏玛共和国相对稳定的时期。一战战败的耻辱和赔款压力依然存在，但道威斯计划暂时缓解经济危机。柏林成为欧洲文化之都，前卫艺术繁荣。包豪斯学院革新设计，表现主义电影震撼世界。夜总会、卡巴莱、爵士乐代表新时代。女性解放运动兴起，同性恋文化相对宽容。但社会分裂严重，共产党和纳粹党势力增长。通货膨胀的记忆让人们既及时行乐又充满不安。",
+    "imageUrl": "",
+    "special": {
+      "challenges": [
+        "政治不稳定，极端势力抬头",
+        "经济脆弱，通胀威胁",
+        "社会撕裂，阶级对立",
+        "战败创伤未愈"
+      ],
+      "opportunities": [
+        "艺术文化空前自由",
+        "科学技术快速发展",
+        "社会实验和改革",
+        "夜生活和娱乐繁荣"
+      ]
+    },
+    "attributeParams": {
+      "strength": { "mu": 49, "sigma": 15 },
+      "constitution": { "mu": 48, "sigma": 15 },
+      "dexterity": { "mu": 52, "sigma": 15 },
+      "intelligence": { "mu": 56, "sigma": 14 },
+      "education": { "mu": 54, "sigma": 14 },
+      "power": { "mu": 50, "sigma": 15 },
+      "charisma": { "mu": 53, "sigma": 14 },
+      "luck": { "mu": 46, "sigma": 16 }
+    },
+    "talentPoolIds": ["weimar_common", "modernist_arts", "political_activism"],
+    "skillPoolIds": ["weimar_skills"],
+    "lorebook": {
+      "id": "lorebook_weimar_berlin_1925",
+      "name": "黄金年代 - 世界背景知识库",
+      "description": "魏玛共和国的艺术、政治、社会背景",
+      "scanDepth": 10,
+      "recursiveScanning": true,
+      "budgetEnabled": false,
+      "entries": [
+        {
+          "id": "entry_weimar_001",
+          "title": "包豪斯运动",
+          "keys": ["包豪斯", "设计", "现代主义", "建筑", "格罗皮乌斯"],
+          "content": "包豪斯学院革新设计理念。形式追随功能，工艺与艺术结合。简洁的线条、实用的设计影响全世界。格罗皮乌斯、密斯·凡德罗等大师云集。钢管家具、无装饰建筑成为新标志。",
+          "enabled": true,
+          "insertionOrder": 100,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_weimar_002",
+          "title": "表现主义电影",
+          "keys": ["电影", "表现主义", "大都会", "卡里加里", "默片"],
+          "content": "德国表现主义电影开创先河。《卡里加里博士的小屋》的扭曲布景，《大都会》的未来幻想。阴影、夸张的妆容、心理恐怖是特色。弗里茨·朗等导演成为传奇。电影院是大众娱乐场所。",
+          "enabled": true,
+          "insertionOrder": 95,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_weimar_003",
+          "title": "夜总会文化",
+          "keys": ["夜总会", "卡巴莱", "爵士", "舞蹈", "颓废"],
+          "content": "柏林的夜生活震惊世界。卡巴莱表演大胆挑衅，爵士乐从美国传来。查尔斯顿舞风靡。酒精、可卡因流行。同性恋俱乐部相对开放。颓废与享乐成为时代标志。保守派深感不安。",
+          "enabled": true,
+          "insertionOrder": 105,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_weimar_004",
+          "title": "政治极端化",
+          "keys": ["纳粹", "共产党", "政治", "街头斗殴", "极端"],
+          "content": "政治光谱两极分化。纳粹党和共产党势力增长。街头斗殴频繁，啤酒馆暴动。希特勒正在重建纳粹党。极端民族主义与国际共产主义对立。中产阶级在夹缝中生存。",
+          "enabled": true,
+          "insertionOrder": 92,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        },
+        {
+          "id": "entry_weimar_005",
+          "title": "通胀记忆",
+          "keys": ["通货膨胀", "经济", "马克", "物价", "恶性通胀"],
+          "content": "1923年恶性通胀的记忆犹新。马克贬值到用手推车装钱买面包。中产阶级储蓄化为乌有。道威斯计划暂时稳定货币，但恐惧仍在。人们及时行乐，不信任纸币。经济脆弱如纸糊。",
+          "enabled": true,
+          "insertionOrder": 88,
+          "caseSensitive": false,
+          "useRegex": false,
+          "createdAt": "2025-01-01T00:00:00Z"
+        }
+      ],
+      "createdAt": "2025-01-01T00:00:00Z"
+    },
+    "isCustom": false
   }
 ]

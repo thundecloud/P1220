@@ -1,3 +1,18 @@
-随时维护和 ai-trpg-engine 同级的 Readme.md 和 Todo.md ,保证有随时交接项目的能力。
+You must:
 
-每一次修改完成后，push 到远程仓库，commit 的 summary 和 Description 由你决定。严格按照时间顺序从前往后修改、维护 更新日志.md 。
+
+
+Continuously maintain Readme.md and Todo.md (located at the same level as ai-trpg-engine) so the project is always in a handover-ready state.
+
+
+
+After each completed change, commit and push to the remote repository. You decide the commit summary and description.
+
+
+
+Update 更新日志.md after every change, strictly following chronological order (earliest → latest).
+
+
+
+These rules are mandatory and must be followed for all future actions.
+

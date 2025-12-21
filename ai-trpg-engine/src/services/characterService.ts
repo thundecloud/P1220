@@ -225,7 +225,8 @@ export function createCharacter(
   story?: string,
   creationMode?: CharacterCreationMode,
   narrativeDescription?: NarrativeDescription,
-  detailedProfile?: DetailedProfile
+  detailedProfile?: DetailedProfile,
+  avatarUrl?: string
 ): Character {
   // 为了向后兼容，创建一个简化的旧版attributes对象（仅当有characterAttributes时）
   const legacyAttributes = characterAttributes ? {
@@ -252,6 +253,7 @@ export function createCharacter(
     creationMode: creationMode || 'coc', // 默认为COC模式
     narrativeDescription: narrativeDescription, // 叙事描述（可选）
     detailedProfile: detailedProfile, // 详细履历（可选）
+    avatarUrl: avatarUrl, // 角色头像（可选）
   };
 }
 

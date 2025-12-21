@@ -36,6 +36,7 @@ import { RARITY_LABELS, RARITY_COLORS } from '../utils/types';
 import CreationModeSelector from '../components/character/CreationModeSelector';
 import NarrativeDescriptionEditor from '../components/character/NarrativeDescriptionEditor';
 import DetailedProfileEditor from '../components/character/DetailedProfileEditor';
+import AvatarUpload from '../components/character/AvatarUpload';
 
 type Step = 'worldline' | 'character';
 
@@ -71,6 +72,9 @@ export default function CharacterCreation() {
 
   // 详细履历（可选）
   const [detailedProfile, setDetailedProfile] = useState<DetailedProfile>({});
+
+  // 角色头像（可选）
+  const [avatarUrl, setAvatarUrl] = useState<string>('');
 
   // 角色数据（COC 模式）
   const [characterAttributes, setCharacterAttributes] = useState<CharacterAttributes | null>(null);
@@ -307,7 +311,8 @@ export default function CharacterCreation() {
       characterStory,
       creationMode,
       narrativeDescription,
-      detailedProfile
+      detailedProfile,
+      avatarUrl
     );
 
     store.setCharacter(character);
@@ -545,6 +550,9 @@ export default function CharacterCreation() {
 
             {/* 创建模式选择 */}
             <CreationModeSelector mode={creationMode} onChange={setCreationMode} />
+
+            {/* 角色头像上传 */}
+            <AvatarUpload avatarUrl={avatarUrl} onAvatarChange={setAvatarUrl} />
 
             {/* 叙事模式表单 */}
             {(creationMode === 'narrative' || creationMode === 'hybrid') && (
