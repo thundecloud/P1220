@@ -30,10 +30,12 @@ import type {
   BasicAttributes,
   CharacterCreationMode,
   NarrativeDescription,
+  DetailedProfile,
 } from '../utils/types';
 import { RARITY_LABELS, RARITY_COLORS } from '../utils/types';
 import CreationModeSelector from '../components/character/CreationModeSelector';
 import NarrativeDescriptionEditor from '../components/character/NarrativeDescriptionEditor';
+import DetailedProfileEditor from '../components/character/DetailedProfileEditor';
 
 type Step = 'worldline' | 'character';
 
@@ -66,6 +68,9 @@ export default function CharacterCreation() {
     speech: '',
     thinking: '',
   });
+
+  // 详细履历（可选）
+  const [detailedProfile, setDetailedProfile] = useState<DetailedProfile>({});
 
   // 角色数据（COC 模式）
   const [characterAttributes, setCharacterAttributes] = useState<CharacterAttributes | null>(null);
@@ -268,14 +273,26 @@ export default function CharacterCreation() {
   // ============ 创建角色 ============
 
   const handleCreateCharacter = () => {
-    if (
-      !selectedWorldline ||
-      !characterAttributes ||
-      !characterName.trim() ||
-      selectedTalents.length !== 3
-    ) {
+    // 验证逻辑根据创建模式不同而不同
+    if (!selectedWorldline || !characterName.trim()) {
       alert('请完成所有必填项');
       return;
+    }
+
+    // narrative 模式验证
+    if (creationMode === 'narrative') {
+      if (!narrativeDescription.description || !narrativeDescription.personality || !narrativeDescription.scenario) {
+        alert('叙事模式需要填写角色描述、性格和场景');
+        return;
+      }
+    }
+
+    // coc/hybrid 模式验证
+    if (creationMode === 'coc' || creationMode === 'hybrid') {
+      if (!characterAttributes || selectedTalents.length !== 3) {
+        alert('COC模式需要生成属性并选择3个天赋');
+        return;
+      }
     }
 
     const character = createCharacter(
@@ -287,7 +304,10 @@ export default function CharacterCreation() {
       selectedTalents,
       characterAttributes,
       characterAge,
-      characterStory
+      characterStory,
+      creationMode,
+      narrativeDescription,
+      detailedProfile
     );
 
     store.setCharacter(character);
@@ -786,6 +806,12 @@ export default function CharacterCreation() {
                 className="w-full px-4 py-3 rounded-none font-mono text-sm min-h-[120px] resize-y"
               />
             </div>
+
+            {/* 详细履历（可选）*/}
+            <DetailedProfileEditor
+              profile={detailedProfile}
+              onChange={setDetailedProfile}
+            />
             </>
             )}
 

@@ -8,6 +8,9 @@ import type {
   CharacterAttributes,
   Skill,
   Character,
+  CharacterCreationMode,
+  NarrativeDescription,
+  DetailedProfile,
 } from '../utils/types';
 
 // 稀有度权重映射
@@ -208,7 +211,7 @@ export function rerollTalentGroup(
 // ============ 角色创建 ============
 
 /**
- * 创建新角色（新版COC风格）
+ * 创建新角色（支持多种创建模式）
  */
 export function createCharacter(
   name: string,
@@ -217,18 +220,21 @@ export function createCharacter(
   _worldline: Worldline,
   backgrounds: string[],
   selectedTalents: Talent[],
-  characterAttributes: CharacterAttributes,
+  characterAttributes: CharacterAttributes | null,
   age: number = 20,
-  story?: string
+  story?: string,
+  creationMode?: CharacterCreationMode,
+  narrativeDescription?: NarrativeDescription,
+  detailedProfile?: DetailedProfile
 ): Character {
-  // 为了向后兼容，创建一个简化的旧版attributes对象
-  const legacyAttributes = {
+  // 为了向后兼容，创建一个简化的旧版attributes对象（仅当有characterAttributes时）
+  const legacyAttributes = characterAttributes ? {
     constitution: characterAttributes.basic.constitution,
     perception: characterAttributes.basic.intelligence,
     adaptability: characterAttributes.basic.dexterity,
     familyBond: characterAttributes.basic.charisma,
     latentTalent: characterAttributes.basic.power,
-  };
+  } : undefined;
 
   return {
     id: `char_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -237,12 +243,15 @@ export function createCharacter(
     gender,
     worldlineId,
     backgrounds,
-    characterAttributes, // 新版COC风格属性
-    attributes: legacyAttributes, // 旧版属性（向后兼容）
-    talents: selectedTalents,
+    characterAttributes: characterAttributes || undefined, // 新版COC风格属性（可选）
+    attributes: legacyAttributes, // 旧版属性（向后兼容，可选）
+    talents: selectedTalents.length > 0 ? selectedTalents : undefined,
     currentAge: age,
     createdAt: new Date().toISOString(),
     story: story || '',
+    creationMode: creationMode || 'coc', // 默认为COC模式
+    narrativeDescription: narrativeDescription, // 叙事描述（可选）
+    detailedProfile: detailedProfile, // 详细履历（可选）
   };
 }
 

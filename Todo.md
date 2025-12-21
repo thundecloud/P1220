@@ -51,7 +51,7 @@
   - [x] 性格特征、外貌描述、信仰价值观
   - [x] 恐惧弱点、目标动机、爱好兴趣
   - [x] DetailedProfileEditor 组件（高级设置折叠面板）
-  - [ ] CharacterCreation 集成 DetailedProfileEditor
+  - [x] CharacterCreation 集成 DetailedProfileEditor
 
 - **角色创建模式系统**（★SillyTavern 风格对齐）
   - [x] CharacterCreationMode 类型（narrative/coc/hybrid）
@@ -61,7 +61,7 @@
   - [x] NarrativeDescriptionEditor 组件（叙事描述编辑器）
   - [x] CharacterCreation STEP2 重构：支持三种模式
   - [x] 灵活验证逻辑：根据模式验证不同字段
-  - [ ] 创建角色逻辑更新：保存 narrativeDescription 和 creationMode
+  - [x] 创建角色逻辑更新：保存 narrativeDescription 和 creationMode
 
 ## 当前开发阶段
 
@@ -163,8 +163,8 @@
 ## 技术债务
 
 ### 优先级：高
-- [ ] 路由配置（添加 Lorebook 管理页面路由）
-- [ ] Lorebook 持久化（Tauri 命令）
+- [x] 路由配置（添加 Lorebook 管理页面路由）
+- [x] Lorebook 持久化（Tauri 命令）
 - [ ] Character Card V2 完整实现
 
 ### 优先级：中
@@ -202,19 +202,19 @@
 - 无已知 bug
 
 ### 功能缺失
-1. Lorebook 管理页面未集成到路由
-2. Lorebook 数据无法持久化（缺少 Tauri 命令）
-3. Character Card V2 仅有类型定义，无实际导入导出功能
-4. 游戏主循环未实现
-5. AI 调用服务未实现
+1. Character Card V2 仅有类型定义，无实际导入导出功能
+2. 游戏主循环未实现
+3. AI 调用服务未实现
 
 ## 下一步行动计划
 
 ### 本周目标 (Week 1)
 1. ✅ 完成 Lorebook 编辑界面
-2. [ ] 集成 Lorebook 管理到应用路由
-3. [ ] 实现 Lorebook 持久化（Tauri 命令）
-4. [ ] 测试 Lorebook 完整流程
+2. ✅ 集成 Lorebook 管理到应用路由
+3. ✅ 实现 Lorebook 持久化（Tauri 命令）
+4. ✅ CharacterCreation 集成 DetailedProfileEditor
+5. ✅ 创建角色逻辑更新（支持多种创建模式）
+6. [ ] 测试 Lorebook 完整流程
 
 ### 下周目标 (Week 2)
 1. [ ] 实现 AI 调用服务
@@ -262,4 +262,4 @@
 **当前版本**: v0.1.0-dev
 **Tauri 版本**: 2.9.x（已完成 v2 迁移）
 **Rust 版本**: 1.92.0
-**构建状态**: ⏳ 待验证
+**构建状态**: ✅ 构建成功
