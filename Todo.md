@@ -76,11 +76,18 @@
 - [ ] 世界线与 Lorebook 关联
 - [ ] 游戏运行时 Lorebook 激活测试
 
-#### 1.2 Character Card V2 导入导出
+#### 1.2 Character Card V2 导入导出 ✅
 - [x] V2 数据类型定义
-- [ ] Character Card 导出功能
-- [ ] Character Card 导入功能
-- [ ] PNG 元数据嵌入（可选）
+- [x] characterCardService.ts 服务实现
+- [x] Character 到 CharacterCardV2 转换
+- [x] CharacterCardV2 到 Character 转换
+- [x] Character Card 导出功能（JSON）
+- [x] Character Card 导入功能（JSON/PNG）
+- [x] PNG 元数据嵌入（tEXt chunk）
+- [x] PNG 元数据提取
+- [x] CharacterManagement 页面
+- [x] 路由集成（/character-management）
+- [x] Config 页面入口按钮
 
 #### 1.3 世界线系统扩展
 - [ ] 添加更多历史世界线（至少 5 个）
@@ -165,7 +172,7 @@
 ### 优先级：高
 - [x] 路由配置（添加 Lorebook 管理页面路由）
 - [x] Lorebook 持久化（Tauri 命令）
-- [ ] Character Card V2 完整实现
+- [x] Character Card V2 完整实现
 
 ### 优先级：中
 - [ ] 单元测试覆盖
@@ -202,9 +209,9 @@
 - 无已知 bug
 
 ### 功能缺失
-1. Character Card V2 仅有类型定义，无实际导入导出功能
-2. 游戏主循环未实现
-3. AI 调用服务未实现
+1. 游戏主循环未实现
+2. AI 调用服务未实现
+3. 角色持久化存储（需要 Tauri 命令）
 
 ## 下一步行动计划
 
@@ -214,7 +221,8 @@
 3. ✅ 实现 Lorebook 持久化（Tauri 命令）
 4. ✅ CharacterCreation 集成 DetailedProfileEditor
 5. ✅ 创建角色逻辑更新（支持多种创建模式）
-6. [ ] 测试 Lorebook 完整流程
+6. ✅ 完成 Character Card V2 导入导出（Phase 1.2）
+7. [ ] 测试 Lorebook 完整流程
 
 ### 下周目标 (Week 2)
 1. [ ] 实现 AI 调用服务

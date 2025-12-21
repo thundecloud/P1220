@@ -186,6 +186,12 @@ export default function Config() {
                 </span>
               )}
               <button
+                onClick={() => navigate('/character-management')}
+                className="px-6 py-3 bg-accent-purple text-white rounded-none font-bold"
+              >
+                👤 角色管理
+              </button>
+              <button
                 onClick={() => navigate('/lorebook')}
                 className="px-6 py-3 bg-accent-teal text-black rounded-none font-bold"
               >
