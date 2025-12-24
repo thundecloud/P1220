@@ -5,6 +5,7 @@ import CharacterCreation from './pages/CharacterCreation';
 import CharacterManagement from './pages/CharacterManagement';
 import GameMain from './pages/GameMain';
 import LorebookManagement from './pages/LorebookManagement';
+import LogViewer from './pages/LogViewer';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/character-management" element={<CharacterManagement />} />
           <Route path="/game" element={<GameMain />} />
           <Route path="/lorebook" element={<LorebookManagement />} />
+          <Route path="/logs" element={<LogViewer />} />
         </Routes>
       </div>
     </Router>

@@ -3,7 +3,7 @@
 ## 项目概况
 基于 Tauri 2 + React + TypeScript 的 TRPG 桌面应用，结合 COC 风格属性系统与 AI 叙事生成能力。
 
-## 最近更新 (2025-12-24)
+## 最近更新 (2025-12-24 晚)
 
 ### ✅ 已完成
 - **Tauri v2 迁移**
@@ -304,11 +304,63 @@
 
 ---
 
-**最后更新**: 2025-12-24
+**最后更新**: 2025-12-24 晚
 **当前版本**: v0.1.0-dev
 **Tauri 版本**: 2.9.x（已完成 v2 迁移）
 **Rust 版本**: 1.92.0
 **构建状态**: ✅ 构建成功
+
+## 2025-12-24 晚间更新
+
+### 用户体验改进
+1. **UI 颜色对比度优化**
+   - 提高 `--color-muted-foreground` 对比度（#c4b5a0 → #d4c4b0）
+   - 提高 `--color-primary` 亮度（#d4a574 → #e8b973）
+   - 优化所有 accent 颜色的可读性：
+     - Amber: #e8b973 → #f0c878
+     - Crimson: #8b2e2e → #b83e3e
+     - Sapphire: #1e3a5f → #3d5a8f
+     - Emerald: #2d5747 → #4a7d64
+
+2. **AI 模型预设更新**
+   - 默认模型改为 DeepSeek v3（通过 OpenAI API 兼容）
+   - 新增模型：
+     - DeepSeek v3 (推荐)
+     - Claude 4 Opus (推荐)
+     - Claude 3.7 Sonnet
+     - Gemini 2.0 Flash (推荐)
+   - 更新模型顺序：推荐模型置顶
+
+3. **日志查看器页面**（新增 `/logs`）
+   - 完整的日志查看界面
+   - 日志级别过滤（DEBUG/INFO/WARN/ERROR）
+   - 关键词搜索功能
+   - 自动滚动选项
+   - 日志导出功能（.txt）
+   - 统计信息面板
+   - 从配置页面快速访问（"🐛 查看日志"按钮）
+
+4. **预设角色系统**（数据层完成）
+   - presetCharacters.ts 数据文件
+   - 6个经典角色原型：
+     - 流浪剑客（叙事模式）
+     - 神秘学者（叙事模式）
+     - 街头小偷（叙事模式）
+     - 私家侦探（混合模式）
+     - 神秘学家（混合模式）
+     - 退伍军人（COC模式）
+     - 医生（COC模式）
+   - 支持三种创建模式（narrative/coc/hybrid）
+   - 完整的角色属性、技能、叙事描述
+   - 待完成：UI集成到角色创建页面
+
+### 文件变更
+- 新增：`src/data/presetCharacters.ts`
+- 新增：`src/pages/LogViewer.tsx`
+- 修改：`src/index.css`（颜色优化）
+- 修改：`src/services/aiService.ts`（模型预设）
+- 修改：`src/pages/Config.tsx`（日志入口）
+- 修改：`src/App.tsx`（路由）
 
 ## 2025-12-24 更新内容
 

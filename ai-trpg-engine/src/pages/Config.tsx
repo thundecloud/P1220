@@ -236,6 +236,12 @@ export default function Config() {
                 📚 Lorebook 管理
               </button>
               <button
+                onClick={() => navigate('/logs')}
+                className="px-6 py-3 bg-[var(--color-accent-sapphire)] text-[var(--color-foreground)] rounded-none font-bold"
+              >
+                🐛 查看日志
+              </button>
+              <button
                 onClick={handleSave}
                 disabled={saving}
                 className="px-6 py-3 bg-primary text-primary-foreground rounded-none disabled:opacity-50"

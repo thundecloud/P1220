@@ -10,7 +10,7 @@
 @theme {
   /* Parchment tones: Deep aged paper */
   --color-background: #1a1612;  /* Dark parchment night */
-  --color-foreground: #f5e6d3;  /* Ivory ink */
+  --color-foreground: #f5e6d3;  /* Ivory ink - 高对比度主文本 */
 
   /* Layered paper panels */
   --color-card: #2d2621;        /* Mid parchment */
@@ -22,7 +22,7 @@
 
   /* Muted backgrounds */
   --color-muted: #2a241f;
-  --color-muted-foreground: #c4b5a0;
+  --color-muted-foreground: #d4c4b0;  /* 提高对比度：从 #c4b5a0 改为 #d4c4b0 */
 
   /* Borders: Gold leaf and dark ink */
   --color-border: #4a3f2f;
@@ -32,14 +32,14 @@
   --color-input: #24201b;
 
   /* Primary accent: Amber candlelight */
-  --color-primary: #d4a574;
+  --color-primary: #e8b973;           /* 提高亮度：从 #d4a574 改为 #e8b973 */
   --color-primary-foreground: #1a1612;
 
   /* Accent colors: Wax seals and illuminations */
-  --color-accent-amber: #e8b973;      /* Warm gold */
-  --color-accent-crimson: #8b2e2e;    /* Wax seal red */
-  --color-accent-sapphire: #1e3a5f;   /* Ink blue */
-  --color-accent-emerald: #2d5747;    /* Antique green */
+  --color-accent-amber: #f0c878;      /* 更亮的暖金色 - 提高可读性 */
+  --color-accent-crimson: #b83e3e;    /* 更亮的红色 - 从 #8b2e2e 改为 #b83e3e */
+  --color-accent-sapphire: #3d5a8f;   /* 更亮的蓝色 - 从 #1e3a5f 改为 #3d5a8f */
+  --color-accent-emerald: #4a7d64;    /* 更亮的绿色 - 从 #2d5747 改为 #4a7d64 */
 
   /* Status colors */
   --color-destructive: #a03939;

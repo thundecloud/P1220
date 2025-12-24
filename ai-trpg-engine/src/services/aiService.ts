@@ -299,9 +299,10 @@ export async function testAIConfig(config: AIConfig): Promise<boolean> {
  */
 export function getDefaultAIConfig(): AIConfig {
   return {
-    provider: 'gemini',
+    provider: 'openai',
     apiKey: '',
-    modelName: 'gemini-2.0-flash-exp',
+    apiBaseUrl: 'https://api.deepseek.com/v1',  // Deepseek 兼容 OpenAI API
+    modelName: 'deepseek-chat',
     temperature: 1.0,
     maxTokens: 2048,
     topP: 0.95,
@@ -311,21 +312,24 @@ export function getDefaultAIConfig(): AIConfig {
 /**
  * 预设模型列表
  */
-export const MODEL_PRESETS: Record<AIProvider, Array<{ name: string; model: string }>> = {
+export const MODEL_PRESETS: Record<AIProvider, Array<{ name: string; model: string; baseUrl?: string }>> = {
   gemini: [
-    { name: 'Gemini 2.0 Flash (实验)', model: 'gemini-2.0-flash-exp' },
-    { name: 'Gemini 1.5 Flash', model: 'gemini-1.5-flash' },
+    { name: 'Gemini 2.0 Flash (推荐)', model: 'gemini-2.0-flash-exp' },
     { name: 'Gemini 1.5 Pro', model: 'gemini-1.5-pro' },
+    { name: 'Gemini 1.5 Flash', model: 'gemini-1.5-flash' },
   ],
   openai: [
+    { name: 'DeepSeek v3 (推荐)', model: 'deepseek-chat', baseUrl: 'https://api.deepseek.com/v1' },
+    { name: 'GPT-4o', model: 'gpt-4o' },
+    { name: 'GPT-4 Turbo', model: 'gpt-4-turbo' },
     { name: 'GPT-4', model: 'gpt-4' },
-    { name: 'GPT-4 Turbo', model: 'gpt-4-turbo-preview' },
     { name: 'GPT-3.5 Turbo', model: 'gpt-3.5-turbo' },
   ],
   anthropic: [
+    { name: 'Claude 4 Opus (推荐)', model: 'claude-opus-4-20250514' },
+    { name: 'Claude 3.7 Sonnet', model: 'claude-3-7-sonnet-20250219' },
     { name: 'Claude 3.5 Sonnet', model: 'claude-3-5-sonnet-20241022' },
     { name: 'Claude 3 Opus', model: 'claude-3-opus-20240229' },
-    { name: 'Claude 3 Haiku', model: 'claude-3-haiku-20240307' },
   ],
   custom: [],
 };
