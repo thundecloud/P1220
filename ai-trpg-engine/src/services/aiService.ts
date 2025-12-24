@@ -1,4 +1,6 @@
-import type { AIConfig, AIMessage, AIResponse, AIProvider } from '../utils/types';
+import type { AIConfig, AIMessage, AIResponse, AIProvider, Character, Worldline, Message } from '../utils/types';
+import { lorebookService } from './lorebookService';
+import { log } from './logService';
 
 /**
  * AI 服务 - 统一的 AI 提供商接口
@@ -327,3 +329,249 @@ export const MODEL_PRESETS: Record<AIProvider, Array<{ name: string; model: stri
   ],
   custom: [],
 };
+
+// ============ 提示词管理与 Lorebook 注入 ============
+
+/**
+ * 构建角色信息提示词片段
+ */
+function buildCharacterPrompt(character: Character, worldline: Worldline): string {
+  const parts: string[] = [];
+
+  // 基础信息
+  parts.push(`角色名称: ${character.name}`);
+  parts.push(`世界线: ${worldline.name} (${worldline.era}, ${worldline.region})`);
+
+  // 根据创建模式决定使用哪些字段
+  const mode = character.creationMode || 'coc';
+
+  if (mode === 'narrative' || mode === 'hybrid') {
+    // 叙事模式：使用 narrativeDescription
+    const narrative = character.narrativeDescription;
+    if (narrative) {
+      if (narrative.description) {
+        parts.push(`\n角色描述:\n${narrative.description}`);
+      }
+      if (narrative.personality) {
+        parts.push(`\n性格特征:\n${narrative.personality}`);
+      }
+      if (narrative.scenario) {
+        parts.push(`\n当前情境:\n${narrative.scenario}`);
+      }
+      if (narrative.background) {
+        parts.push(`\n背景故事:\n${narrative.background}`);
+      }
+    }
+  }
+
+  if (mode === 'coc' || mode === 'hybrid') {
+    // COC 模式：使用属性和天赋
+    if (character.characterAttributes) {
+      const attrs = character.characterAttributes;
+      parts.push('\n基础属性:');
+      parts.push(`- 力量(STR): ${attrs.basic.strength}`);
+      parts.push(`- 体质(CON): ${attrs.basic.constitution}`);
+      parts.push(`- 敏捷(DEX): ${attrs.basic.dexterity}`);
+      parts.push(`- 智力(INT): ${attrs.basic.intelligence}`);
+      parts.push(`- 教育(EDU): ${attrs.basic.education}`);
+      parts.push(`- 意志(POW): ${attrs.basic.power}`);
+      parts.push(`- 魅力(CHA): ${attrs.basic.charisma}`);
+      parts.push(`- 幸运(LUC): ${attrs.basic.luck}`);
+
+      parts.push('\n派生属性:');
+      parts.push(`- 生命值(HP): ${attrs.derived.hitPoints}`);
+      parts.push(`- 理智值(SAN): ${attrs.derived.sanity}`);
+      parts.push(`- 魔力值(MP): ${attrs.derived.magicPoints}`);
+
+      // 技能（仅列出主要技能）
+      if (attrs.skills && attrs.skills.length > 0) {
+        parts.push('\n主要技能:');
+        attrs.skills.slice(0, 10).forEach(skill => {
+          parts.push(`- ${skill.name}: ${skill.currentValue}`);
+        });
+      }
+    }
+
+    // 天赋
+    if (character.talents && character.talents.length > 0) {
+      parts.push('\n天赋特质:');
+      character.talents.forEach(talent => {
+        parts.push(`- ${talent.name}: ${talent.description}`);
+      });
+    }
+  }
+
+  // 简历级详细信息（如果有）
+  if (character.detailedProfile) {
+    const profile = character.detailedProfile;
+
+    if (profile.goals && profile.goals.length > 0) {
+      parts.push(`\n目标: ${profile.goals.join(', ')}`);
+    }
+
+    if (profile.fears && profile.fears.length > 0) {
+      parts.push(`\n恐惧: ${profile.fears.join(', ')}`);
+    }
+  }
+
+  return parts.join('\n');
+}
+
+/**
+ * 构建DM系统提示词
+ */
+function buildSystemPrompt(
+  character: Character,
+  worldline: Worldline,
+  dmPrompt: string,
+  activatedLorebookEntries: string[]
+): string {
+  const parts: string[] = [];
+
+  // 1. DM角色提示
+  parts.push(dmPrompt);
+
+  // 2. 角色信息
+  parts.push('\n===== 角色信息 =====');
+  parts.push(buildCharacterPrompt(character, worldline));
+
+  // 3. 世界线背景
+  parts.push('\n===== 世界背景 =====');
+  parts.push(`世界类型: ${worldline.worldType || 'historical'}`);
+  parts.push(`历史背景: ${worldline.historicalBackground}`);
+  if (worldline.physicsRules) {
+    parts.push(`物理规则: ${worldline.physicsRules}`);
+  }
+  if (worldline.magicSystem) {
+    parts.push(`魔法体系: ${worldline.magicSystem}`);
+  }
+
+  // 4. 激活的 Lorebook 条目
+  if (activatedLorebookEntries.length > 0) {
+    parts.push('\n===== 世界知识 (Lorebook) =====');
+    parts.push('以下是当前情境相关的世界背景知识，请在叙事时自然融入：');
+    activatedLorebookEntries.forEach((entry, index) => {
+      parts.push(`\n[知识条目 ${index + 1}]`);
+      parts.push(entry);
+    });
+  }
+
+  // 5. 叙事指导
+  parts.push('\n===== 叙事指导 =====');
+  parts.push('- 根据角色的属性、天赋和背景生成合适的故事情节');
+  parts.push('- 在需要判定时，明确说明需要判定的属性或技能');
+  parts.push('- 保持叙事简洁有力，每次回应控制在 2-3 段');
+  parts.push('- 给玩家明确的选择或行动提示');
+
+  return parts.join('\n');
+}
+
+/**
+ * 生成游戏 AI 响应（带 Lorebook 注入）
+ * @param config AI 配置
+ * @param character 角色信息
+ * @param worldline 世界线信息
+ * @param messageHistory 对话历史
+ * @param dmPrompt DM 提示词
+ * @returns AI 响应
+ */
+export async function generateGameResponse(
+  config: AIConfig,
+  character: Character,
+  worldline: Worldline,
+  messageHistory: Message[],
+  dmPrompt: string
+): Promise<AIResponse> {
+  const startTime = Date.now();
+
+  log.info('开始生成 AI 响应', { context: 'AIService' });
+
+  // 1. 激活 Lorebook 条目
+  let activatedEntries: string[] = [];
+  if (worldline.lorebook) {
+    const recentMessages = messageHistory
+      .slice(-10)  // 取最近 10 条消息
+      .map(msg => msg.content);
+
+    activatedEntries = lorebookService.activateEntries(
+      worldline.lorebook,
+      recentMessages,
+      messageHistory.length
+    );
+
+    log.debug(
+      `Lorebook 激活了 ${activatedEntries.length} 个条目`,
+      { context: 'AIService' }
+    );
+  }
+
+  // 2. 构建系统提示词
+  const systemPrompt = buildSystemPrompt(
+    character,
+    worldline,
+    dmPrompt,
+    activatedEntries
+  );
+
+  // 3. 构建消息列表
+  const messages: AIMessage[] = [
+    { role: 'system', content: systemPrompt },
+    ...messageHistory.map(msg => ({
+      role: msg.role === 'system' ? 'system' : (msg.role === 'user' ? 'user' : 'assistant'),
+      content: msg.content,
+    } as AIMessage)),
+  ];
+
+  // 4. 调用 AI
+  try {
+    const response = await generateAIResponse(config, messages);
+
+    log.timing('AI 响应生成', startTime, { context: 'AIService' });
+
+    if (response.usage) {
+      log.debug(
+        `Token 使用: prompt=${response.usage.promptTokens}, completion=${response.usage.completionTokens}, total=${response.usage.totalTokens}`,
+        { context: 'AIService' }
+      );
+    }
+
+    return response;
+  } catch (error) {
+    log.error('AI 响应生成失败', error as Error, { context: 'AIService' });
+    throw error;
+  }
+}
+
+/**
+ * 生成游戏开场白
+ */
+export async function generateOpeningMessage(
+  config: AIConfig,
+  character: Character,
+  worldline: Worldline,
+  dmPrompt: string
+): Promise<string> {
+  log.info('生成开场白', { context: 'AIService' });
+
+  // 使用空的消息历史和特殊提示
+  const openingPrompt = `现在是游戏开始，请为玩家生成一段引人入胜的开场白。
+
+要求：
+1. 描绘角色当前所处的场景和环境
+2. 体现世界线的时代特征和氛围
+3. 暗示可能的冲突或挑战
+4. 以第二人称("你")与玩家对话
+5. 控制在 2-3 段，留下悬念
+
+开场白应该让玩家立即进入角色，感受到这个世界的真实性。`;
+
+  const response = await generateGameResponse(
+    config,
+    character,
+    worldline,
+    [{ role: 'user', content: openingPrompt, timestamp: new Date().toISOString() }],
+    dmPrompt
+  );
+
+  return response.content;
+}

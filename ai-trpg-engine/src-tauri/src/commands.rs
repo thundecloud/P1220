@@ -334,3 +334,44 @@ fn read_dir_recursive(path: &PathBuf) -> Result<FileNode, String> {
         })
     }
 }
+
+// ============ 日志系统 ============
+
+use log::{debug, error, info, warn};
+
+// 前端调用的日志命令
+#[tauri::command]
+pub fn log_debug(message: String, context: Option<String>) -> Result<(), String> {
+    match context {
+        Some(ctx) => debug!("[{}] {}", ctx, message),
+        None => debug!("{}", message),
+    }
+    Ok(())
+}
+
+#[tauri::command]
+pub fn log_info(message: String, context: Option<String>) -> Result<(), String> {
+    match context {
+        Some(ctx) => info!("[{}] {}", ctx, message),
+        None => info!("{}", message),
+    }
+    Ok(())
+}
+
+#[tauri::command]
+pub fn log_warn(message: String, context: Option<String>) -> Result<(), String> {
+    match context {
+        Some(ctx) => warn!("[{}] {}", ctx, message),
+        None => warn!("{}", message),
+    }
+    Ok(())
+}
+
+#[tauri::command]
+pub fn log_error(message: String, context: Option<String>) -> Result<(), String> {
+    match context {
+        Some(ctx) => error!("[{}] {}", ctx, message),
+        None => error!("{}", message),
+    }
+    Ok(())
+}

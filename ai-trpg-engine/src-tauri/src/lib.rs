@@ -2,6 +2,13 @@ mod commands;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    // 初始化日志系统
+    env_logger::Builder::from_default_env()
+        .filter_level(log::LevelFilter::Debug)
+        .init();
+
+    log::info!("AI-TRPG Engine 启动中...");
+
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_dialog::init())
@@ -24,6 +31,10 @@ pub fn run() {
             commands::load_lorebook,
             commands::list_lorebooks,
             commands::delete_lorebook,
+            commands::log_debug,
+            commands::log_info,
+            commands::log_warn,
+            commands::log_error,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
