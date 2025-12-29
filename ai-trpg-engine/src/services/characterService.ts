@@ -1,4 +1,5 @@
 import { clampedNormalRandom, weightedRandom } from '../utils/random';
+import { log } from './logService';
 import type {
   Worldline,
   Talent,
@@ -28,9 +29,10 @@ const RARITY_WEIGHTS: Record<TalentRarity, number> = {
  * 根据世界线参数生成COC风格的8项基础属性
  */
 export function generateBasicAttributes(worldline: Worldline): BasicAttributes {
+  log.debug(`生成基础属性: 世界线=${worldline.name}`, { context: 'CharacterService' });
   const params = worldline.attributeParams;
 
-  return {
+  const attrs = {
     strength: Math.round(
       clampedNormalRandom(params.strength.mu, params.strength.sigma, 0, 100)
     ),
@@ -56,6 +58,13 @@ export function generateBasicAttributes(worldline: Worldline): BasicAttributes {
       clampedNormalRandom(params.luck.mu, params.luck.sigma, 0, 100)
     ),
   };
+
+  log.info(
+    `基础属性生成完成: STR=${attrs.strength} CON=${attrs.constitution} DEX=${attrs.dexterity} INT=${attrs.intelligence} EDU=${attrs.education} POW=${attrs.power} CHA=${attrs.charisma} LUC=${attrs.luck}`,
+    { context: 'CharacterService' }
+  );
+
+  return attrs;
 }
 
 /**
@@ -65,6 +74,8 @@ export function calculateDerivedAttributes(
   basic: BasicAttributes,
   age: number = 20
 ): DerivedAttributes {
+  log.debug(`计算派生属性: 年龄=${age}`, { context: 'CharacterService' });
+
   // HP = (CON + STR) / 10，向下取整
   const hitPoints = Math.floor((basic.constitution + basic.strength) / 10);
 
@@ -86,6 +97,11 @@ export function calculateDerivedAttributes(
     movement = 6;
   }
 
+  log.debug(
+    `派生属性计算完成: HP=${hitPoints} SAN=${sanity} MP=${magicPoints} MOV=${movement}`,
+    { context: 'CharacterService' }
+  );
+
   return {
     hitPoints,
     sanity,
@@ -101,11 +117,15 @@ export function generateCharacterAttributes(
   worldline: Worldline,
   age: number = 20
 ): CharacterAttributes {
+  log.info(`生成角色属性: 世界线=${worldline.name}, 年龄=${age}`, { context: 'CharacterService' });
+
   const basic = generateBasicAttributes(worldline);
   const derived = calculateDerivedAttributes(basic, age);
 
   // 初始技能列表为空，将在角色创建流程中填充
   const skills: Skill[] = [];
+
+  log.info('角色属性生成完成', { context: 'CharacterService' });
 
   return {
     basic,
@@ -118,6 +138,7 @@ export function generateCharacterAttributes(
  * 重新投骰基础属性
  */
 export function rerollBasicAttributes(worldline: Worldline): BasicAttributes {
+  log.info(`重新投骰基础属性: 世界线=${worldline.name}`, { context: 'CharacterService' });
   return generateBasicAttributes(worldline);
 }
 
@@ -135,12 +156,17 @@ export function drawTalents(
   poolIds: string[],
   count: number = 9
 ): Talent[] {
+  log.debug(`抽取天赋: 池IDs=${poolIds.join(',')}, 数量=${count}`, { context: 'CharacterService' });
+
   // 筛选出该世界线可用的天赋
   const availableTalents = allTalents.filter((talent) =>
     poolIds.includes(talent.poolId)
   );
 
+  log.debug(`可用天赋数量: ${availableTalents.length}`, { context: 'CharacterService' });
+
   if (availableTalents.length < count) {
+    log.error(`天赋池不足: 需要${count}个, 只有${availableTalents.length}个`, undefined, { context: 'CharacterService' });
     throw new Error(`天赋池中的天赋数量不足。需要${count}个，但只有${availableTalents.length}个可用。`);
   }
 
@@ -155,11 +181,14 @@ export function drawTalents(
     // 加权随机选择
     const selected = weightedRandom(talentPool, weights);
     drawn.push(selected);
+    log.debug(`抽取天赋: ${selected.name} (${selected.rarity})`, { context: 'CharacterService' });
 
     // 从池中移除已选择的天赋
     const index = talentPool.indexOf(selected);
     talentPool.splice(index, 1);
   }
+
+  log.info(`天赋抽取完成: ${drawn.map(t => t.name).join(', ')}`, { context: 'CharacterService' });
 
   return drawn;
 }
@@ -168,11 +197,17 @@ export function drawTalents(
  * 将抽取的天赋分组(3组,每组3个)
  */
 export function groupTalents(talents: Talent[]): Talent[][] {
+  log.debug(`天赋分组: ${talents.length}个天赋`, { context: 'CharacterService' });
+
   if (talents.length !== 9) {
+    log.error(`天赋数量不正确: ${talents.length} (需要9个)`, undefined, { context: 'CharacterService' });
     throw new Error('需要正好9个天赋才能分组');
   }
 
-  return [talents.slice(0, 3), talents.slice(3, 6), talents.slice(6, 9)];
+  const groups = [talents.slice(0, 3), talents.slice(3, 6), talents.slice(6, 9)];
+  log.debug('天赋分组完成: 3组x3个', { context: 'CharacterService' });
+
+  return groups;
 }
 
 /**
@@ -183,13 +218,18 @@ export function rerollTalentGroup(
   poolIds: string[],
   excludedTalents: Talent[]
 ): Talent[] {
+  log.info(`重新抽取天赋组: 排除${excludedTalents.length}个已选天赋`, { context: 'CharacterService' });
+
   const availableTalents = allTalents.filter(
     (talent) =>
       poolIds.includes(talent.poolId) &&
       !excludedTalents.some((excluded) => excluded.id === talent.id)
   );
 
+  log.debug(`可用天赋: ${availableTalents.length}个`, { context: 'CharacterService' });
+
   if (availableTalents.length < 3) {
+    log.error('可用天赋不足，无法重新抽取', undefined, { context: 'CharacterService' });
     throw new Error('可用天赋不足，无法重新抽取');
   }
 
@@ -200,10 +240,13 @@ export function rerollTalentGroup(
     const weights = talentPool.map((t) => RARITY_WEIGHTS[t.rarity]);
     const selected = weightedRandom(talentPool, weights);
     drawn.push(selected);
+    log.debug(`重抽天赋: ${selected.name} (${selected.rarity})`, { context: 'CharacterService' });
 
     const index = talentPool.indexOf(selected);
     talentPool.splice(index, 1);
   }
+
+  log.info(`天赋组重抽完成: ${drawn.map(t => t.name).join(', ')}`, { context: 'CharacterService' });
 
   return drawn;
 }
@@ -228,6 +271,9 @@ export function createCharacter(
   detailedProfile?: DetailedProfile,
   avatarUrl?: string
 ): Character {
+  log.info(`创建角色: 名称=${name}, 性别=${gender}, 年龄=${age}, 模式=${creationMode || 'coc'}`, { context: 'CharacterService' });
+  log.debug(`角色详情: 世界线=${worldlineId}, 背景数=${backgrounds.length}, 天赋数=${selectedTalents.length}`, { context: 'CharacterService' });
+
   // 为了向后兼容，创建一个简化的旧版attributes对象（仅当有characterAttributes时）
   const legacyAttributes = characterAttributes ? {
     constitution: characterAttributes.basic.constitution,
@@ -237,8 +283,10 @@ export function createCharacter(
     latentTalent: characterAttributes.basic.power,
   } : undefined;
 
-  return {
-    id: `char_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+  const characterId = `char_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+  const character: Character = {
+    id: characterId,
     name,
     birthYear: new Date().getFullYear() - age,
     gender,
@@ -255,28 +303,39 @@ export function createCharacter(
     detailedProfile: detailedProfile, // 详细履历（可选）
     avatarUrl: avatarUrl, // 角色头像（可选）
   };
+
+  log.info(`角色创建成功: ID=${characterId}, 名称=${name}`, { context: 'CharacterService' });
+
+  return character;
 }
 
 /**
  * 验证角色数据
  */
 export function validateCharacter(character: Partial<Character>): boolean {
+  log.debug(`验证角色数据: ${character.name || '未命名'}`, { context: 'CharacterService' });
+
   if (!character.name || character.name.trim().length === 0) {
+    log.warn('角色验证失败: 缺少名称', { context: 'CharacterService' });
     return false;
   }
 
   if (!character.gender) {
+    log.warn('角色验证失败: 缺少性别', { context: 'CharacterService' });
     return false;
   }
 
   if (!character.worldlineId) {
+    log.warn('角色验证失败: 缺少世界线ID', { context: 'CharacterService' });
     return false;
   }
 
   if (!character.talents || character.talents.length !== 3) {
+    log.warn(`角色验证失败: 天赋数量不正确 (${character.talents?.length || 0}/3)`, { context: 'CharacterService' });
     return false;
   }
 
+  log.debug('角色验证通过', { context: 'CharacterService' });
   return true;
 }
 

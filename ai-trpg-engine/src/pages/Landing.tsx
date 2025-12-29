@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { listSaves, loadGame as loadGameTauri } from '../utils/tauri';
+import { log } from '../services/logService';
 
 export default function Landing() {
   const navigate = useNavigate();
@@ -9,41 +10,52 @@ export default function Landing() {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
+    log.info('Landing页面加载', { context: 'Landing' });
     loadSaves();
     const timer = setInterval(() => setTime(new Date()), 1000);
-    return () => clearInterval(timer);
+    return () => {
+      clearInterval(timer);
+      log.debug('Landing页面卸载，清理定时器', { context: 'Landing' });
+    };
   }, []);
 
   const loadSaves = async () => {
+    log.debug('开始加载存档列表...', { context: 'Landing' });
     try {
       const savesList = await listSaves();
       setSaves(savesList);
+      log.info(`存档列表加载完成: ${savesList.length}个存档`, { context: 'Landing' });
     } catch (error) {
-      console.error('Failed to load saves:', error);
+      log.error('加载存档列表失败', error as Error, { context: 'Landing' });
     } finally {
       setLoading(false);
     }
   };
 
   const handleNewGame = () => {
+    log.info('用户点击"开始新游戏"', { context: 'Landing' });
     navigate('/character-creation');
   };
 
   const handleConfig = () => {
+    log.info('用户点击"系统设置"', { context: 'Landing' });
     navigate('/config');
   };
 
   const handleLoadGame = async (filename: string) => {
+    log.info(`用户尝试加载存档: ${filename}`, { context: 'Landing' });
     try {
       void await loadGameTauri(filename);
+      log.info(`存档加载成功: ${filename}`, { context: 'Landing' });
       // TODO: Load save data into game store
       navigate('/game');
     } catch (error) {
-      console.error('Failed to load game:', error);
+      log.error(`加载存档失败: ${filename}`, error as Error, { context: 'Landing' });
     }
   };
 
   const handleQuickStart = () => {
+    log.info('用户点击"快速开始"', { context: 'Landing' });
     // 快速开始：使用默认配置和第一个预设角色
     // 直接进入角色创建页面并选择预设角色
     navigate('/character-creation?quickstart=true');

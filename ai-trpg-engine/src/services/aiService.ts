@@ -37,6 +37,9 @@ async function callGeminiAPI(
   const apiKey = config.apiKey;
   const modelName = config.modelName || 'gemini-2.0-flash-exp';
 
+  log.info(`调用Gemini API: model=${modelName}`, { context: 'AIService' });
+  log.debug(`Gemini请求: ${messages.length}条消息`, { context: 'AIService' });
+
   // Gemini API endpoint
   const endpoint = config.apiBaseUrl ||
     `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
@@ -73,6 +76,9 @@ async function callGeminiAPI(
   };
 
   // 调用 API
+  log.debug('发送Gemini API请求...', { context: 'AIService' });
+  const startTime = Date.now();
+
   const response = await fetch(endpoint, {
     method: 'POST',
     headers: {
@@ -81,8 +87,11 @@ async function callGeminiAPI(
     body: JSON.stringify(requestBody),
   });
 
+  const duration = Date.now() - startTime;
+
   if (!response.ok) {
     const errorText = await response.text();
+    log.error(`Gemini API错误: status=${response.status}, 耗时=${duration}ms`, undefined, { context: 'AIService' });
     throw new Error(`Gemini API 错误 (${response.status}): ${errorText}`);
   }
 
@@ -91,6 +100,7 @@ async function callGeminiAPI(
   // 解析响应
   const candidate = data.candidates?.[0];
   if (!candidate) {
+    log.error('Gemini API返回空响应', undefined, { context: 'AIService' });
     throw new Error('Gemini API 返回了空响应');
   }
 
@@ -103,6 +113,11 @@ async function callGeminiAPI(
     completionTokens: data.usageMetadata.candidatesTokenCount || 0,
     totalTokens: data.usageMetadata.totalTokenCount || 0,
   } : undefined;
+
+  log.info(`Gemini响应成功: ${content.length}字符, 耗时=${duration}ms, finishReason=${finishReason}`, { context: 'AIService' });
+  if (usage) {
+    log.debug(`Gemini Token: prompt=${usage.promptTokens}, completion=${usage.completionTokens}, total=${usage.totalTokens}`, { context: 'AIService' });
+  }
 
   return {
     content,
@@ -119,6 +134,10 @@ async function callOpenAIAPI(
   messages: AIMessage[]
 ): Promise<AIResponse> {
   const endpoint = config.apiBaseUrl || 'https://api.openai.com/v1/chat/completions';
+  const modelName = config.modelName || 'gpt-3.5-turbo';
+
+  log.info(`调用OpenAI API: model=${modelName}, endpoint=${endpoint}`, { context: 'AIService' });
+  log.debug(`OpenAI请求: ${messages.length}条消息`, { context: 'AIService' });
 
   // OpenAI 消息格式已经兼容
   const openaiMessages: OpenAIMessage[] = messages.map(msg => ({
@@ -127,7 +146,7 @@ async function callOpenAIAPI(
   }));
 
   const requestBody = {
-    model: config.modelName || 'gpt-3.5-turbo',
+    model: modelName,
     messages: openaiMessages,
     temperature: config.temperature ?? 1.0,
     max_tokens: config.maxTokens ?? 2048,
@@ -135,6 +154,9 @@ async function callOpenAIAPI(
     presence_penalty: config.presencePenalty ?? 0,
     frequency_penalty: config.frequencyPenalty ?? 0,
   };
+
+  log.debug('发送OpenAI API请求...', { context: 'AIService' });
+  const startTime = Date.now();
 
   const response = await fetch(endpoint, {
     method: 'POST',
@@ -145,8 +167,11 @@ async function callOpenAIAPI(
     body: JSON.stringify(requestBody),
   });
 
+  const duration = Date.now() - startTime;
+
   if (!response.ok) {
     const errorText = await response.text();
+    log.error(`OpenAI API错误: status=${response.status}, 耗时=${duration}ms`, undefined, { context: 'AIService' });
     throw new Error(`OpenAI API 错误 (${response.status}): ${errorText}`);
   }
 
@@ -154,17 +179,26 @@ async function callOpenAIAPI(
 
   const choice = data.choices?.[0];
   if (!choice) {
+    log.error('OpenAI API返回空响应', undefined, { context: 'AIService' });
     throw new Error('OpenAI API 返回了空响应');
   }
 
+  const content = choice.message?.content || '';
+  const usage = data.usage ? {
+    promptTokens: data.usage.prompt_tokens,
+    completionTokens: data.usage.completion_tokens,
+    totalTokens: data.usage.total_tokens,
+  } : undefined;
+
+  log.info(`OpenAI响应成功: ${content.length}字符, 耗时=${duration}ms, finishReason=${choice.finish_reason}`, { context: 'AIService' });
+  if (usage) {
+    log.debug(`OpenAI Token: prompt=${usage.promptTokens}, completion=${usage.completionTokens}, total=${usage.totalTokens}`, { context: 'AIService' });
+  }
+
   return {
-    content: choice.message?.content || '',
+    content,
     finishReason: choice.finish_reason,
-    usage: data.usage ? {
-      promptTokens: data.usage.prompt_tokens,
-      completionTokens: data.usage.completion_tokens,
-      totalTokens: data.usage.total_tokens,
-    } : undefined,
+    usage,
   };
 }
 
@@ -176,6 +210,10 @@ async function callAnthropicAPI(
   messages: AIMessage[]
 ): Promise<AIResponse> {
   const endpoint = config.apiBaseUrl || 'https://api.anthropic.com/v1/messages';
+  const modelName = config.modelName || 'claude-3-5-sonnet-20241022';
+
+  log.info(`调用Anthropic API: model=${modelName}`, { context: 'AIService' });
+  log.debug(`Anthropic请求: ${messages.length}条消息`, { context: 'AIService' });
 
   // Anthropic 需要分离 system 消息
   let systemPrompt = '';
@@ -192,8 +230,10 @@ async function callAnthropicAPI(
     }
   }
 
+  log.debug(`Anthropic: system长度=${systemPrompt.length}, 消息数=${anthropicMessages.length}`, { context: 'AIService' });
+
   const requestBody: any = {
-    model: config.modelName || 'claude-3-5-sonnet-20241022',
+    model: modelName,
     messages: anthropicMessages,
     max_tokens: config.maxTokens ?? 2048,
     temperature: config.temperature ?? 1.0,
@@ -203,6 +243,9 @@ async function callAnthropicAPI(
   if (systemPrompt) {
     requestBody.system = systemPrompt.trim();
   }
+
+  log.debug('发送Anthropic API请求...', { context: 'AIService' });
+  const startTime = Date.now();
 
   const response = await fetch(endpoint, {
     method: 'POST',
@@ -214,23 +257,32 @@ async function callAnthropicAPI(
     body: JSON.stringify(requestBody),
   });
 
+  const duration = Date.now() - startTime;
+
   if (!response.ok) {
     const errorText = await response.text();
+    log.error(`Anthropic API错误: status=${response.status}, 耗时=${duration}ms`, undefined, { context: 'AIService' });
     throw new Error(`Anthropic API 错误 (${response.status}): ${errorText}`);
   }
 
   const data = await response.json();
 
   const content = data.content?.[0]?.text || '';
+  const usage = data.usage ? {
+    promptTokens: data.usage.input_tokens,
+    completionTokens: data.usage.output_tokens,
+    totalTokens: data.usage.input_tokens + data.usage.output_tokens,
+  } : undefined;
+
+  log.info(`Anthropic响应成功: ${content.length}字符, 耗时=${duration}ms, stopReason=${data.stop_reason}`, { context: 'AIService' });
+  if (usage) {
+    log.debug(`Anthropic Token: prompt=${usage.promptTokens}, completion=${usage.completionTokens}, total=${usage.totalTokens}`, { context: 'AIService' });
+  }
 
   return {
     content,
     finishReason: data.stop_reason,
-    usage: data.usage ? {
-      promptTokens: data.usage.input_tokens,
-      completionTokens: data.usage.output_tokens,
-      totalTokens: data.usage.input_tokens + data.usage.output_tokens,
-    } : undefined,
+    usage,
   };
 }
 
@@ -246,31 +298,42 @@ export async function generateAIResponse(
   config: AIConfig,
   messages: AIMessage[]
 ): Promise<AIResponse> {
+  log.debug(`生成AI响应: provider=${config.provider}, model=${config.modelName}`, { context: 'AIService' });
+
   // 验证配置
   if (!config.apiKey || config.apiKey.trim() === '') {
+    log.error('API Key未配置', undefined, { context: 'AIService' });
     throw new Error('API Key 未配置');
   }
 
   if (!config.modelName || config.modelName.trim() === '') {
+    log.error('模型名称未配置', undefined, { context: 'AIService' });
     throw new Error('模型名称未配置');
   }
+
+  log.debug(`AI请求验证通过, 消息数=${messages.length}`, { context: 'AIService' });
 
   // 根据提供商调用相应的 API
   switch (config.provider) {
     case 'gemini':
+      log.debug('路由到Gemini API', { context: 'AIService' });
       return await callGeminiAPI(config, messages);
 
     case 'openai':
+      log.debug('路由到OpenAI API', { context: 'AIService' });
       return await callOpenAIAPI(config, messages);
 
     case 'anthropic':
+      log.debug('路由到Anthropic API', { context: 'AIService' });
       return await callAnthropicAPI(config, messages);
 
     case 'custom':
       // 自定义提供商默认使用 OpenAI 兼容格式
+      log.debug('路由到自定义API (OpenAI兼容)', { context: 'AIService' });
       return await callOpenAIAPI(config, messages);
 
     default:
+      log.error(`不支持的AI提供商: ${config.provider}`, undefined, { context: 'AIService' });
       throw new Error(`不支持的 AI 提供商: ${config.provider}`);
   }
 }
@@ -281,15 +344,26 @@ export async function generateAIResponse(
  * @returns 测试是否成功
  */
 export async function testAIConfig(config: AIConfig): Promise<boolean> {
+  log.info(`测试AI配置: provider=${config.provider}, model=${config.modelName}`, { context: 'AIService' });
+
   try {
     const testMessages: AIMessage[] = [
       { role: 'user', content: 'Hello, please respond with "OK".' },
     ];
 
+    const startTime = Date.now();
     const response = await generateAIResponse(config, testMessages);
-    return response.content.length > 0;
+    const duration = Date.now() - startTime;
+
+    const success = response.content.length > 0;
+    if (success) {
+      log.info(`AI配置测试成功: 耗时${duration}ms, 响应长度=${response.content.length}`, { context: 'AIService' });
+    } else {
+      log.warn('AI配置测试失败: 空响应', { context: 'AIService' });
+    }
+    return success;
   } catch (error) {
-    console.error('AI 配置测试失败:', error);
+    log.error('AI配置测试失败', error as Error, { context: 'AIService' });
     return false;
   }
 }

@@ -4,6 +4,7 @@ import CharacterPanel from '../components/game/CharacterPanel';
 import GameDialogue from '../components/game/GameDialogue';
 import { generateAIResponse } from '../services/aiService';
 import { loadConfig } from '../utils/tauri';
+import { log } from '../services/logService';
 import type { Character, Message, AppConfig, AIMessage } from '../utils/types';
 
 export default function GameMain() {
@@ -17,53 +18,74 @@ export default function GameMain() {
 
   // 从导航 state 或 localStorage 加载角色
   useEffect(() => {
+    log.info('GameMain页面加载', { context: 'GameMain' });
+
     const loadCharacter = () => {
+      log.debug('开始加载角色数据...', { context: 'GameMain' });
+
       // 优先从 location.state 获取
       const stateCharacter = location.state?.character as Character | undefined;
       if (stateCharacter) {
+        log.info(`从导航state加载角色: ${stateCharacter.name}`, { context: 'GameMain' });
         setCharacter(stateCharacter);
         localStorage.setItem('currentCharacter', JSON.stringify(stateCharacter));
         return;
       }
 
       // 从 localStorage 恢复
+      log.debug('尝试从localStorage恢复角色...', { context: 'GameMain' });
       const savedCharacter = localStorage.getItem('currentCharacter');
       if (savedCharacter) {
         try {
-          setCharacter(JSON.parse(savedCharacter));
+          const parsed = JSON.parse(savedCharacter);
+          log.info(`从localStorage恢复角色: ${parsed.name}`, { context: 'GameMain' });
+          setCharacter(parsed);
         } catch (error) {
-          console.error('Failed to parse saved character:', error);
+          log.error('解析保存的角色数据失败', error as Error, { context: 'GameMain' });
           setError('无法加载角色数据');
         }
       } else {
+        log.warn('未找到角色数据', { context: 'GameMain' });
         setError('未找到角色数据，请先创建或选择角色');
       }
     };
 
     const loadAppConfig = async () => {
+      log.debug('开始加载应用配置...', { context: 'GameMain' });
       try {
         const configData = await loadConfig();
         const loadedConfig = JSON.parse(configData);
+        log.info(`应用配置加载成功: provider=${loadedConfig.ai?.provider || 'unknown'}`, { context: 'GameMain' });
         setConfig(loadedConfig);
       } catch (error) {
-        console.error('Failed to load config:', error);
+        log.error('加载应用配置失败', error as Error, { context: 'GameMain' });
         setError('无法加载配置，请先配置 AI 设置');
       }
     };
 
     loadCharacter();
     loadAppConfig();
+
+    return () => {
+      log.debug('GameMain页面卸载', { context: 'GameMain' });
+    };
   }, [location.state]);
 
   // 初始化游戏（发送开场白）
   useEffect(() => {
     if (character && config && messages.length === 0) {
+      log.debug('触发游戏初始化: 角色和配置已就绪', { context: 'GameMain' });
       initializeGame();
     }
   }, [character, config]);
 
   const initializeGame = async () => {
-    if (!character || !config) return;
+    if (!character || !config) {
+      log.warn('游戏初始化失败: 角色或配置缺失', { context: 'GameMain' });
+      return;
+    }
+
+    log.info(`开始初始化游戏: 角色=${character.name}`, { context: 'GameMain' });
 
     const systemMessage: Message = {
       role: 'system',
@@ -75,16 +97,23 @@ export default function GameMain() {
     try {
       // 构建初始提示词
       const initialPrompt = buildInitialPrompt(character);
+      log.debug(`初始提示词长度: ${initialPrompt.length}字符`, { context: 'GameMain' });
 
       // 调用 AI 生成开场
       setIsProcessing(true);
+      log.info('调用AI生成开场白...', { context: 'GameMain' });
+
       const aiMessages: AIMessage[] = [
         { role: 'system', content: config.game.dmPrompt },
         { role: 'system', content: initialPrompt },
         { role: 'user', content: '请开始游戏，为我描述当前的场景。' },
       ];
 
+      const startTime = Date.now();
       const response = await generateAIResponse(config.ai, aiMessages);
+      const duration = Date.now() - startTime;
+
+      log.info(`AI开场白生成成功: ${response.content.length}字符, 耗时${duration}ms`, { context: 'GameMain' });
 
       const dmMessage: Message = {
         role: 'assistant',
@@ -93,8 +122,9 @@ export default function GameMain() {
       };
 
       setMessages([dmMessage]);
+      log.info('游戏初始化完成', { context: 'GameMain' });
     } catch (error) {
-      console.error('Failed to initialize game:', error);
+      log.error('游戏初始化失败', error as Error, { context: 'GameMain' });
       const errorMessage: Message = {
         role: 'system',
         content: `游戏初始化失败: ${error instanceof Error ? error.message : '未知错误'}。请检查 AI 配置。`,
@@ -149,7 +179,13 @@ export default function GameMain() {
   };
 
   const handleSendMessage = async (content: string) => {
-    if (!character || !config || isProcessing) return;
+    if (!character || !config || isProcessing) {
+      log.warn(`消息发送被阻止: character=${!!character}, config=${!!config}, isProcessing=${isProcessing}`, { context: 'GameMain' });
+      return;
+    }
+
+    log.info(`用户发送消息: ${content.length}字符`, { context: 'GameMain' });
+    log.debug(`消息内容: "${content.substring(0, 100)}${content.length > 100 ? '...' : ''}"`, { context: 'GameMain' });
 
     // 添加用户消息
     const userMessage: Message = {
@@ -173,8 +209,15 @@ export default function GameMain() {
         { role: 'user', content },
       ];
 
+      log.debug(`构建AI消息历史: ${aiMessages.length}条消息`, { context: 'GameMain' });
+
       // 调用 AI
+      log.info('调用AI生成响应...', { context: 'GameMain' });
+      const startTime = Date.now();
       const response = await generateAIResponse(config.ai, aiMessages);
+      const duration = Date.now() - startTime;
+
+      log.info(`AI响应生成成功: ${response.content.length}字符, 耗时${duration}ms`, { context: 'GameMain' });
 
       // 添加 AI 响应
       const aiMessage: Message = {
@@ -184,7 +227,7 @@ export default function GameMain() {
       };
       setMessages(prev => [...prev, aiMessage]);
     } catch (error) {
-      console.error('Failed to generate AI response:', error);
+      log.error('AI响应生成失败', error as Error, { context: 'GameMain' });
       const errorMessage: Message = {
         role: 'system',
         content: `AI 响应失败: ${error instanceof Error ? error.message : '未知错误'}`,
