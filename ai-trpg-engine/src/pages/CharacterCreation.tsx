@@ -1,10 +1,11 @@
-import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
 import { useCharacterStore } from '../stores/characterStore';
 import WorldlineManager from '../components/worldline/WorldlineManager';
 import worldlinesData from '../data/worldlines.json';
 import talentsData from '../data/talents.json';
 import backgroundsData from '../data/backgrounds.json';
+import { PRESET_CHARACTERS } from '../data/presetCharacters';
 import {
   generateCharacterAttributes,
   rerollBasicAttributes,
@@ -42,7 +43,9 @@ type Step = 'worldline' | 'character';
 
 export default function CharacterCreation() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const store = useCharacterStore();
+  const quickStartProcessed = useRef(false);
 
   // 步骤控制
   const [step, setStep] = useState<Step>('worldline');
@@ -106,6 +109,52 @@ export default function CharacterCreation() {
   useEffect(() => {
     setAllWorldlines([...builtInWorldlines, ...customWorldlines]);
   }, [builtInWorldlines, customWorldlines]);
+
+  // 快速开始模式处理
+  useEffect(() => {
+    const isQuickStart = searchParams.get('quickstart') === 'true';
+    if (isQuickStart && !quickStartProcessed.current && builtInWorldlines.length > 0) {
+      quickStartProcessed.current = true;
+
+      // 获取第一个预设角色
+      const presetCharacter = PRESET_CHARACTERS[0];
+      if (!presetCharacter) return;
+
+      // 找到对应的世界线（使用默认世界线）
+      const targetWorldline = builtInWorldlines.find(w => w.id === presetCharacter.worldlineId)
+        || builtInWorldlines[0];
+
+      if (!targetWorldline) return;
+
+      // 创建角色并直接进入游戏
+      const character = createCharacter(
+        presetCharacter.name,
+        presetCharacter.gender,
+        targetWorldline.id,
+        targetWorldline,
+        [],  // 无背景
+        [],  // 无天赋（narrative模式）
+        null,  // 无COC属性
+        25,  // 默认年龄
+        '',  // 无故事
+        presetCharacter.creationMode,
+        presetCharacter.narrativeDescription || {
+          description: '',
+          personality: '',
+          scenario: '',
+        },
+        {},  // 无详细履历
+        ''   // 无头像
+      );
+
+      store.setCharacter(character);
+      store.setSelectedWorldline(targetWorldline);
+      localStorage.setItem('currentCharacter', JSON.stringify(character));
+
+      // 直接跳转到游戏
+      navigate('/game', { state: { character }, replace: true });
+    }
+  }, [searchParams, builtInWorldlines, navigate, store]);
 
   const loadCustomWorldlines = async () => {
     try {

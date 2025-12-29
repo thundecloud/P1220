@@ -3,10 +3,18 @@
   "identifier": "default",
   "description": "Default permissions for the application",
   "windows": [
-    "main"
+    "main",
+    "log-window"
   ],
   "permissions": [
     "core:default",
+    "core:window:default",
+    "core:window:allow-create",
+    "core:window:allow-close",
+    "core:window:allow-set-focus",
+    "core:webview:default",
+    "core:webview:allow-create-webview",
+    "core:webview:allow-create-webview-window",
     "dialog:default",
     "dialog:allow-open",
     "shell:allow-open",
