@@ -28,7 +28,7 @@ const MODEL_PRESETS: FlatModelPreset[] = [
     id: `openai-${idx}`,
     name: `OpenAI - ${preset.name}`,
     provider: 'openai' as AIProvider,
-    apiBaseUrl: 'https://api.openai.com/v1',
+    apiBaseUrl: preset.baseUrl || 'https://api.openai.com/v1',
     modelName: preset.model,
   })),
   // Anthropic 预设

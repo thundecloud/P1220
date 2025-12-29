@@ -43,6 +43,12 @@ export default function Landing() {
     }
   };
 
+  const handleQuickStart = () => {
+    // 快速开始：使用默认配置和第一个预设角色
+    // 直接进入角色创建页面并选择预设角色
+    navigate('/character-creation?quickstart=true');
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen p-8 grid-bg">
       <div className="max-w-5xl w-full space-y-6">
@@ -76,7 +82,23 @@ export default function Landing() {
         </div>
 
         {/* Main Control Panel */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Quick Start */}
+          <button
+            onClick={handleQuickStart}
+            className="group relative bg-accent-emerald text-black p-8 rounded-none hover:bg-opacity-90 transition-all border-4 border-accent-emerald"
+          >
+            <div className="absolute top-4 left-4 led" style={{ background: 'var(--color-terminal-green)' }}></div>
+            <div className="relative z-10 text-left">
+              <div className="label mb-2 text-black">[CMD_00]</div>
+              <div className="text-2xl font-bold mb-2">QUICK_START.EXE</div>
+              <div className="text-sm opacity-90 font-mono">&gt; 使用预设角色</div>
+              <div className="text-sm opacity-90 font-mono">&gt; 默认世界线设置</div>
+              <div className="text-sm opacity-90 font-mono">&gt; 立即开始冒险</div>
+            </div>
+            <div className="absolute bottom-4 right-4 text-4xl opacity-20">⚡</div>
+          </button>
+
           {/* New Game */}
           <button
             onClick={handleNewGame}

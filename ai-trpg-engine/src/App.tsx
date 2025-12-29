@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Landing from './pages/Landing';
 import Config from './pages/Config';
 import CharacterCreation from './pages/CharacterCreation';
@@ -6,6 +6,7 @@ import CharacterManagement from './pages/CharacterManagement';
 import GameMain from './pages/GameMain';
 import LorebookManagement from './pages/LorebookManagement';
 import LogViewer from './pages/LogViewer';
+import LogWindow from './pages/LogWindow';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/game" element={<GameMain />} />
           <Route path="/lorebook" element={<LorebookManagement />} />
           <Route path="/logs" element={<LogViewer />} />
+          <Route path="/log-window" element={<LogWindow />} />
         </Routes>
       </div>
     </Router>

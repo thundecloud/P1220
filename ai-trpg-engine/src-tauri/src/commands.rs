@@ -375,3 +375,45 @@ pub fn log_error(message: String, context: Option<String>) -> Result<(), String>
     }
     Ok(())
 }
+
+// 获取日志文件列表
+#[tauri::command]
+pub fn get_log_files() -> Result<Vec<String>, String> {
+    let home_dir = dirs::document_dir().ok_or("无法获取文档目录")?;
+    let log_dir = home_dir.join("AI-TRPG").join("logs");
+
+    if !log_dir.exists() {
+        return Ok(Vec::new());
+    }
+
+    let entries = fs::read_dir(log_dir).map_err(|e| e.to_string())?;
+    let mut log_files: Vec<String> = entries
+        .filter_map(|e| e.ok())
+        .filter(|e| {
+            e.path()
+                .extension()
+                .and_then(|s| s.to_str())
+                == Some("log")
+        })
+        .filter_map(|e| e.file_name().to_str().map(String::from))
+        .collect();
+
+    // 按文件名倒序排列（最新的在前）
+    log_files.sort_by(|a, b| b.cmp(a));
+
+    Ok(log_files)
+}
+
+// 读取日志文件内容
+#[tauri::command]
+pub fn read_log_file(filename: String) -> Result<String, String> {
+    let home_dir = dirs::document_dir().ok_or("无法获取文档目录")?;
+    let log_dir = home_dir.join("AI-TRPG").join("logs");
+    let file_path = log_dir.join(&filename);
+
+    if !file_path.exists() {
+        return Err(format!("日志文件不存在: {}", filename));
+    }
+
+    fs::read_to_string(file_path).map_err(|e| e.to_string())
+}
